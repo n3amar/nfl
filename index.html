@@ -1,0 +1,2389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NFL — Week 1 Board</title>
+<style>
+/* ============================================================================
+   SteelCapping — "Saturday Desk"
+
+   An analyst's terminal, not a scoreboard. Ink-dark field, bone-chalk type,
+   and two deliberate voices in the palette: burnt orange is always the MODEL
+   speaking, cool cyan is always the MARKET. Nothing else gets to use them.
+   ========================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+    --ink:        #0a0b0d;
+    --panel:      #14171b;
+    --rule:       #23282f;
+    --rule-soft:  #191d22;
+
+    --chalk:      #ece7dc;
+    --chalk-dim:  #9c968a;
+    --chalk-mute: #6b665d;
+
+    /* The model's voice. Green, replacing the original burnt orange.
+
+       Two steps of one hue rather than one, because a single value cannot do both
+       jobs. #228B22 is the requested colour and it is what fills, borders and washes
+       use, where WCAG only asks 3:1. It cannot carry text: against the ink it
+       measures 4.49:1 and against the panel 4.10:1, both under the 4.5:1 floor for
+       normal-size type — and most of what wears this colour is 10-12px mono.
+
+       --signal lifts the same hue to 6.34:1 on ink and 5.79:1 on panel, which is
+       where the old orange sat (5.82 / 5.32), so nothing got harder to read. */
+    --signal:      #2fa82f;   /* text, values, active states */
+    --signal-dim:  #228b22;   /* fills, borders, meters */
+    --signal-wash: rgba(34, 139, 34, 0.10);
+
+    /* The market's voice. Chosen by running the palette validator against the dark
+       chart surface rather than by eye: the original #6fb6c9 failed both the
+       lightness band and the chroma floor, meaning it read as grey rather than as a
+       colour.
+
+       Re-validated against the green after the swap, since the number recorded here
+       was measured against the orange it replaced. Still passes all five checks:
+       deltaE 20.0 from --signal under deuteranopia and 21.5 under normal vision,
+       against a target of 8. Tritan separation is the one figure that got worse,
+       4.2 against the orange's 33.7 — tritanopia is ~1 in 10,000 and not sex-linked,
+       and every place these two colours meet is also separated by position and
+       label, but it is the cost of moving the signal hue this close to cyan. */
+    --market:      #1f9ec9;
+    --market-wash: rgba(31, 158, 201, 0.10);
+
+    --serif: 'Instrument Serif', Georgia, serif;
+    --sans:  'Archivo', 'Helvetica Neue', sans-serif;
+    --mono:  'IBM Plex Mono', ui-monospace, monospace;
+
+    --rail-left:  clamp(180px, 15vw, 236px);
+    --rail-right: clamp(280px, 24vw, 364px);
+    --gutter:     clamp(12px, 1.6vw, 26px);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--ink);
+    color: var(--chalk);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Faint field texture so the dark reads as paper stock, not a void. */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+    background-image:
+        radial-gradient(circle at 18% 8%, rgba(34, 139, 34, 0.06), transparent 44%),
+        radial-gradient(circle at 88% 72%, rgba(31, 158, 201, 0.045), transparent 40%);
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ── Shell ───────────────────────────────────────────────────────────────── */
+
+.desk {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: var(--rail-left) minmax(0, 1fr) var(--rail-right);
+    gap: var(--gutter);
+    max-width: 1680px;
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    align-items: start;
+}
+
+.rail {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 26px 0 40px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--rule) transparent;
+}
+
+.rail::-webkit-scrollbar { width: 6px; }
+.rail::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
+
+.rail--left  { border-right: 1px solid var(--rule-soft); padding-right: var(--gutter); }
+.rail--right { border-left: 1px solid var(--rule-soft); padding-left: var(--gutter); }
+
+.column { padding: 26px 0 80px; min-width: 0; }
+
+/* ── Masthead ────────────────────────────────────────────────────────────── */
+
+.mark { display: block; margin-bottom: 30px; line-height: 1; }
+
+.mark__name {
+    font-family: var(--serif);
+    font-size: 27px;
+    letter-spacing: -0.015em;
+}
+
+.mark__name em { color: var(--signal); font-style: italic; }
+
+.mark__sub {
+    display: block;
+    margin-top: 7px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.19em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+}
+
+/* ── Navigation ──────────────────────────────────────────────────────────── */
+
+.nav__group { margin-bottom: 26px; }
+
+.nav__label {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    margin-bottom: 9px;
+    padding-left: 10px;
+}
+
+.nav__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 5px;
+    border-left: 2px solid transparent;
+    color: var(--chalk-dim);
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color .16s ease, background .16s ease, border-color .16s ease;
+}
+
+.nav__item:hover { color: var(--chalk); background: var(--panel); }
+
+.nav__item--on {
+    color: var(--chalk);
+    background: var(--signal-wash);
+    border-left-color: var(--signal);
+}
+
+.nav__count { font-family: var(--mono); font-size: 11.5px; color: var(--chalk-mute); }
+
+/* ── Nav tiers ───────────────────────────────────────────────────────────── */
+
+/* The workshop, set below a rule and dimmed until wanted. */
+.nav__group--under {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule-soft);
+    opacity: .72;
+    transition: opacity .2s ease;
+}
+
+.nav__group--under:hover { opacity: 1; }
+.nav__group--under + .nav__group--under { margin-top: 20px; padding-top: 0; border-top: none; }
+
+/* ── Benchmark comparison ────────────────────────────────────────────────── */
+
+.bench {
+    display: grid;
+    gap: 7px;
+    margin-bottom: 16px;
+    padding: 16px 18px;
+    background: var(--panel);
+    border: 1px solid var(--rule-soft);
+    border-radius: 9px;
+}
+
+.bench__row {
+    display: grid;
+    grid-template-columns: 148px 1fr 52px minmax(0, 168px);
+    align-items: center;
+    gap: 12px;
+}
+
+.bench__name { font-size: 13px; color: var(--chalk-dim); }
+
+.bench__bar {
+    height: 8px;
+    background: var(--rule-soft);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.bench__fill {
+    display: block;
+    height: 100%;
+    background: var(--chalk-mute);
+    border-radius: 4px;
+    opacity: .55;
+}
+
+.bench__val {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    color: var(--chalk-dim);
+}
+
+.bench__note {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bench__row--mine .bench__name { color: var(--chalk); font-weight: 600; }
+.bench__row--mine .bench__fill { background: var(--signal); opacity: 1; }
+.bench__row--mine .bench__val { color: var(--signal); }
+
+.inline { color: var(--signal); border-bottom: 1px solid var(--signal-dim); }
+.inline:hover { border-bottom-color: var(--signal); }
+
+@media (max-width: 900px) {
+    .bench__row { grid-template-columns: 116px 1fr 48px; }
+    .bench__note { display: none; }
+}
+
+/* ── Overview ────────────────────────────────────────────────────────────── */
+
+.stat__sub {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    margin-top: 4px;
+}
+
+.empty {
+    padding: 22px 24px;
+    background: var(--panel);
+    border: 1px dashed var(--rule);
+    border-radius: 9px;
+    margin-bottom: 32px;
+    max-width: 66ch;
+}
+
+.empty__lede {
+    font-family: var(--serif);
+    font-size: 21px;
+    color: var(--chalk);
+    margin-bottom: 9px;
+}
+
+.empty p { margin: 0 0 11px; font-size: 13.5px; line-height: 1.62; color: var(--chalk-dim); }
+
+.empty__why {
+    font-size: 12.5px !important;
+    color: var(--chalk-mute) !important;
+    padding-left: 13px;
+    border-left: 2px solid var(--rule);
+}
+
+.empty__link {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--signal);
+}
+
+.upnext {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.up {
+    display: block;
+    padding: 13px 15px;
+    background: var(--panel);
+    border: 1px solid var(--rule-soft);
+    border-radius: 8px;
+    transition: border-color .16s ease, transform .16s ease;
+}
+
+.up:hover { border-color: var(--signal-dim); transform: translateY(-1px); }
+
+.up__when {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    margin-bottom: 8px;
+}
+
+.up__league { color: var(--market); }
+
+.up__teams {
+    font-size: 14px;
+    color: var(--chalk);
+    margin-bottom: 7px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.up__teams span { color: var(--chalk-mute); font-size: 12px; }
+
+.up__call {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--chalk-dim);
+    padding-top: 8px;
+    border-top: 1px solid var(--rule-soft);
+}
+
+.up__call span { color: var(--signal); }
+
+/* ── Backtest ledger ─────────────────────────────────────────────────────── */
+
+.trials { display: grid; gap: 10px; margin-bottom: 30px; }
+
+.trial {
+    padding: 14px 16px;
+    background: var(--panel);
+    border: 1px solid var(--rule-soft);
+    border-left: 3px solid var(--rule);
+    border-radius: 0 8px 8px 0;
+}
+
+/* The verdict is carried by an edge stripe AND a word — never colour alone. */
+.trial--positive { border-left-color: var(--up); }
+.trial--negative { border-left-color: var(--down); }
+.trial--inconclusive { border-left-color: var(--chalk-mute); }
+.trial--informational { border-left-color: var(--market); }
+
+.trial__top {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 11px;
+}
+
+.trial__league {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.13em;
+    color: var(--chalk-mute);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 2px 5px;
+}
+
+.trial__name { font-size: 14.5px; font-weight: 500; color: var(--chalk); }
+
+.trial__verdict {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.trial--positive .trial__verdict { color: var(--up); }
+.trial--negative .trial__verdict { color: var(--down); }
+.trial--inconclusive .trial__verdict { color: var(--chalk-mute); }
+.trial--informational .trial__verdict { color: var(--market); }
+
+.trial__nums { display: flex; flex-wrap: wrap; gap: 22px; margin-bottom: 10px; }
+.trial__num { display: flex; flex-direction: column; gap: 2px; }
+
+.trial__k {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+}
+
+.trial__v {
+    font-family: var(--mono);
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+    color: var(--chalk);
+}
+
+.trial__v--cool { color: var(--market); }
+
+.trial__says {
+    margin: 0 0 9px;
+    font-size: 13px;
+    line-height: 1.58;
+    color: var(--chalk-dim);
+    max-width: 70ch;
+}
+
+.trial__foot {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+}
+
+/* ── Glossary ────────────────────────────────────────────────────────────── */
+
+.key { margin: 12px 0 0; padding: 0; }
+
+.key dt {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin-bottom: 3px;
+}
+
+.key dt.key__market { color: var(--market); }
+
+.key dd {
+    margin: 0 0 11px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--chalk-mute);
+}
+
+.key__more {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    transition: color .15s ease;
+}
+
+.key__more:hover { color: var(--signal); }
+
+/* ── Page header ─────────────────────────────────────────────────────────── */
+
+.head { margin-bottom: 22px; }
+
+.head__kicker {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin-bottom: 7px;
+}
+
+.head__title {
+    font-family: var(--serif);
+    font-size: clamp(30px, 4.2vw, 47px);
+    line-height: 1.02;
+    letter-spacing: -0.022em;
+    margin: 0 0 9px;
+}
+
+.head__title em { font-style: italic; color: var(--chalk-dim); }
+
+.head__note { font-size: 12.5px; color: var(--chalk-mute); max-width: 62ch; }
+.head__note strong { color: var(--chalk-dim); font-weight: 500; }
+
+/* ── Week strip ──────────────────────────────────────────────────────────── */
+
+.weeks {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    padding: 13px 0 17px;
+    border-top: 1px solid var(--rule-soft);
+    border-bottom: 1px solid var(--rule-soft);
+    margin-bottom: 22px;
+}
+
+/* An anchor, not a button: the week is in the route, so this navigates. That also makes
+   it work unchanged in a static export, where no handler would ever fire. */
+.week {
+    min-width: 33px;
+    padding: 5px 9px;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--chalk-mute);
+    background: var(--panel);
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .15s ease;
+}
+
+.week:hover { color: var(--chalk); border-color: var(--rule); }
+.week--on { background: var(--signal); color: var(--ink); font-weight: 600; }
+
+/* ── Game cards ──────────────────────────────────────────────────────────── */
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 11px;
+}
+
+.game {
+    background: var(--panel);
+    border: 1px solid var(--rule-soft);
+    border-radius: 8px;
+    padding: 15px 16px 13px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .18s ease, transform .18s ease;
+    animation: rise .42s cubic-bezier(.2, .7, .3, 1) backwards;
+}
+
+.game:hover { border-color: var(--rule); transform: translateY(-1px); }
+
+/* Confidence bleeds in from the left edge — readable at a glance across the board. */
+.game::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--signal);
+    opacity: var(--conf, 0.2);
+}
+
+@keyframes rise {
+    from { opacity: 0; transform: translateY(7px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.game__when {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    margin-bottom: 11px;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.side {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 4px 0;
+}
+
+.side__team {
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    color: var(--chalk-dim);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.side--fav .side__team { color: var(--chalk); font-weight: 600; }
+
+.side__score {
+    font-family: var(--mono);
+    font-size: 16px;
+    font-variant-numeric: tabular-nums;
+    color: var(--chalk-mute);
+}
+
+.side--fav .side__score { color: var(--signal); }
+
+.game__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 11px;
+    padding-top: 10px;
+    border-top: 1px solid var(--rule-soft);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--chalk-mute);
+}
+
+.spread { color: var(--chalk); font-weight: 500; }
+
+.tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid;
+}
+
+.tag--key  { color: var(--signal); border-color: var(--signal-dim); background: var(--signal-wash); }
+.tag--thin { color: var(--chalk-mute); border-color: var(--rule); }
+
+.meter {
+    height: 3px;
+    background: var(--rule-soft);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 9px;
+}
+
+.meter__fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--signal-dim), var(--signal));
+    transition: width .5s cubic-bezier(.2, .7, .3, 1);
+}
+
+/* ── Expandable breakdown ────────────────────────────────────────────────── */
+
+.game__hit { cursor: pointer; }
+.game--open { border-color: var(--signal-dim); }
+.game--open .game__foot { border-bottom: 1px solid var(--rule-soft); padding-bottom: 10px; }
+
+.chev {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--chalk-mute);
+    margin-left: auto;
+    padding-left: 6px;
+}
+
+.game--open .chev { color: var(--signal); }
+
+.dig { animation: unfurl .22s ease-out; padding-top: 12px; }
+
+@keyframes unfurl {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.dig__label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    margin: 0 0 7px;
+}
+
+.dig__note {
+    margin-top: 12px;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--chalk-mute);
+    opacity: .78;
+}
+
+.grid {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 15px;
+}
+
+.grid th {
+    text-align: right;
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    padding: 0 0 5px 10px;
+    border-bottom: 1px solid var(--rule-soft);
+}
+
+.grid th:first-child { text-align: left; padding-left: 0; }
+
+.grid td {
+    text-align: right;
+    padding: 6px 0 6px 10px;
+    color: var(--chalk-dim);
+    border-bottom: 1px solid var(--rule-soft);
+}
+
+.grid tr:last-child td { border-bottom: none; }
+
+.grid__team {
+    text-align: left !important;
+    padding-left: 0 !important;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--chalk);
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.grid__net { color: var(--signal); }
+.grid__dim { color: var(--chalk-mute); }
+
+.build { margin-bottom: 11px; }
+
+.build__head {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--chalk);
+    margin-bottom: 4px;
+}
+
+.build__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 2.5px 0;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+}
+
+.build__k { color: var(--chalk-mute); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.build__v { color: var(--chalk-dim); }
+
+.build__row--sum {
+    margin-top: 3px;
+    padding-top: 5px;
+    border-top: 1px solid var(--rule-soft);
+}
+
+.build__row--sum .build__k { color: var(--chalk-dim); }
+.build__row--sum .build__v { color: var(--signal); font-size: 13px; }
+
+/* ── Calibration plot ────────────────────────────────────────────────────── */
+
+.stats--wide { grid-template-columns: repeat(4, 1fr); margin-bottom: 30px; }
+.stat__v--verdict { font-family: var(--sans); font-size: 13px; line-height: 1.3; }
+
+.section {
+    font-family: var(--serif);
+    font-size: 22px;
+    letter-spacing: -0.012em;
+    margin: 0 0 5px;
+    font-weight: 400;
+}
+
+.section__note {
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--chalk-mute);
+    max-width: 60ch;
+    margin: 0 0 16px;
+}
+
+.plot {
+    margin: 0 0 32px;
+    padding: 12px 6px 6px;
+    background: var(--panel);
+    border: 1px solid var(--rule-soft);
+    border-radius: 9px;
+}
+
+.plot svg { width: 100%; height: auto; display: block; }
+
+.plot__grid { stroke: var(--rule-soft); stroke-width: 1; }
+.plot__axis { stroke: var(--rule); stroke-width: 1; }
+
+/* Perfect calibration: present but recessive — it is a reference, not a series. */
+.plot__ideal {
+    stroke: var(--chalk-mute);
+    stroke-width: 1.5;
+    stroke-dasharray: 5 5;
+    opacity: .55;
+}
+
+.plot__path {
+    fill: none;
+    stroke: var(--signal);
+    stroke-width: 2;
+    opacity: .38;
+    stroke-linejoin: round;
+}
+
+/* 2px surface ring so overlapping dots stay countable. */
+.plot__dot {
+    fill: var(--signal);
+    stroke: var(--panel);
+    stroke-width: 2;
+    transition: opacity .15s ease;
+}
+
+.plot__dot:hover { opacity: .8; }
+.plot__dot--off { fill: var(--market); }
+
+.plot__tick {
+    font-family: var(--mono);
+    font-size: 11px;
+    fill: var(--chalk-mute);
+}
+
+.plot__label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    fill: var(--chalk-mute);
+}
+
+.explain {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--chalk-mute);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--rule-soft);
+}
+
+.explain:last-child { border-bottom: none; }
+.explain b { color: var(--chalk-dim); font-weight: 600; }
+
+@media (max-width: 900px) {
+    .stats--wide { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Power ratings ladder ────────────────────────────────────────────────── */
+
+.chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 16px; }
+
+.chip {
+    padding: 4px 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--chalk-mute);
+    background: var(--panel);
+    border: 1px solid transparent;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all .15s ease;
+}
+
+.chip:hover { color: var(--chalk); border-color: var(--rule); }
+.chip--on { background: var(--signal); color: var(--ink); font-weight: 600; }
+
+.ladder {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+}
+
+.ladder thead th {
+    position: sticky;
+    top: 0;
+    background: var(--ink);
+    z-index: 2;
+    font-weight: 500;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    padding: 9px 0 8px 12px;
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+}
+
+.ladder__num { text-align: right; }
+.ladder th.ladder__num { cursor: pointer; user-select: none; transition: color .15s ease; }
+.ladder th.ladder__num:hover { color: var(--chalk); }
+.ladder th.ladder__num--on { color: var(--signal); }
+
+.ladder tbody td {
+    padding: 7px 0 7px 12px;
+    border-bottom: 1px solid var(--rule-soft);
+    color: var(--chalk-dim);
+}
+
+.ladder tbody tr:hover td { background: var(--panel); }
+
+.ladder__rank {
+    width: 34px;
+    text-align: right;
+    color: var(--chalk-mute);
+    padding-left: 0 !important;
+}
+
+.ladder__team {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: var(--chalk);
+    width: 100%;
+}
+
+.ladder__conf {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    margin-left: 8px;
+}
+
+.ladder__net { color: var(--signal); font-weight: 500; }
+.ladder__dim { color: var(--chalk-mute); }
+
+/* ── Right rail panels ───────────────────────────────────────────────────── */
+
+.panel-block { margin-bottom: 26px; }
+
+.panel__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 11px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--rule-soft);
+}
+
+/* Panels that filter the board announce it by being clickable. */
+.panel__head--act,
+.row--act {
+    cursor: pointer;
+    transition: color .15s ease, background .15s ease;
+}
+
+.panel__head--act:hover { border-bottom-color: var(--signal-dim); }
+.panel__head--act:hover .panel__title { color: var(--signal); }
+
+/* Inset rather than negative margins: pulling the hover area outward pushed the value
+   column past the rail edge and clipped every percentage. */
+.row--act {
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 4px;
+}
+
+.row--act:hover { background: var(--signal-wash); }
+.row--act:hover .row__label { color: var(--chalk); }
+
+.panel__head--on .panel__title { color: var(--signal); }
+.row--on { background: var(--signal-wash); }
+
+/* ── Active filter ───────────────────────────────────────────────────────── */
+
+/* An author display rule outranks the UA stylesheet's [hidden] { display: none }, so
+   the exported filter bar — which ships hidden and is revealed by the static shim —
+   stayed visible and empty on the published board until this was added. The cards were
+   fine because nothing sets display on .game. */
+.filter[hidden] { display: none; }
+
+.filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    margin-bottom: 16px;
+    background: var(--signal-wash);
+    border: 1px solid var(--signal-dim);
+    border-radius: 7px;
+}
+
+.filter__what {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--signal);
+}
+
+.filter__count { font-size: 12px; color: var(--chalk-mute); margin-left: auto; }
+
+.filter__clear {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--chalk-dim);
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 3px 9px;
+    cursor: pointer;
+    transition: all .15s ease;
+}
+
+.filter__clear:hover { color: var(--ink); background: var(--signal); border-color: var(--signal); }
+
+.panel__title { font-family: var(--serif); font-size: 17px; letter-spacing: -0.01em; }
+
+.panel__meta {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 9px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    font-size: 12.5px;
+}
+
+.row:last-child { border-bottom: none; }
+
+.row__label { color: var(--chalk-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row__label b { color: var(--chalk); font-weight: 600; }
+
+.row__value {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: var(--signal);
+    white-space: nowrap;
+}
+
+.row__value--cool { color: var(--market); }
+.row__value--mute { color: var(--chalk-mute); }
+
+/* ── Stat block ──────────────────────────────────────────────────────────── */
+
+.stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--rule-soft);
+    border: 1px solid var(--rule-soft);
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.stat { background: var(--panel); padding: 11px 12px; }
+
+.stat__k {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    margin-bottom: 5px;
+}
+
+.stat__v {
+    font-family: var(--mono);
+    font-size: 17px;
+    font-variant-numeric: tabular-nums;
+    color: var(--chalk);
+}
+
+.stat__v--signal { color: var(--signal); }
+.stat__v--market { color: var(--market); }
+
+/* ── Empty / loading ─────────────────────────────────────────────────────── */
+
+.hush {
+    padding: 46px 20px;
+    text-align: center;
+    color: var(--chalk-mute);
+    font-size: 13px;
+    border: 1px dashed var(--rule);
+    border-radius: 8px;
+}
+
+.hush__lede {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 20px;
+    color: var(--chalk-dim);
+    margin-bottom: 7px;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 1240px) {
+    .desk { grid-template-columns: var(--rail-left) minmax(0, 1fr); }
+    .rail--right { display: none; }
+}
+
+@media (max-width: 820px) {
+    .desk { grid-template-columns: minmax(0, 1fr); padding: 0 16px; }
+    .rail--left {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--rule-soft);
+        padding-right: 0;
+    }
+    .nav__group { margin-bottom: 14px; }
+    .board { grid-template-columns: 1fr; }
+}
+
+/* ── Board modes ─────────────────────────────────────────────────────────────
+   The two voices of the palette do the work here: the confidence board is the
+   model talking, the edge board is the market talking. Colouring the active
+   mode is not decoration — it is the same cue used everywhere else, so a glance
+   at the page tells you whose number you are reading.
+   ------------------------------------------------------------------------- */
+
+.modes {
+    display: flex;
+    gap: 8px;
+    margin: 14px 0 4px;
+    flex-wrap: wrap;
+}
+
+.mode {
+    flex: 1 1 180px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 9px 12px;
+    text-align: left;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    color: var(--chalk-mute);
+    text-decoration: none;
+    transition: all .16s ease;
+}
+
+.mode:hover { border-color: var(--chalk-mute); color: var(--chalk-dim); }
+
+.mode__name {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.mode__note {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.mode--on { color: var(--chalk); }
+
+.mode--on.mode--model  { border-color: var(--signal-dim); background: var(--signal-wash); }
+.mode--on.mode--model  .mode__note { color: var(--signal); }
+
+.mode--on.mode--market { border-color: var(--market); background: var(--market-wash); }
+.mode--on.mode--market .mode__note { color: var(--market); }
+
+/* ── Captured market, on a game card ─────────────────────────────────────────
+   Always the market's cyan, never the model's orange, so a posted price can
+   never be mistaken for a projection on a card that shows both.
+   ------------------------------------------------------------------------- */
+
+.mkt {
+    margin-top: 10px;
+    padding-top: 9px;
+    border-top: 1px dashed var(--rule);
+    color: var(--market);
+}
+
+.mkt__cap {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+}
+
+.mkt__src { letter-spacing: 0.08em; }
+
+.mkt__grid {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+}
+
+.mkt__grid th {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: right;
+    color: var(--chalk-mute);
+    padding-bottom: 3px;
+}
+
+.mkt__grid th:first-child { text-align: left; }
+
+.mkt__grid td {
+    padding: 3px 0;
+    text-align: right;
+    white-space: nowrap;
+    color: var(--market);
+}
+
+/* The subject of every price. Named, never implied — a bare "-3.5" on a card with
+   two teams on it is not a line, it is a riddle. */
+.mkt__team {
+    text-align: left !important;
+    width: 46%;
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--chalk) !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mkt__tot td { border-top: 1px solid var(--rule-soft); padding-top: 5px; }
+.mkt__tot .mkt__team { color: var(--chalk-dim) !important; }
+
+.mkt__drift {
+    margin-top: 6px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--chalk-mute);
+}
+
+/* ── Sized bets, on the card that produced them ──────────────────────────────
+   The rail could only ever fit a cramped ranked list. An edge is a disagreement
+   between two numbers, so both belong beside the price they disagree about.
+   ------------------------------------------------------------------------- */
+
+.plays {
+    margin-top: 10px;
+    padding-top: 9px;
+    border-top: 1px dashed var(--rule);
+}
+
+.plays__cap {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 5px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+}
+
+.plays__src { letter-spacing: 0.06em; text-transform: none; opacity: .8; }
+
+.play {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto auto;
+    align-items: baseline;
+    gap: 4px 9px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-variant-numeric: tabular-nums;
+    color: var(--chalk-mute);
+}
+
+.play:last-child { border-bottom: none; }
+
+.play__what {
+    font-family: var(--sans);
+    font-size: 12.5px;
+    color: var(--chalk-dim);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.play__price { color: var(--market); }
+.play__nums  { font-size: 11.5px; }
+.play__edge  { font-weight: 600; }
+.play__edge--up { color: var(--signal); }
+
+/* The verdict spans the full width on its own line, because a truncated reason is
+   the one thing on this block that must never be truncated. */
+.play__verdict {
+    grid-column: 1 / -1;
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--chalk-mute);
+}
+
+.play--on .play__what { color: var(--chalk); font-weight: 600; }
+.play--on .play__verdict { color: var(--signal); }
+
+/* A game with a price the model is not entitled to an opinion about. Stating the
+   reason matters: silence here would look identical to a game with no market. */
+.plays--held .plays__cap { color: var(--chalk-mute); }
+
+.plays__why {
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--chalk-mute);
+    font-style: italic;
+}
+
+/* Absence stated, not implied. A card with no odds row and a card whose odds
+   failed to load would otherwise look identical. */
+.mkt--none {
+    color: var(--chalk-mute);
+    font-family: var(--sans);
+    font-size: 12px;
+    font-style: italic;
+}
+
+/* A model-derived teaser flag, deliberately duller than the market one. The two
+   were indistinguishable once, and a game the model liked by 8 with the market
+   at 4.5 read as a qualifying leg when it is not one. */
+.tag--hint { color: var(--chalk-mute); border-color: var(--rule); border-style: dashed; }
+
+/* Sized bets in a market the ledger has already measured as losing. */
+.tag--warn { color: var(--signal); border-color: var(--signal-dim); background: var(--signal-wash); }
+
+/* ── Calibration band, beside a confidence claim ─────────────────────────── */
+
+.band {
+    display: block;
+    margin-top: 2px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--chalk-mute);
+    white-space: normal;
+}
+
+.band--none { font-style: italic; opacity: .7; }
+
+/* Rows carrying a band need two lines; the single-line ellipsis rule that keeps
+   the other panels tidy would otherwise clip the evidence off the end. */
+.row__label:has(.band) { white-space: normal; overflow: visible; }
+
+/* ── The model, dissected ────────────────────────────────────────────────────
+   A reading document rather than a dashboard, so it gets a measure and a longer
+   line height. Everything else on the site is scanned; this is read.
+   ------------------------------------------------------------------------- */
+
+.column--prose { max-width: 76ch; }
+
+.column--prose p { line-height: 1.62; color: var(--chalk-dim); }
+
+.claim {
+    margin: 14px 0 26px;
+    padding: 16px 18px;
+    border-left: 2px solid var(--signal-dim);
+    background: var(--signal-wash);
+    border-radius: 0 4px 4px 0;
+}
+
+.claim p:last-child { margin-bottom: 0; }
+.claim strong { color: var(--chalk); }
+
+.claim--key { border-left-color: var(--signal); }
+.claim--key p { color: var(--chalk); font-size: 15.5px; }
+
+.claim--warn { border-left-color: var(--market); background: var(--market-wash); }
+
+.two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 14px 0 20px;
+}
+
+@media (max-width: 900px) { .two { grid-template-columns: 1fr; } }
+
+.card {
+    padding: 15px 17px;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    background: var(--panel);
+}
+
+.card__cap {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    margin-bottom: 9px;
+}
+
+.card ul { margin: 0; padding-left: 17px; }
+.card li { margin-bottom: 6px; font-size: 13.5px; line-height: 1.5; color: var(--chalk-dim); }
+.card li:last-child { margin-bottom: 0; }
+.card strong { color: var(--chalk); }
+
+.card--is   { border-left: 2px solid var(--signal-dim); }
+.card--isnt { border-left: 2px solid var(--market); }
+
+.aside {
+    margin: 16px 0 26px;
+    padding-left: 14px;
+    border-left: 1px solid var(--rule);
+    font-size: 13.5px;
+    color: var(--chalk-mute);
+}
+
+.aside--foot { margin-top: 34px; font-style: italic; }
+
+.wide {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 22px;
+    font-size: 13.5px;
+}
+
+.wide th {
+    text-align: left;
+    padding: 7px 10px 7px 0;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    font-weight: 500;
+}
+
+.wide td {
+    padding: 9px 10px 9px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    vertical-align: top;
+    line-height: 1.5;
+    color: var(--chalk-dim);
+}
+
+.wide td:first-child { color: var(--chalk); width: 21%; }
+.wide tr.rule td { border-top: 1px solid var(--rule); }
+
+.wide .num {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    width: 11%;
+    color: var(--chalk);
+}
+
+.num--signal { color: var(--signal); }
+.num--market { color: var(--market); }
+
+.wrongs { margin: 12px 0 24px; padding-left: 20px; }
+
+.wrongs > li {
+    margin-bottom: 15px;
+    line-height: 1.6;
+    color: var(--chalk-dim);
+    font-size: 14px;
+}
+
+.wrongs strong { color: var(--chalk); }
+.wrongs ul { margin: 8px 0 0; padding-left: 17px; }
+.wrongs ul li { margin-bottom: 5px; font-size: 13.5px; }
+
+.checks { display: grid; gap: 12px; margin: 14px 0 24px; }
+
+.check {
+    position: relative;
+    padding: 15px 17px 15px 19px;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    background: var(--panel);
+}
+
+.check h3 {
+    margin: 0 0 7px;
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--chalk);
+}
+
+.check p { margin: 0 0 8px; font-size: 13.5px; line-height: 1.55; }
+.check p:last-child { margin-bottom: 0; }
+
+.check__tag {
+    display: inline-block;
+    margin-bottom: 8px;
+    padding: 2px 7px;
+    border: 1px solid;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.check__why {
+    margin-top: 9px;
+    padding-top: 9px;
+    border-top: 1px solid var(--rule-soft);
+    color: var(--chalk-mute);
+}
+
+.check--have    { border-left: 2px solid var(--signal-dim); }
+.check--have    .check__tag { color: var(--signal); border-color: var(--signal-dim); }
+
+.check--partial { border-left: 2px solid var(--chalk-mute); }
+.check--partial .check__tag { color: var(--chalk-dim); border-color: var(--rule); }
+
+/* The ones that matter most, so they are the ones that read loudest. */
+.check--missing { border-left: 2px solid var(--market); }
+.check--missing .check__tag { color: var(--market); border-color: var(--market); }
+
+/* ── Comparison bars ─────────────────────────────────────────────────────────
+   One hue, because these are one measure across three sports rather than three
+   categories — identity is carried by the row label, not by colour. Values are
+   direct-labelled, so there is no legend and no colour-only encoding.
+   ------------------------------------------------------------------------- */
+
+.bars {
+    margin: 0;
+    padding: 15px 17px;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    background: var(--panel);
+}
+
+.bars__cap {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 13px;
+    font-family: var(--sans);
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--chalk);
+}
+
+.bars__cap span {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    color: var(--chalk-mute);
+    text-transform: none;
+}
+
+.bar {
+    display: grid;
+    grid-template-columns: 58px 1fr 52px;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 8px;
+}
+
+.bar__k {
+    font-family: var(--sans);
+    font-size: 12.5px;
+    color: var(--chalk-dim);
+}
+
+.bar__track {
+    height: 9px;
+    background: var(--rule-soft);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+/* 4px rounded data-end, anchored to the baseline. */
+.bar__fill {
+    display: block;
+    height: 100%;
+    background: var(--signal);
+    border-radius: 0 3px 3px 0;
+    transition: width .5s cubic-bezier(.2, .7, .3, 1);
+}
+
+.bar__v {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    color: var(--chalk);
+}
+
+.bars__note {
+    margin: 12px 0 0;
+    padding-top: 10px;
+    border-top: 1px solid var(--rule-soft);
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--chalk-mute);
+}
+
+.gates { margin: 10px 0; padding-left: 19px; }
+.gates li { margin-bottom: 6px; font-size: 14px; line-height: 1.5; color: var(--chalk-dim); }
+
+/* Blazor's error bar, restyled so it belongs to the same room. */
+#blazor-error-ui {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 11px 18px;
+    background: var(--signal);
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+#blazor-error-ui .dismiss { cursor: pointer; float: right; }
+
+.blazor-error-boundary { background: var(--signal); padding: 1rem; color: var(--ink); }
+.blazor-error-boundary::after { content: "Something broke."; }
+
+/* ── Export to the public sites ──────────────────────────────────────────────
+   Sits under the board header rather than in the rail: publishing is an action on
+   the week being looked at, and the rail is where the week's *contents* are read. */
+
+.export { margin: 14px 0 4px; }
+
+.export__go {
+    padding: 8px 14px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--chalk-dim);
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all .16s ease;
+}
+
+.export__go:hover:not(:disabled) {
+    color: var(--signal);
+    border-color: var(--signal-dim);
+    background: var(--signal-wash);
+}
+
+.export__go:disabled { opacity: .45; cursor: default; }
+
+.export__said {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-top: 10px;
+    padding: 9px 12px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    line-height: 1.5;
+    border-left: 2px solid var(--rule);
+    color: var(--chalk-mute);
+}
+
+.export__said strong { font-weight: 600; color: var(--chalk); }
+
+.export__said--ok  { border-left-color: var(--signal-dim); }
+.export__said--bad { border-left-color: var(--warn, #c8552b); }
+
+</style>
+</head>
+<body>
+
+
+<div class="desk"><aside class="rail rail--left"><a class="mark" href="index.html"><span class="mark__name">Steel<em>Capping</em></span>
+        <span class="mark__sub">NFL</span></a><div class="nav__group"><div class="nav__label">NFL</div>
+
+        <a class="nav__item nav__item--on" href="index.html"><span>This week</span>
+            <span class="nav__count">board</span></a>
+
+        <a class="nav__item " href="results.html"><span>Results</span>
+            <span class="nav__count">graded</span></a></div><div class="nav__group nav__group--under"><div class="nav__label">Other sites</div>
+
+        <a class="nav__item" href="https://n3amar.github.io/cfb/"><span>College Football</span></a>
+
+        <a class="nav__item" href="https://n3amar.github.io/mlb/"><span>MLB</span></a></div><div class="nav__group nav__group--under"><div class="nav__label">Accuracy · college</div>
+        <div class="stats"><div class="stat"><div class="stat__k">Model MAE</div>
+                <div class="stat__v stat__v--signal">12.92</div></div>
+            <div class="stat"><div class="stat__k">Market</div>
+                <div class="stat__v stat__v--market">12.09</div></div>
+            <div class="stat"><div class="stat__k">Brier skill</div>
+                <div class="stat__v">20.9%</div></div>
+            <div class="stat"><div class="stat__k">Calib err</div>
+                <div class="stat__v">1.6%</div></div></div>
+
+        <dl class="key"><dt>Model MAE</dt>
+            <dd>
+                How many points the model misses a final margin by, on average.
+                Lower is better.
+            </dd>
+
+            <dt class="key__market">Market</dt>
+            <dd>
+                The same measure for the closing betting line. It is the benchmark,
+                and has not yet been beaten.
+            </dd>
+
+            <dt>Brier skill</dt>
+            <dd>
+                How much better its win probabilities are than always guessing the
+                base rate. Zero would mean it knows nothing beyond how often home
+                teams win.
+            </dd>
+
+            <dt>Calib err</dt>
+            <dd>
+                How far its stated confidence sits from what happens. Under 2% means
+                a 70% call really does win about 70% of the time.
+            </dd></dl></div></aside>
+
+    <main class="column"><header class="head"><div class="head__kicker">NFL · 2026 Season</div>
+            <h1 class="head__title">Week 1 <em>board</em></h1><p class="head__note">
+                        Every number here is the model's, not the market's — these are the games
+                        it is most sure about, shown beside how sure it has earned the right to be.
+                        <strong>This is not a list of bets.</strong>Ratings from <strong>2025 ratings carried at 85%</strong>. Click a game for the numbers behind it.</p></header><div class="filter" data-filter-bar hidden><span class="filter__what"></span>
+                    <span class="filter__count"></span>
+                    <button class="filter__clear" data-filter-clear>Show all</button></div><div class="board"><article class="game " data-game="New England Patriots@Seattle Seahawks" style="--conf:0.44; animation-delay:0ms"><div class="game__hit" data-toggle><div class="game__when"><span>Wed 9 Sep &#xB7; 17:20</span>
+                                <span></span></div>
+
+                            <div class="side "><span class="side__team">New England Patriots</span>
+                                <span class="side__score">19.4</span></div>
+
+                            <div class="side side--fav"><span class="side__team">Seattle Seahawks</span>
+                                <span class="side__score">25.6</span></div>
+
+                            <div class="meter"><div class="meter__fill" style="width:65.91093369948163%"></div></div>
+
+                            <div class="game__foot"><span class="spread">Seattle Seahawks by 6.2</span>
+                                <span>66%
+                                    · O/U 45.0</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · 6d ago</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">New England Patriots</td>
+                                                <td>&#x2B;3.5  -110</td>
+                                                <td>&#x2B;165</td></tr>
+                                            <tr><td class="mkt__team">Seattle Seahawks</td>
+                                                <td>-3.5  -110</td>
+                                                <td>-200</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 44.5</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div></article><article class="game " data-game="San Francisco 49ers@Los Angeles Rams" style="--conf:0.46; animation-delay:22ms"><div class="game__hit" data-toggle><div class="game__when"><span>Thu 10 Sep &#xB7; 17:35</span>
+                                <span></span></div>
+
+                            <div class="side "><span class="side__team">San Francisco 49ers</span>
+                                <span class="side__score">20.8</span></div>
+
+                            <div class="side side--fav"><span class="side__team">Los Angeles Rams</span>
+                                <span class="side__score">27.4</span></div>
+
+                            <div class="meter"><div class="meter__fill" style="width:67.11067773806398%"></div></div>
+
+                            <div class="game__foot"><span class="spread">Los Angeles Rams by 6.6</span>
+                                <span>67%
+                                    · O/U 48.2</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · 6d ago</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">San Francisco 49ers</td>
+                                                <td>&#x2B;3.5  -110</td>
+                                                <td>&#x2B;161</td></tr>
+                                            <tr><td class="mkt__team">Los Angeles Rams</td>
+                                                <td>-3.5  -110</td>
+                                                <td>-195</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 48.5</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div></article><article class="game " data-game="Chicago Bears@Carolina Panthers" style="--conf:0.22; animation-delay:44ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 13 Sep &#xB7; 10:00</span>
+                                <span></span></div>
+
+                            <div class="side side--fav"><span class="side__team">Chicago Bears</span>
+                                <span class="side__score">21.9</span></div>
+
+                            <div class="side "><span class="side__team">Carolina Panthers</span>
+                                <span class="side__score">21.0</span></div>
+
+                            <div class="meter"><div class="meter__fill" style="width:52.397414936296016%"></div></div>
+
+                            <div class="game__foot"><span class="spread">Chicago Bears by 0.9</span>
+                                <span>52%
+                                    · O/U 43.0</span><span class="tag tag--key" title="Market &#x2B;2.5 teases to &#x2B;8.5 &#x2014; a qualifying leg">3 &amp; 7</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · 6d ago</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Chicago Bears</td>
+                                                <td>-2.5  -115</td>
+                                                <td>-145</td></tr>
+                                            <tr><td class="mkt__team">Carolina Panthers</td>
+                                                <td>&#x2B;2.5  -105</td>
+                                                <td>&#x2B;124</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 45.5</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div></article><article class="game " data-game="Tampa Bay Buccaneers@Cincinnati Bengals" style="--conf:0.19; animation-delay:66ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 13 Sep &#xB7; 10:00</span>
+                                <span></span></div>
+
+                            <div class="side side--fav"><span class="side__team">Tampa Bay Buccaneers</span>
+                                <span class="side__score">25.2</span></div>
+
+                            <div class="side "><span class="side__team">Cincinnati Bengals</span>
+                                <span class="side__score">24.9</span></div>
+
+                            <div class="meter"><div class="meter__fill" style="width:50.833723670615626%"></div></div>
+
+                            <div class="game__foot"><span class="spread">Tampa Bay Buccaneers by 0.3</span>
+                                <span>51%
+                                    · O/U 50.1</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · 6d ago</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Tampa Bay Buccaneers</td>
+                                                <td>&#x2B;3.5  -110</td>
+                                                <td>&#x2B;163</td></tr>
+                                            <tr><td class="mkt__team">Cincinnati Bengals</td>
+                                                <td>-3.5  -110</td>
+                                                <td>-192</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 52.5</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div></article><article class="game " data-game="New Orleans Saints@Detroit Lions" style="--conf:0.53; animation-delay:88ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 13 Sep &#xB7; 10:00</span>
+                                <span></span></div>
+
+                            <div class="side "><span class="side__team">New Orleans Saints</span>
+                                <span class="side__score">18.0</span></div>
+
+                            <div class="side side--fav"><span class="side__team">Detroit Lions</span>
+                                <span class="side__score">26.4</span></div>
+
+                            <div class="meter"><div class="meter__fill" style="width:71.05949081173823%"></div></div>
+
+                            <div class="game__foot"><span class="spread">Detroit Lions by 8.3</span>
+                                <span>71%
+                                    · O/U 44.4</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · 6d ago</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">New Orleans Saints</td>
+                                                <td>&#x2B;7.0  -110</td>
+                                                <td>&#x2B;272</td></tr>
+                                            <tr><td class="mkt__team">Detroit Lions</td>
+                                                <td>-7.0  -110</td>
+                                                <td>-350</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 49.5</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div></article><article class="game " data-game="Buffalo Bills@Houston Texans" style="--conf:0.35; animation-delay:110ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 13 Sep &#xB7; 10:00</span>
+                                <span></span></div>
+
+                            <div class="side "><span class="side__team">Buffalo Bills</span>
+                                <span class="side__score">19.7</span></div>
+
+                            <div class="side side--fav"><span class="side__team">Houston Texans</span>
+                                <span class="side__score">23.8</span></div>
+
+                            <div class="meter"><div class="meter__fill" style="width:60.64516905161842%"></div></div>
+
+                            <div class="game__foot"><span class="spread">Houston Texans by 4.1</span>
+                                <span>61%
+                                    · O/U 43.5</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · 6d ago</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Buffalo Bills</td>
+                                                <td>-1.0  -108</td>
+                                                <td>-115</td></tr>
+                                            <tr><td class="mkt__team">Houston Texans</td>
+                                                <td>&#x2B;1.0  -110</td>
+                                                <td>-105</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 44.5</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div></article><article class="game " data-game="Baltimore Ravens@Indianapolis Colts" style="--conf:0.36; animation-delay:132ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 13 Sep &#xB7; 10:00</span>
+                                <span></span></div>
+
+                            <div class="side "><span class="side__team">Baltimore Ravens</span>
+                                <span class="side__score">23.0</span></div>
+
+                            <div class="side side--fav"><span class="side__team">Indianapolis Colts</span>
+                                <span class="side__score">27.2</span></div>
+
+                            <div class="meter"><div class="meter__fill" style="width:61.02526185298676%"></div></div>
+
+                            <div class="game__foot"><span class="spread">Indianapolis Colts by 4.2</span>
+                                <span>61%
+                                    · O/U 50.2</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · 6d ago</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Baltimore Ravens</td>
+                                                <td>-3.5  -110</td>
+                                                <td>-190</td></tr>
+                                            <tr><td class="mkt__team">Indianapolis Colts</td>
+                                                <td>&#x2B;3.5  -110</td>
+                                                <td>&#x2B;165</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 48.5</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div></article><article class="game " data-game="Cleveland Browns@Jacksonville Jaguars" style="--conf:0.67; animation-delay:154ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 13 Sep &#xB7; 10:00</span>
+                                <span></span></div>
+
+                            <div class="side "><span class="side__team">Cleveland Browns</span>
+                                <span class="side__score">13.5</span></div>
+
+                            <div class="side side--fav"><span class="side__team">Jacksonville Jaguars</span>
+                                <span class="side__score">26.1</span></div>
+
+                            <div class="meter"><div class="meter__fill" style="width:80.06197710573079%"></div></div>
+
+                            <div class="game__foot"><span class="spread">Jacksonville Jaguars by 12.7</span>
+                                <span>80%
+                                    · O/U 39.6</span><span class="tag tag--key" title="Market -7.5 teases to -1.5 &#x2014; a qualifying leg">3 &amp; 7</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · 6d ago</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Cleveland Browns</td>
+                                                <td>&#x2B;7.5  -110</td>
+                                                <td>&#x2B;300</td></tr>
+                                            <tr><td class="mkt__team">Jacksonville Jaguars</td>
+                                                <td>-7.5  -110</td>
+                                                <td>-405</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 40.5</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div></article><article class="game " data-game="Atlanta Falcons@Pittsburgh Steelers" style="--conf:0.37; animation-delay:176ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 13 Sep &#xB7; 10:00</span>
+                                <span></span></div>
+
+                            <div class="side "><span class="side__team">Atlanta Falcons</span>
+                                <span class="side__score">19.2</span></div>
+
+                            <div class="side side--fav"><span class="side__team">Pittsburgh Steelers</span>
+                                <span class="side__score">23.5</span></div>
+
+                            <div class="meter"><div class="meter__fill" style="width:61.390913356552055%"></div></div>
+
+                            <div class="game__foot"><span class="spread">Pittsburgh Steelers by 4.3</span>
+                                <span>61%
+                                    · O/U 42.7</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · 6d ago</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Atlanta Falcons</td>
+                                                <td>&#x2B;3.0  -105</td>
+                                                <td>&#x2B;138</td></tr>
+                                            <tr><td class="mkt__team">Pittsburgh Steelers</td>
+                                                <td>-3.0  -110</td>
+                                                <td>-160</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 41.5</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div></article><article class="game " data-game="New York Jets@Tennessee Titans" style="--conf:0.37; animation-delay:198ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 13 Sep &#xB7; 10:00</span>
+                                <span></span></div>
+
+                            <div class="side "><span class="side__team">New York Jets</span>
+                                <span class="side__score">19.9</span></div>
+
+                            <div class="side side--fav"><span class="side__team">Tennessee Titans</span>
+                                <span class="side__score">24.3</span></div>
+
+                            <div class="meter"><div class="meter__fill" style="width:61.67956235907861%"></div></div>
+
+                            <div class="game__foot"><span class="spread">Tennessee Titans by 4.5</span>
+                                <span>62%
+                                    · O/U 44.2</span><span class="tag tag--key" title="Market &#x2B;2.5 teases to &#x2B;8.5 &#x2014; a qualifying leg">3 &amp; 7</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · 6d ago</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">New York Jets</td>
+                                                <td>&#x2B;2.5  -105</td>
+                                                <td>&#x2B;125</td></tr>
+                                            <tr><td class="mkt__team">Tennessee Titans</td>
+                                                <td>-2.5  -112</td>
+                                                <td>-150</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 38.5</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div></article><article class="game " data-game="Miami Dolphins@Las Vegas Raiders" style="--conf:0.23; animation-delay:220ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 13 Sep &#xB7; 13:25</span>
+                                <span></span></div>
+
+                            <div class="side side--fav"><span class="side__team">Miami Dolphins</span>
+                                <span class="side__score">20.2</span></div>
+
+                            <div class="side "><span class="side__team">Las Vegas Raiders</span>
+                                <span class="side__score">19.1</span></div>
+
+                            <div class="meter"><div class="meter__fill" style="width:52.99531640734665%"></div></div>
+
+                            <div class="game__foot"><span class="spread">Miami Dolphins by 1.1</span>
+                                <span>53%
+                                    · O/U 39.3</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · 6d ago</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Miami Dolphins</td>
+                                                <td>&#x2B;3.5  -110</td>
+                                                <td>&#x2B;161</td></tr>
+                                            <tr><td class="mkt__team">Las Vegas Raiders</td>
+                                                <td>-3.5  -110</td>
+                                                <td>-198</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 40.5</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div></article><article class="game " data-game="Arizona Cardinals@Los Angeles Chargers" style="--conf:0.45; animation-delay:242ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 13 Sep &#xB7; 13:25</span>
+                                <span></span></div>
+
+                            <div class="side "><span class="side__team">Arizona Cardinals</span>
+                                <span class="side__score">18.6</span></div>
+
+                            <div class="side side--fav"><span class="side__team">Los Angeles Chargers</span>
+                                <span class="side__score">25.1</span></div>
+
+                            <div class="meter"><div class="meter__fill" style="width:66.68410042194922%"></div></div>
+
+                            <div class="game__foot"><span class="spread">Los Angeles Chargers by 6.5</span>
+                                <span>67%
+                                    · O/U 43.6</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · 6d ago</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Arizona Cardinals</td>
+                                                <td>&#x2B;10.5  -110</td>
+                                                <td>&#x2B;446</td></tr>
+                                            <tr><td class="mkt__team">Los Angeles Chargers</td>
+                                                <td>-10.5  -110</td>
+                                                <td>-600</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 46.0</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div></article><article class="game " data-game="Green Bay Packers@Minnesota Vikings" style="--conf:0.26; animation-delay:264ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 13 Sep &#xB7; 13:25</span>
+                                <span></span></div>
+
+                            <div class="side "><span class="side__team">Green Bay Packers</span>
+                                <span class="side__score">17.7</span></div>
+
+                            <div class="side side--fav"><span class="side__team">Minnesota Vikings</span>
+                                <span class="side__score">19.6</span></div>
+
+                            <div class="meter"><div class="meter__fill" style="width:55.08150527323079%"></div></div>
+
+                            <div class="game__foot"><span class="spread">Minnesota Vikings by 1.9</span>
+                                <span>55%
+                                    · O/U 37.3</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · 6d ago</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Green Bay Packers</td>
+                                                <td>0.0  -110</td>
+                                                <td>-108</td></tr>
+                                            <tr><td class="mkt__team">Minnesota Vikings</td>
+                                                <td>0.0  -110</td>
+                                                <td>-112</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 45.5</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div></article><article class="game " data-game="Washington Commanders@Philadelphia Eagles" style="--conf:0.52; animation-delay:286ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 13 Sep &#xB7; 13:25</span>
+                                <span></span></div>
+
+                            <div class="side "><span class="side__team">Washington Commanders</span>
+                                <span class="side__score">16.5</span></div>
+
+                            <div class="side side--fav"><span class="side__team">Philadelphia Eagles</span>
+                                <span class="side__score">24.5</span></div>
+
+                            <div class="meter"><div class="meter__fill" style="width:70.44060526312606%"></div></div>
+
+                            <div class="game__foot"><span class="spread">Philadelphia Eagles by 8.1</span>
+                                <span>70%
+                                    · O/U 41.0</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · 6d ago</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Washington Commanders</td>
+                                                <td>&#x2B;4.5  -110</td>
+                                                <td>&#x2B;180</td></tr>
+                                            <tr><td class="mkt__team">Philadelphia Eagles</td>
+                                                <td>-4.5  -110</td>
+                                                <td>-210</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 47.5</td>
+                                                <td>over -112</td>
+                                                <td>under -110</td></tr></tbody></table></div></div></article><article class="game " data-game="Dallas Cowboys@New York Giants" style="--conf:0.28; animation-delay:308ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 13 Sep &#xB7; 17:20</span>
+                                <span></span></div>
+
+                            <div class="side "><span class="side__team">Dallas Cowboys</span>
+                                <span class="side__score">26.1</span></div>
+
+                            <div class="side side--fav"><span class="side__team">New York Giants</span>
+                                <span class="side__score">28.4</span></div>
+
+                            <div class="meter"><div class="meter__fill" style="width:56.263128640616685%"></div></div>
+
+                            <div class="game__foot"><span class="spread">New York Giants by 2.4</span>
+                                <span>56%
+                                    · O/U 54.5</span><span class="tag tag--key" title="Market &#x2B;2.5 teases to &#x2B;8.5 &#x2014; a qualifying leg">3 &amp; 7</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · 6d ago</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Dallas Cowboys</td>
+                                                <td>-2.5  -115</td>
+                                                <td>-150</td></tr>
+                                            <tr><td class="mkt__team">New York Giants</td>
+                                                <td>&#x2B;2.5  -106</td>
+                                                <td>&#x2B;125</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 48.0</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div></article><article class="game " data-game="Denver Broncos@Kansas City Chiefs" style="--conf:0.22; animation-delay:308ms"><div class="game__hit" data-toggle><div class="game__when"><span>Mon 14 Sep &#xB7; 17:15</span>
+                                <span></span></div>
+
+                            <div class="side "><span class="side__team">Denver Broncos</span>
+                                <span class="side__score">18.4</span></div>
+
+                            <div class="side side--fav"><span class="side__team">Kansas City Chiefs</span>
+                                <span class="side__score">19.3</span></div>
+
+                            <div class="meter"><div class="meter__fill" style="width:52.4117977060111%"></div></div>
+
+                            <div class="game__foot"><span class="spread">Kansas City Chiefs by 0.9</span>
+                                <span>52%
+                                    · O/U 37.7</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · 6d ago</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Denver Broncos</td>
+                                                <td>&#x2B;3.0  -114</td>
+                                                <td>&#x2B;125</td></tr>
+                                            <tr><td class="mkt__team">Kansas City Chiefs</td>
+                                                <td>-3.0  -105</td>
+                                                <td>-155</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 42.5</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div></article></div></main>
+
+    <aside class="rail rail--right"><section class="panel-block"><div class="panel__head panel__head--act " data-filter="Strongest reads" data-keys="Cleveland Browns@Jacksonville Jaguars|New Orleans Saints@Detroit Lions|Washington Commanders@Philadelphia Eagles|San Francisco 49ers@Los Angeles Rams|Arizona Cardinals@Los Angeles Chargers|New England Patriots@Seattle Seahawks|New York Jets@Tennessee Titans|Atlanta Falcons@Pittsburgh Steelers"><span class="panel__title">Strongest reads</span>
+                        <span class="panel__meta">win prob · measured</span></div><div class="row row--act " data-focus="Cleveland Browns@Jacksonville Jaguars"><span class="row__label"><b>Jacksonville Jaguars</b>
+                                <span style="opacity:.72">vs Cleveland Browns</span><span class="band">
+                                        band ran 87% on 62</span></span>
+                            <span class="row__value ">80%</span></div><div class="row row--act " data-focus="New Orleans Saints@Detroit Lions"><span class="row__label"><b>Detroit Lions</b>
+                                <span style="opacity:.72">vs New Orleans Saints</span><span class="band">
+                                        band ran 78% on 205· claims low</span></span>
+                            <span class="row__value ">71%</span></div><div class="row row--act " data-focus="Washington Commanders@Philadelphia Eagles"><span class="row__label"><b>Philadelphia Eagles</b>
+                                <span style="opacity:.72">vs Washington Commanders</span><span class="band">
+                                        band ran 78% on 205· claims low</span></span>
+                            <span class="row__value ">70%</span></div><div class="row row--act " data-focus="San Francisco 49ers@Los Angeles Rams"><span class="row__label"><b>Los Angeles Rams</b>
+                                <span style="opacity:.72">vs San Francisco 49ers</span><span class="band">
+                                        band ran 60% on 311· claims high</span></span>
+                            <span class="row__value ">67%</span></div><div class="row row--act " data-focus="Arizona Cardinals@Los Angeles Chargers"><span class="row__label"><b>Los Angeles Chargers</b>
+                                <span style="opacity:.72">vs Arizona Cardinals</span><span class="band">
+                                        band ran 60% on 311· claims high</span></span>
+                            <span class="row__value ">67%</span></div><div class="row row--act " data-focus="New England Patriots@Seattle Seahawks"><span class="row__label"><b>Seattle Seahawks</b>
+                                <span style="opacity:.72">vs New England Patriots</span><span class="band">
+                                        band ran 60% on 311· claims high</span></span>
+                            <span class="row__value ">66%</span></div><div class="row row--act " data-focus="New York Jets@Tennessee Titans"><span class="row__label"><b>Tennessee Titans</b>
+                                <span style="opacity:.72">vs New York Jets</span><span class="band">
+                                        band ran 60% on 311· claims high</span></span>
+                            <span class="row__value ">62%</span></div><div class="row row--act " data-focus="Atlanta Falcons@Pittsburgh Steelers"><span class="row__label"><b>Pittsburgh Steelers</b>
+                                <span style="opacity:.72">vs Atlanta Falcons</span><span class="band">
+                                        band ran 60% on 311· claims high</span></span>
+                            <span class="row__value ">61%</span></div></section><section class="panel-block"><div class="panel__head  " data-filter="Spread confidence" data-keys=""><span class="panel__title">Spread confidence</span>
+                        <span class="panel__meta">cover prob · captured line</span></div><div class="row"><span class="row__label" style="opacity:.72">16 games have
+                                        a line, but no team has three games rated yet. Preseason
+                                        priors are not entitled to a pick.
+                                    </span></div></section><section class="panel-block"><div class="panel__head  " data-filter="Total confidence" data-keys=""><span class="panel__title">Total confidence</span>
+                        <span class="panel__meta">over/under prob · captured line</span></div><div class="row"><span class="row__label" style="opacity:.72">
+                                Same story as the spreads: no pick without a captured total
+                                and three games rated.
+                            </span></div></section><section class="panel-block"><div class="panel__head panel__head--act " data-filter="Biggest mismatches" data-keys="Cleveland Browns@Jacksonville Jaguars|New Orleans Saints@Detroit Lions|Washington Commanders@Philadelphia Eagles|San Francisco 49ers@Los Angeles Rams|Arizona Cardinals@Los Angeles Chargers|New England Patriots@Seattle Seahawks"><span class="panel__title">Biggest mismatches</span>
+                    <span class="panel__meta">net rating gap</span></div><div class="row row--act " data-focus="Cleveland Browns@Jacksonville Jaguars"><span class="row__label"><b>Jacksonville Jaguars</b> <span style="opacity:.72">vs Cleveland Browns</span></span>
+                        <span class="row__value">10.5</span></div><div class="row row--act " data-focus="New Orleans Saints@Detroit Lions"><span class="row__label"><b>Detroit Lions</b> <span style="opacity:.72">vs New Orleans Saints</span></span>
+                        <span class="row__value">6.1</span></div><div class="row row--act " data-focus="Washington Commanders@Philadelphia Eagles"><span class="row__label"><b>Philadelphia Eagles</b> <span style="opacity:.72">vs Washington Commanders</span></span>
+                        <span class="row__value">5.9</span></div><div class="row row--act " data-focus="San Francisco 49ers@Los Angeles Rams"><span class="row__label"><b>Los Angeles Rams</b> <span style="opacity:.72">vs San Francisco 49ers</span></span>
+                        <span class="row__value">4.5</span></div><div class="row row--act " data-focus="Arizona Cardinals@Los Angeles Chargers"><span class="row__label"><b>Los Angeles Chargers</b> <span style="opacity:.72">vs Arizona Cardinals</span></span>
+                        <span class="row__value">4.3</span></div><div class="row row--act " data-focus="New England Patriots@Seattle Seahawks"><span class="row__label"><b>Seattle Seahawks</b> <span style="opacity:.72">vs New England Patriots</span></span>
+                        <span class="row__value">4.0</span></div></section><section class="panel-block"><div class="panel__head panel__head--act " data-filter="Teaser watch" data-keys="Cleveland Browns@Jacksonville Jaguars|New York Jets@Tennessee Titans|Dallas Cowboys@New York Giants|Chicago Bears@Carolina Panthers"><span class="panel__title">Teaser watch</span>
+                    <span class="panel__meta">crosses 3 &amp; 7</span></div><div class="row row--act " data-focus="Cleveland Browns@Jacksonville Jaguars"><span class="row__label"><b>Jacksonville Jaguars</b>
+                                <span style="opacity:.72">-7.5 → -1.5</span></span>
+                            <span class="row__value ">72.8%</span></div><div class="row row--act " data-focus="New York Jets@Tennessee Titans"><span class="row__label"><b>New York Jets</b>
+                                <span style="opacity:.72">&#x2B;2.5 → &#x2B;8.5</span></span>
+                            <span class="row__value ">75.1%</span></div><div class="row row--act " data-focus="Dallas Cowboys@New York Giants"><span class="row__label"><b>New York Giants</b>
+                                <span style="opacity:.72">&#x2B;2.5 → &#x2B;8.5</span></span>
+                            <span class="row__value ">75.1%</span></div><div class="row row--act " data-focus="Chicago Bears@Carolina Panthers"><span class="row__label"><b>Carolina Panthers</b>
+                                <span style="opacity:.72">&#x2B;2.5 → &#x2B;8.5</span></span>
+                            <span class="row__value ">75.1%</span></div><div class="row"><span class="row__label" style="opacity:.65;font-size:12px">
+                            Win rates are the measured per-leg rates over 1999–2025, not this game's.
+                            A market-priced leg is actionable; a model line only says a qualifying
+                            price may appear. At −134 the two-team six-pointer loses — bet at −115
+                            or better, per <code>docs/TEASER_DECISION_MEMO.md</code>.
+                        </span></div></section><section class="panel-block"><div class="panel__head"><span class="panel__title">This week</span></div>
+                <div class="stats"><div class="stat"><div class="stat__k">Games</div>
+                        <div class="stat__v">16</div></div>
+                    <div class="stat"><div class="stat__k">Mean total</div>
+                        <div class="stat__v stat__v--market">44.0</div></div>
+                    <div class="stat"><div class="stat__k">Coin flips</div>
+                        <div class="stat__v">6</div></div>
+                    <div class="stat"><div class="stat__k">Blowouts</div>
+                        <div class="stat__v stat__v--signal">0</div></div></div></section></aside></div>
+<script>
+// Interactions for the exported static boards.
+//
+// The control center runs these server-side through Blazor's @onclick handlers. An
+// exported page has no circuit, so this reimplements exactly the three that carry the
+// board's meaning — card expand, rail row to one game, rail panel to a set — against
+// the data- attributes SlateBoardView emits. Nothing else is restored: the mode switch,
+// week strip and year strip are suppressed at render time rather than faked here,
+// because an export publishes one week in one mode and every other target is a dead end.
+//
+// Deliberately dependency-free and inlined into the page: the sites are two flat files
+// on GitHub Pages with no build step and a CSP that would block an external script.
+(function () {
+    'use strict';
+
+    var board = document.querySelector('.board');
+    if (!board) return;
+
+    var cards = Array.prototype.slice.call(board.querySelectorAll('[data-game]'));
+    var bar = document.querySelector('[data-filter-bar]');
+    var barWhat = bar && bar.querySelector('.filter__what');
+    var barCount = bar && bar.querySelector('.filter__count');
+
+    // Mirrors the server's _filter / _keys pair: the label a panel was clicked under,
+    // and the set of games it narrowed to. Null label means showing everything.
+    var label = null;
+    var keys = [];
+
+    function apply() {
+        var all = keys.length === 0;
+
+        cards.forEach(function (card) {
+            var on = all || keys.indexOf(card.getAttribute('data-game')) !== -1;
+            card.hidden = !on;
+        });
+
+        // Panel heads and rail rows light up to show where the filter came from, the
+        // same On() / OnGame() classes the server applies.
+        document.querySelectorAll('[data-filter]').forEach(function (head) {
+            head.classList.toggle('panel__head--on', head.getAttribute('data-filter') === label);
+        });
+
+        document.querySelectorAll('[data-focus]').forEach(function (row) {
+            var single = keys.length === 1 && keys[0] === row.getAttribute('data-focus');
+            row.classList.toggle('row--on', single);
+        });
+
+        if (bar) {
+            bar.hidden = all;
+
+            if (!all) {
+                var shown = cards.length - cards.filter(function (c) { return c.hidden; }).length;
+                barWhat.textContent = label;
+                barCount.textContent = shown + ' of ' + cards.length +
+                    ' game' + (cards.length === 1 ? '' : 's');
+            }
+        }
+    }
+
+    function clear() {
+        label = null;
+        keys = [];
+        apply();
+    }
+
+    // Card expand. Toggling the class rather than a hidden attribute so the CSS
+    // transition on .game--open still runs.
+    board.addEventListener('click', function (e) {
+        var hit = e.target.closest('[data-toggle]');
+        if (!hit) return;
+
+        var card = hit.closest('[data-game]');
+        var wasOpen = card.classList.contains('game--open');
+
+        cards.forEach(function (c) { c.classList.remove('game--open'); });
+        if (!wasOpen) card.classList.add('game--open');
+    });
+
+    // Rail row: narrow to one game and open it, which is the point of clicking it.
+    // Clicking the row that is already the sole selection clears — the control is its
+    // own undo, matching FilterToGame.
+    document.addEventListener('click', function (e) {
+        var row = e.target.closest('[data-focus]');
+        if (!row) return;
+
+        var key = row.getAttribute('data-focus');
+
+        if (keys.length === 1 && keys[0] === key) { clear(); return; }
+
+        var card = cards.filter(function (c) { return c.getAttribute('data-game') === key; })[0];
+        if (!card) return;
+
+        label = card.querySelector('.side__team').textContent.trim() + ' at ' +
+            card.querySelectorAll('.side__team')[1].textContent.trim();
+        keys = [key];
+
+        cards.forEach(function (c) { c.classList.remove('game--open'); });
+        card.classList.add('game--open');
+        apply();
+    });
+
+    // Rail panel: narrow to its set. Clicking the active panel again clears, matching
+    // SetFilter. An empty panel is inert, as it is server-side.
+    document.addEventListener('click', function (e) {
+        var head = e.target.closest('[data-filter]');
+        if (!head) return;
+
+        var set = (head.getAttribute('data-keys') || '').split('|').filter(Boolean);
+        if (set.length === 0) return;
+
+        if (label === head.getAttribute('data-filter')) { clear(); return; }
+
+        label = head.getAttribute('data-filter');
+        keys = set;
+
+        cards.forEach(function (c) { c.classList.remove('game--open'); });
+        apply();
+    });
+
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('[data-filter-clear]')) clear();
+    });
+})();
+
+</script>
+</body>
+</html>

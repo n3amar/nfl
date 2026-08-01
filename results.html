@@ -1,0 +1,2376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NFL — Results</title>
+<style>
+/* ============================================================================
+   SteelCapping — "Saturday Desk"
+
+   An analyst's terminal, not a scoreboard. Ink-dark field, bone-chalk type,
+   and two deliberate voices in the palette: burnt orange is always the MODEL
+   speaking, cool cyan is always the MARKET. Nothing else gets to use them.
+   ========================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+    --ink:        #0a0b0d;
+    --panel:      #14171b;
+    --rule:       #23282f;
+    --rule-soft:  #191d22;
+
+    --chalk:      #ece7dc;
+    --chalk-dim:  #9c968a;
+    --chalk-mute: #6b665d;
+
+    /* The model's voice. Green, replacing the original burnt orange.
+
+       Two steps of one hue rather than one, because a single value cannot do both
+       jobs. #228B22 is the requested colour and it is what fills, borders and washes
+       use, where WCAG only asks 3:1. It cannot carry text: against the ink it
+       measures 4.49:1 and against the panel 4.10:1, both under the 4.5:1 floor for
+       normal-size type — and most of what wears this colour is 10-12px mono.
+
+       --signal lifts the same hue to 6.34:1 on ink and 5.79:1 on panel, which is
+       where the old orange sat (5.82 / 5.32), so nothing got harder to read. */
+    --signal:      #2fa82f;   /* text, values, active states */
+    --signal-dim:  #228b22;   /* fills, borders, meters */
+    --signal-wash: rgba(34, 139, 34, 0.10);
+
+    /* The market's voice. Chosen by running the palette validator against the dark
+       chart surface rather than by eye: the original #6fb6c9 failed both the
+       lightness band and the chroma floor, meaning it read as grey rather than as a
+       colour.
+
+       Re-validated against the green after the swap, since the number recorded here
+       was measured against the orange it replaced. Still passes all five checks:
+       deltaE 20.0 from --signal under deuteranopia and 21.5 under normal vision,
+       against a target of 8. Tritan separation is the one figure that got worse,
+       4.2 against the orange's 33.7 — tritanopia is ~1 in 10,000 and not sex-linked,
+       and every place these two colours meet is also separated by position and
+       label, but it is the cost of moving the signal hue this close to cyan. */
+    --market:      #1f9ec9;
+    --market-wash: rgba(31, 158, 201, 0.10);
+
+    --serif: 'Instrument Serif', Georgia, serif;
+    --sans:  'Archivo', 'Helvetica Neue', sans-serif;
+    --mono:  'IBM Plex Mono', ui-monospace, monospace;
+
+    --rail-left:  clamp(180px, 15vw, 236px);
+    --rail-right: clamp(280px, 24vw, 364px);
+    --gutter:     clamp(12px, 1.6vw, 26px);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--ink);
+    color: var(--chalk);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Faint field texture so the dark reads as paper stock, not a void. */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+    background-image:
+        radial-gradient(circle at 18% 8%, rgba(34, 139, 34, 0.06), transparent 44%),
+        radial-gradient(circle at 88% 72%, rgba(31, 158, 201, 0.045), transparent 40%);
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ── Shell ───────────────────────────────────────────────────────────────── */
+
+.desk {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: var(--rail-left) minmax(0, 1fr) var(--rail-right);
+    gap: var(--gutter);
+    max-width: 1680px;
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    align-items: start;
+}
+
+.rail {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 26px 0 40px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--rule) transparent;
+}
+
+.rail::-webkit-scrollbar { width: 6px; }
+.rail::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
+
+.rail--left  { border-right: 1px solid var(--rule-soft); padding-right: var(--gutter); }
+.rail--right { border-left: 1px solid var(--rule-soft); padding-left: var(--gutter); }
+
+.column { padding: 26px 0 80px; min-width: 0; }
+
+/* ── Masthead ────────────────────────────────────────────────────────────── */
+
+.mark { display: block; margin-bottom: 30px; line-height: 1; }
+
+.mark__name {
+    font-family: var(--serif);
+    font-size: 27px;
+    letter-spacing: -0.015em;
+}
+
+.mark__name em { color: var(--signal); font-style: italic; }
+
+.mark__sub {
+    display: block;
+    margin-top: 7px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.19em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+}
+
+/* ── Navigation ──────────────────────────────────────────────────────────── */
+
+.nav__group { margin-bottom: 26px; }
+
+.nav__label {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    margin-bottom: 9px;
+    padding-left: 10px;
+}
+
+.nav__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 5px;
+    border-left: 2px solid transparent;
+    color: var(--chalk-dim);
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color .16s ease, background .16s ease, border-color .16s ease;
+}
+
+.nav__item:hover { color: var(--chalk); background: var(--panel); }
+
+.nav__item--on {
+    color: var(--chalk);
+    background: var(--signal-wash);
+    border-left-color: var(--signal);
+}
+
+.nav__count { font-family: var(--mono); font-size: 11.5px; color: var(--chalk-mute); }
+
+/* ── Nav tiers ───────────────────────────────────────────────────────────── */
+
+/* The workshop, set below a rule and dimmed until wanted. */
+.nav__group--under {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule-soft);
+    opacity: .72;
+    transition: opacity .2s ease;
+}
+
+.nav__group--under:hover { opacity: 1; }
+.nav__group--under + .nav__group--under { margin-top: 20px; padding-top: 0; border-top: none; }
+
+/* ── Benchmark comparison ────────────────────────────────────────────────── */
+
+.bench {
+    display: grid;
+    gap: 7px;
+    margin-bottom: 16px;
+    padding: 16px 18px;
+    background: var(--panel);
+    border: 1px solid var(--rule-soft);
+    border-radius: 9px;
+}
+
+.bench__row {
+    display: grid;
+    grid-template-columns: 148px 1fr 52px minmax(0, 168px);
+    align-items: center;
+    gap: 12px;
+}
+
+.bench__name { font-size: 13px; color: var(--chalk-dim); }
+
+.bench__bar {
+    height: 8px;
+    background: var(--rule-soft);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.bench__fill {
+    display: block;
+    height: 100%;
+    background: var(--chalk-mute);
+    border-radius: 4px;
+    opacity: .55;
+}
+
+.bench__val {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    color: var(--chalk-dim);
+}
+
+.bench__note {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bench__row--mine .bench__name { color: var(--chalk); font-weight: 600; }
+.bench__row--mine .bench__fill { background: var(--signal); opacity: 1; }
+.bench__row--mine .bench__val { color: var(--signal); }
+
+.inline { color: var(--signal); border-bottom: 1px solid var(--signal-dim); }
+.inline:hover { border-bottom-color: var(--signal); }
+
+@media (max-width: 900px) {
+    .bench__row { grid-template-columns: 116px 1fr 48px; }
+    .bench__note { display: none; }
+}
+
+/* ── Overview ────────────────────────────────────────────────────────────── */
+
+.stat__sub {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    margin-top: 4px;
+}
+
+.empty {
+    padding: 22px 24px;
+    background: var(--panel);
+    border: 1px dashed var(--rule);
+    border-radius: 9px;
+    margin-bottom: 32px;
+    max-width: 66ch;
+}
+
+.empty__lede {
+    font-family: var(--serif);
+    font-size: 21px;
+    color: var(--chalk);
+    margin-bottom: 9px;
+}
+
+.empty p { margin: 0 0 11px; font-size: 13.5px; line-height: 1.62; color: var(--chalk-dim); }
+
+.empty__why {
+    font-size: 12.5px !important;
+    color: var(--chalk-mute) !important;
+    padding-left: 13px;
+    border-left: 2px solid var(--rule);
+}
+
+.empty__link {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--signal);
+}
+
+.upnext {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.up {
+    display: block;
+    padding: 13px 15px;
+    background: var(--panel);
+    border: 1px solid var(--rule-soft);
+    border-radius: 8px;
+    transition: border-color .16s ease, transform .16s ease;
+}
+
+.up:hover { border-color: var(--signal-dim); transform: translateY(-1px); }
+
+.up__when {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    margin-bottom: 8px;
+}
+
+.up__league { color: var(--market); }
+
+.up__teams {
+    font-size: 14px;
+    color: var(--chalk);
+    margin-bottom: 7px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.up__teams span { color: var(--chalk-mute); font-size: 12px; }
+
+.up__call {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--chalk-dim);
+    padding-top: 8px;
+    border-top: 1px solid var(--rule-soft);
+}
+
+.up__call span { color: var(--signal); }
+
+/* ── Backtest ledger ─────────────────────────────────────────────────────── */
+
+.trials { display: grid; gap: 10px; margin-bottom: 30px; }
+
+.trial {
+    padding: 14px 16px;
+    background: var(--panel);
+    border: 1px solid var(--rule-soft);
+    border-left: 3px solid var(--rule);
+    border-radius: 0 8px 8px 0;
+}
+
+/* The verdict is carried by an edge stripe AND a word — never colour alone. */
+.trial--positive { border-left-color: var(--up); }
+.trial--negative { border-left-color: var(--down); }
+.trial--inconclusive { border-left-color: var(--chalk-mute); }
+.trial--informational { border-left-color: var(--market); }
+
+.trial__top {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 11px;
+}
+
+.trial__league {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.13em;
+    color: var(--chalk-mute);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 2px 5px;
+}
+
+.trial__name { font-size: 14.5px; font-weight: 500; color: var(--chalk); }
+
+.trial__verdict {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.trial--positive .trial__verdict { color: var(--up); }
+.trial--negative .trial__verdict { color: var(--down); }
+.trial--inconclusive .trial__verdict { color: var(--chalk-mute); }
+.trial--informational .trial__verdict { color: var(--market); }
+
+.trial__nums { display: flex; flex-wrap: wrap; gap: 22px; margin-bottom: 10px; }
+.trial__num { display: flex; flex-direction: column; gap: 2px; }
+
+.trial__k {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+}
+
+.trial__v {
+    font-family: var(--mono);
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+    color: var(--chalk);
+}
+
+.trial__v--cool { color: var(--market); }
+
+.trial__says {
+    margin: 0 0 9px;
+    font-size: 13px;
+    line-height: 1.58;
+    color: var(--chalk-dim);
+    max-width: 70ch;
+}
+
+.trial__foot {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+}
+
+/* ── Glossary ────────────────────────────────────────────────────────────── */
+
+.key { margin: 12px 0 0; padding: 0; }
+
+.key dt {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin-bottom: 3px;
+}
+
+.key dt.key__market { color: var(--market); }
+
+.key dd {
+    margin: 0 0 11px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--chalk-mute);
+}
+
+.key__more {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    transition: color .15s ease;
+}
+
+.key__more:hover { color: var(--signal); }
+
+/* ── Page header ─────────────────────────────────────────────────────────── */
+
+.head { margin-bottom: 22px; }
+
+.head__kicker {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin-bottom: 7px;
+}
+
+.head__title {
+    font-family: var(--serif);
+    font-size: clamp(30px, 4.2vw, 47px);
+    line-height: 1.02;
+    letter-spacing: -0.022em;
+    margin: 0 0 9px;
+}
+
+.head__title em { font-style: italic; color: var(--chalk-dim); }
+
+.head__note { font-size: 12.5px; color: var(--chalk-mute); max-width: 62ch; }
+.head__note strong { color: var(--chalk-dim); font-weight: 500; }
+
+/* ── Week strip ──────────────────────────────────────────────────────────── */
+
+.weeks {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    padding: 13px 0 17px;
+    border-top: 1px solid var(--rule-soft);
+    border-bottom: 1px solid var(--rule-soft);
+    margin-bottom: 22px;
+}
+
+/* An anchor, not a button: the week is in the route, so this navigates. That also makes
+   it work unchanged in a static export, where no handler would ever fire. */
+.week {
+    min-width: 33px;
+    padding: 5px 9px;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--chalk-mute);
+    background: var(--panel);
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .15s ease;
+}
+
+.week:hover { color: var(--chalk); border-color: var(--rule); }
+.week--on { background: var(--signal); color: var(--ink); font-weight: 600; }
+
+/* ── Game cards ──────────────────────────────────────────────────────────── */
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 11px;
+}
+
+.game {
+    background: var(--panel);
+    border: 1px solid var(--rule-soft);
+    border-radius: 8px;
+    padding: 15px 16px 13px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .18s ease, transform .18s ease;
+    animation: rise .42s cubic-bezier(.2, .7, .3, 1) backwards;
+}
+
+.game:hover { border-color: var(--rule); transform: translateY(-1px); }
+
+/* Confidence bleeds in from the left edge — readable at a glance across the board. */
+.game::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--signal);
+    opacity: var(--conf, 0.2);
+}
+
+@keyframes rise {
+    from { opacity: 0; transform: translateY(7px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.game__when {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    margin-bottom: 11px;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.side {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 4px 0;
+}
+
+.side__team {
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    color: var(--chalk-dim);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.side--fav .side__team { color: var(--chalk); font-weight: 600; }
+
+.side__score {
+    font-family: var(--mono);
+    font-size: 16px;
+    font-variant-numeric: tabular-nums;
+    color: var(--chalk-mute);
+}
+
+.side--fav .side__score { color: var(--signal); }
+
+.game__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 11px;
+    padding-top: 10px;
+    border-top: 1px solid var(--rule-soft);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--chalk-mute);
+}
+
+.spread { color: var(--chalk); font-weight: 500; }
+
+.tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid;
+}
+
+.tag--key  { color: var(--signal); border-color: var(--signal-dim); background: var(--signal-wash); }
+.tag--thin { color: var(--chalk-mute); border-color: var(--rule); }
+
+.meter {
+    height: 3px;
+    background: var(--rule-soft);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 9px;
+}
+
+.meter__fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--signal-dim), var(--signal));
+    transition: width .5s cubic-bezier(.2, .7, .3, 1);
+}
+
+/* ── Expandable breakdown ────────────────────────────────────────────────── */
+
+.game__hit { cursor: pointer; }
+.game--open { border-color: var(--signal-dim); }
+.game--open .game__foot { border-bottom: 1px solid var(--rule-soft); padding-bottom: 10px; }
+
+.chev {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--chalk-mute);
+    margin-left: auto;
+    padding-left: 6px;
+}
+
+.game--open .chev { color: var(--signal); }
+
+.dig { animation: unfurl .22s ease-out; padding-top: 12px; }
+
+@keyframes unfurl {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.dig__label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    margin: 0 0 7px;
+}
+
+.dig__note {
+    margin-top: 12px;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--chalk-mute);
+    opacity: .78;
+}
+
+.grid {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 15px;
+}
+
+.grid th {
+    text-align: right;
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    padding: 0 0 5px 10px;
+    border-bottom: 1px solid var(--rule-soft);
+}
+
+.grid th:first-child { text-align: left; padding-left: 0; }
+
+.grid td {
+    text-align: right;
+    padding: 6px 0 6px 10px;
+    color: var(--chalk-dim);
+    border-bottom: 1px solid var(--rule-soft);
+}
+
+.grid tr:last-child td { border-bottom: none; }
+
+.grid__team {
+    text-align: left !important;
+    padding-left: 0 !important;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--chalk);
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.grid__net { color: var(--signal); }
+.grid__dim { color: var(--chalk-mute); }
+
+.build { margin-bottom: 11px; }
+
+.build__head {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--chalk);
+    margin-bottom: 4px;
+}
+
+.build__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 2.5px 0;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+}
+
+.build__k { color: var(--chalk-mute); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.build__v { color: var(--chalk-dim); }
+
+.build__row--sum {
+    margin-top: 3px;
+    padding-top: 5px;
+    border-top: 1px solid var(--rule-soft);
+}
+
+.build__row--sum .build__k { color: var(--chalk-dim); }
+.build__row--sum .build__v { color: var(--signal); font-size: 13px; }
+
+/* ── Calibration plot ────────────────────────────────────────────────────── */
+
+.stats--wide { grid-template-columns: repeat(4, 1fr); margin-bottom: 30px; }
+.stat__v--verdict { font-family: var(--sans); font-size: 13px; line-height: 1.3; }
+
+.section {
+    font-family: var(--serif);
+    font-size: 22px;
+    letter-spacing: -0.012em;
+    margin: 0 0 5px;
+    font-weight: 400;
+}
+
+.section__note {
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--chalk-mute);
+    max-width: 60ch;
+    margin: 0 0 16px;
+}
+
+.plot {
+    margin: 0 0 32px;
+    padding: 12px 6px 6px;
+    background: var(--panel);
+    border: 1px solid var(--rule-soft);
+    border-radius: 9px;
+}
+
+.plot svg { width: 100%; height: auto; display: block; }
+
+.plot__grid { stroke: var(--rule-soft); stroke-width: 1; }
+.plot__axis { stroke: var(--rule); stroke-width: 1; }
+
+/* Perfect calibration: present but recessive — it is a reference, not a series. */
+.plot__ideal {
+    stroke: var(--chalk-mute);
+    stroke-width: 1.5;
+    stroke-dasharray: 5 5;
+    opacity: .55;
+}
+
+.plot__path {
+    fill: none;
+    stroke: var(--signal);
+    stroke-width: 2;
+    opacity: .38;
+    stroke-linejoin: round;
+}
+
+/* 2px surface ring so overlapping dots stay countable. */
+.plot__dot {
+    fill: var(--signal);
+    stroke: var(--panel);
+    stroke-width: 2;
+    transition: opacity .15s ease;
+}
+
+.plot__dot:hover { opacity: .8; }
+.plot__dot--off { fill: var(--market); }
+
+.plot__tick {
+    font-family: var(--mono);
+    font-size: 11px;
+    fill: var(--chalk-mute);
+}
+
+.plot__label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    fill: var(--chalk-mute);
+}
+
+.explain {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--chalk-mute);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--rule-soft);
+}
+
+.explain:last-child { border-bottom: none; }
+.explain b { color: var(--chalk-dim); font-weight: 600; }
+
+@media (max-width: 900px) {
+    .stats--wide { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Power ratings ladder ────────────────────────────────────────────────── */
+
+.chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 16px; }
+
+.chip {
+    padding: 4px 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--chalk-mute);
+    background: var(--panel);
+    border: 1px solid transparent;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all .15s ease;
+}
+
+.chip:hover { color: var(--chalk); border-color: var(--rule); }
+.chip--on { background: var(--signal); color: var(--ink); font-weight: 600; }
+
+.ladder {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+}
+
+.ladder thead th {
+    position: sticky;
+    top: 0;
+    background: var(--ink);
+    z-index: 2;
+    font-weight: 500;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    padding: 9px 0 8px 12px;
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+}
+
+.ladder__num { text-align: right; }
+.ladder th.ladder__num { cursor: pointer; user-select: none; transition: color .15s ease; }
+.ladder th.ladder__num:hover { color: var(--chalk); }
+.ladder th.ladder__num--on { color: var(--signal); }
+
+.ladder tbody td {
+    padding: 7px 0 7px 12px;
+    border-bottom: 1px solid var(--rule-soft);
+    color: var(--chalk-dim);
+}
+
+.ladder tbody tr:hover td { background: var(--panel); }
+
+.ladder__rank {
+    width: 34px;
+    text-align: right;
+    color: var(--chalk-mute);
+    padding-left: 0 !important;
+}
+
+.ladder__team {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: var(--chalk);
+    width: 100%;
+}
+
+.ladder__conf {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    margin-left: 8px;
+}
+
+.ladder__net { color: var(--signal); font-weight: 500; }
+.ladder__dim { color: var(--chalk-mute); }
+
+/* ── Right rail panels ───────────────────────────────────────────────────── */
+
+.panel-block { margin-bottom: 26px; }
+
+.panel__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 11px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--rule-soft);
+}
+
+/* Panels that filter the board announce it by being clickable. */
+.panel__head--act,
+.row--act {
+    cursor: pointer;
+    transition: color .15s ease, background .15s ease;
+}
+
+.panel__head--act:hover { border-bottom-color: var(--signal-dim); }
+.panel__head--act:hover .panel__title { color: var(--signal); }
+
+/* Inset rather than negative margins: pulling the hover area outward pushed the value
+   column past the rail edge and clipped every percentage. */
+.row--act {
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 4px;
+}
+
+.row--act:hover { background: var(--signal-wash); }
+.row--act:hover .row__label { color: var(--chalk); }
+
+.panel__head--on .panel__title { color: var(--signal); }
+.row--on { background: var(--signal-wash); }
+
+/* ── Active filter ───────────────────────────────────────────────────────── */
+
+/* An author display rule outranks the UA stylesheet's [hidden] { display: none }, so
+   the exported filter bar — which ships hidden and is revealed by the static shim —
+   stayed visible and empty on the published board until this was added. The cards were
+   fine because nothing sets display on .game. */
+.filter[hidden] { display: none; }
+
+.filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    margin-bottom: 16px;
+    background: var(--signal-wash);
+    border: 1px solid var(--signal-dim);
+    border-radius: 7px;
+}
+
+.filter__what {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--signal);
+}
+
+.filter__count { font-size: 12px; color: var(--chalk-mute); margin-left: auto; }
+
+.filter__clear {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--chalk-dim);
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 3px 9px;
+    cursor: pointer;
+    transition: all .15s ease;
+}
+
+.filter__clear:hover { color: var(--ink); background: var(--signal); border-color: var(--signal); }
+
+.panel__title { font-family: var(--serif); font-size: 17px; letter-spacing: -0.01em; }
+
+.panel__meta {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 9px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    font-size: 12.5px;
+}
+
+.row:last-child { border-bottom: none; }
+
+.row__label { color: var(--chalk-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row__label b { color: var(--chalk); font-weight: 600; }
+
+.row__value {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: var(--signal);
+    white-space: nowrap;
+}
+
+.row__value--cool { color: var(--market); }
+.row__value--mute { color: var(--chalk-mute); }
+
+/* ── Stat block ──────────────────────────────────────────────────────────── */
+
+.stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--rule-soft);
+    border: 1px solid var(--rule-soft);
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.stat { background: var(--panel); padding: 11px 12px; }
+
+.stat__k {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    margin-bottom: 5px;
+}
+
+.stat__v {
+    font-family: var(--mono);
+    font-size: 17px;
+    font-variant-numeric: tabular-nums;
+    color: var(--chalk);
+}
+
+.stat__v--signal { color: var(--signal); }
+.stat__v--market { color: var(--market); }
+
+/* ── Empty / loading ─────────────────────────────────────────────────────── */
+
+.hush {
+    padding: 46px 20px;
+    text-align: center;
+    color: var(--chalk-mute);
+    font-size: 13px;
+    border: 1px dashed var(--rule);
+    border-radius: 8px;
+}
+
+.hush__lede {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 20px;
+    color: var(--chalk-dim);
+    margin-bottom: 7px;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 1240px) {
+    .desk { grid-template-columns: var(--rail-left) minmax(0, 1fr); }
+    .rail--right { display: none; }
+}
+
+@media (max-width: 820px) {
+    .desk { grid-template-columns: minmax(0, 1fr); padding: 0 16px; }
+    .rail--left {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--rule-soft);
+        padding-right: 0;
+    }
+    .nav__group { margin-bottom: 14px; }
+    .board { grid-template-columns: 1fr; }
+}
+
+/* ── Board modes ─────────────────────────────────────────────────────────────
+   The two voices of the palette do the work here: the confidence board is the
+   model talking, the edge board is the market talking. Colouring the active
+   mode is not decoration — it is the same cue used everywhere else, so a glance
+   at the page tells you whose number you are reading.
+   ------------------------------------------------------------------------- */
+
+.modes {
+    display: flex;
+    gap: 8px;
+    margin: 14px 0 4px;
+    flex-wrap: wrap;
+}
+
+.mode {
+    flex: 1 1 180px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 9px 12px;
+    text-align: left;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    color: var(--chalk-mute);
+    text-decoration: none;
+    transition: all .16s ease;
+}
+
+.mode:hover { border-color: var(--chalk-mute); color: var(--chalk-dim); }
+
+.mode__name {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.mode__note {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.mode--on { color: var(--chalk); }
+
+.mode--on.mode--model  { border-color: var(--signal-dim); background: var(--signal-wash); }
+.mode--on.mode--model  .mode__note { color: var(--signal); }
+
+.mode--on.mode--market { border-color: var(--market); background: var(--market-wash); }
+.mode--on.mode--market .mode__note { color: var(--market); }
+
+/* ── Captured market, on a game card ─────────────────────────────────────────
+   Always the market's cyan, never the model's orange, so a posted price can
+   never be mistaken for a projection on a card that shows both.
+   ------------------------------------------------------------------------- */
+
+.mkt {
+    margin-top: 10px;
+    padding-top: 9px;
+    border-top: 1px dashed var(--rule);
+    color: var(--market);
+}
+
+.mkt__cap {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+}
+
+.mkt__src { letter-spacing: 0.08em; }
+
+.mkt__grid {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+}
+
+.mkt__grid th {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: right;
+    color: var(--chalk-mute);
+    padding-bottom: 3px;
+}
+
+.mkt__grid th:first-child { text-align: left; }
+
+.mkt__grid td {
+    padding: 3px 0;
+    text-align: right;
+    white-space: nowrap;
+    color: var(--market);
+}
+
+/* The subject of every price. Named, never implied — a bare "-3.5" on a card with
+   two teams on it is not a line, it is a riddle. */
+.mkt__team {
+    text-align: left !important;
+    width: 46%;
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--chalk) !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mkt__tot td { border-top: 1px solid var(--rule-soft); padding-top: 5px; }
+.mkt__tot .mkt__team { color: var(--chalk-dim) !important; }
+
+.mkt__drift {
+    margin-top: 6px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--chalk-mute);
+}
+
+/* ── Sized bets, on the card that produced them ──────────────────────────────
+   The rail could only ever fit a cramped ranked list. An edge is a disagreement
+   between two numbers, so both belong beside the price they disagree about.
+   ------------------------------------------------------------------------- */
+
+.plays {
+    margin-top: 10px;
+    padding-top: 9px;
+    border-top: 1px dashed var(--rule);
+}
+
+.plays__cap {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 5px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+}
+
+.plays__src { letter-spacing: 0.06em; text-transform: none; opacity: .8; }
+
+.play {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto auto;
+    align-items: baseline;
+    gap: 4px 9px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-variant-numeric: tabular-nums;
+    color: var(--chalk-mute);
+}
+
+.play:last-child { border-bottom: none; }
+
+.play__what {
+    font-family: var(--sans);
+    font-size: 12.5px;
+    color: var(--chalk-dim);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.play__price { color: var(--market); }
+.play__nums  { font-size: 11.5px; }
+.play__edge  { font-weight: 600; }
+.play__edge--up { color: var(--signal); }
+
+/* The verdict spans the full width on its own line, because a truncated reason is
+   the one thing on this block that must never be truncated. */
+.play__verdict {
+    grid-column: 1 / -1;
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--chalk-mute);
+}
+
+.play--on .play__what { color: var(--chalk); font-weight: 600; }
+.play--on .play__verdict { color: var(--signal); }
+
+/* A game with a price the model is not entitled to an opinion about. Stating the
+   reason matters: silence here would look identical to a game with no market. */
+.plays--held .plays__cap { color: var(--chalk-mute); }
+
+.plays__why {
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--chalk-mute);
+    font-style: italic;
+}
+
+/* Absence stated, not implied. A card with no odds row and a card whose odds
+   failed to load would otherwise look identical. */
+.mkt--none {
+    color: var(--chalk-mute);
+    font-family: var(--sans);
+    font-size: 12px;
+    font-style: italic;
+}
+
+/* A model-derived teaser flag, deliberately duller than the market one. The two
+   were indistinguishable once, and a game the model liked by 8 with the market
+   at 4.5 read as a qualifying leg when it is not one. */
+.tag--hint { color: var(--chalk-mute); border-color: var(--rule); border-style: dashed; }
+
+/* Sized bets in a market the ledger has already measured as losing. */
+.tag--warn { color: var(--signal); border-color: var(--signal-dim); background: var(--signal-wash); }
+
+/* ── Calibration band, beside a confidence claim ─────────────────────────── */
+
+.band {
+    display: block;
+    margin-top: 2px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--chalk-mute);
+    white-space: normal;
+}
+
+.band--none { font-style: italic; opacity: .7; }
+
+/* Rows carrying a band need two lines; the single-line ellipsis rule that keeps
+   the other panels tidy would otherwise clip the evidence off the end. */
+.row__label:has(.band) { white-space: normal; overflow: visible; }
+
+/* ── The model, dissected ────────────────────────────────────────────────────
+   A reading document rather than a dashboard, so it gets a measure and a longer
+   line height. Everything else on the site is scanned; this is read.
+   ------------------------------------------------------------------------- */
+
+.column--prose { max-width: 76ch; }
+
+.column--prose p { line-height: 1.62; color: var(--chalk-dim); }
+
+.claim {
+    margin: 14px 0 26px;
+    padding: 16px 18px;
+    border-left: 2px solid var(--signal-dim);
+    background: var(--signal-wash);
+    border-radius: 0 4px 4px 0;
+}
+
+.claim p:last-child { margin-bottom: 0; }
+.claim strong { color: var(--chalk); }
+
+.claim--key { border-left-color: var(--signal); }
+.claim--key p { color: var(--chalk); font-size: 15.5px; }
+
+.claim--warn { border-left-color: var(--market); background: var(--market-wash); }
+
+.two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 14px 0 20px;
+}
+
+@media (max-width: 900px) { .two { grid-template-columns: 1fr; } }
+
+.card {
+    padding: 15px 17px;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    background: var(--panel);
+}
+
+.card__cap {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    margin-bottom: 9px;
+}
+
+.card ul { margin: 0; padding-left: 17px; }
+.card li { margin-bottom: 6px; font-size: 13.5px; line-height: 1.5; color: var(--chalk-dim); }
+.card li:last-child { margin-bottom: 0; }
+.card strong { color: var(--chalk); }
+
+.card--is   { border-left: 2px solid var(--signal-dim); }
+.card--isnt { border-left: 2px solid var(--market); }
+
+.aside {
+    margin: 16px 0 26px;
+    padding-left: 14px;
+    border-left: 1px solid var(--rule);
+    font-size: 13.5px;
+    color: var(--chalk-mute);
+}
+
+.aside--foot { margin-top: 34px; font-style: italic; }
+
+.wide {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 22px;
+    font-size: 13.5px;
+}
+
+.wide th {
+    text-align: left;
+    padding: 7px 10px 7px 0;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    font-weight: 500;
+}
+
+.wide td {
+    padding: 9px 10px 9px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    vertical-align: top;
+    line-height: 1.5;
+    color: var(--chalk-dim);
+}
+
+.wide td:first-child { color: var(--chalk); width: 21%; }
+.wide tr.rule td { border-top: 1px solid var(--rule); }
+
+.wide .num {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    width: 11%;
+    color: var(--chalk);
+}
+
+.num--signal { color: var(--signal); }
+.num--market { color: var(--market); }
+
+.wrongs { margin: 12px 0 24px; padding-left: 20px; }
+
+.wrongs > li {
+    margin-bottom: 15px;
+    line-height: 1.6;
+    color: var(--chalk-dim);
+    font-size: 14px;
+}
+
+.wrongs strong { color: var(--chalk); }
+.wrongs ul { margin: 8px 0 0; padding-left: 17px; }
+.wrongs ul li { margin-bottom: 5px; font-size: 13.5px; }
+
+.checks { display: grid; gap: 12px; margin: 14px 0 24px; }
+
+.check {
+    position: relative;
+    padding: 15px 17px 15px 19px;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    background: var(--panel);
+}
+
+.check h3 {
+    margin: 0 0 7px;
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--chalk);
+}
+
+.check p { margin: 0 0 8px; font-size: 13.5px; line-height: 1.55; }
+.check p:last-child { margin-bottom: 0; }
+
+.check__tag {
+    display: inline-block;
+    margin-bottom: 8px;
+    padding: 2px 7px;
+    border: 1px solid;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.check__why {
+    margin-top: 9px;
+    padding-top: 9px;
+    border-top: 1px solid var(--rule-soft);
+    color: var(--chalk-mute);
+}
+
+.check--have    { border-left: 2px solid var(--signal-dim); }
+.check--have    .check__tag { color: var(--signal); border-color: var(--signal-dim); }
+
+.check--partial { border-left: 2px solid var(--chalk-mute); }
+.check--partial .check__tag { color: var(--chalk-dim); border-color: var(--rule); }
+
+/* The ones that matter most, so they are the ones that read loudest. */
+.check--missing { border-left: 2px solid var(--market); }
+.check--missing .check__tag { color: var(--market); border-color: var(--market); }
+
+/* ── Comparison bars ─────────────────────────────────────────────────────────
+   One hue, because these are one measure across three sports rather than three
+   categories — identity is carried by the row label, not by colour. Values are
+   direct-labelled, so there is no legend and no colour-only encoding.
+   ------------------------------------------------------------------------- */
+
+.bars {
+    margin: 0;
+    padding: 15px 17px;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    background: var(--panel);
+}
+
+.bars__cap {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 13px;
+    font-family: var(--sans);
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--chalk);
+}
+
+.bars__cap span {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    color: var(--chalk-mute);
+    text-transform: none;
+}
+
+.bar {
+    display: grid;
+    grid-template-columns: 58px 1fr 52px;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 8px;
+}
+
+.bar__k {
+    font-family: var(--sans);
+    font-size: 12.5px;
+    color: var(--chalk-dim);
+}
+
+.bar__track {
+    height: 9px;
+    background: var(--rule-soft);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+/* 4px rounded data-end, anchored to the baseline. */
+.bar__fill {
+    display: block;
+    height: 100%;
+    background: var(--signal);
+    border-radius: 0 3px 3px 0;
+    transition: width .5s cubic-bezier(.2, .7, .3, 1);
+}
+
+.bar__v {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    color: var(--chalk);
+}
+
+.bars__note {
+    margin: 12px 0 0;
+    padding-top: 10px;
+    border-top: 1px solid var(--rule-soft);
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--chalk-mute);
+}
+
+.gates { margin: 10px 0; padding-left: 19px; }
+.gates li { margin-bottom: 6px; font-size: 14px; line-height: 1.5; color: var(--chalk-dim); }
+
+/* Blazor's error bar, restyled so it belongs to the same room. */
+#blazor-error-ui {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 11px 18px;
+    background: var(--signal);
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+#blazor-error-ui .dismiss { cursor: pointer; float: right; }
+
+.blazor-error-boundary { background: var(--signal); padding: 1rem; color: var(--ink); }
+.blazor-error-boundary::after { content: "Something broke."; }
+
+/* ── Export to the public sites ──────────────────────────────────────────────
+   Sits under the board header rather than in the rail: publishing is an action on
+   the week being looked at, and the rail is where the week's *contents* are read. */
+
+.export { margin: 14px 0 4px; }
+
+.export__go {
+    padding: 8px 14px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--chalk-dim);
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all .16s ease;
+}
+
+.export__go:hover:not(:disabled) {
+    color: var(--signal);
+    border-color: var(--signal-dim);
+    background: var(--signal-wash);
+}
+
+.export__go:disabled { opacity: .45; cursor: default; }
+
+.export__said {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-top: 10px;
+    padding: 9px 12px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    line-height: 1.5;
+    border-left: 2px solid var(--rule);
+    color: var(--chalk-mute);
+}
+
+.export__said strong { font-weight: 600; color: var(--chalk); }
+
+.export__said--ok  { border-left-color: var(--signal-dim); }
+.export__said--bad { border-left-color: var(--warn, #c8552b); }
+
+</style>
+</head>
+<body>
+
+
+<div class="desk"><aside class="rail rail--left"><a class="mark" href="index.html"><span class="mark__name">Steel<em>Capping</em></span>
+        <span class="mark__sub">NFL</span></a><div class="nav__group"><div class="nav__label">NFL</div>
+
+        <a class="nav__item " href="index.html"><span>This week</span>
+            <span class="nav__count">board</span></a>
+
+        <a class="nav__item nav__item--on" href="results.html"><span>Results</span>
+            <span class="nav__count">graded</span></a></div><div class="nav__group nav__group--under"><div class="nav__label">Other sites</div>
+
+        <a class="nav__item" href="https://n3amar.github.io/cfb/"><span>College Football</span></a>
+
+        <a class="nav__item" href="https://n3amar.github.io/mlb/"><span>MLB</span></a></div><div class="nav__group nav__group--under"><div class="nav__label">Accuracy · college</div>
+        <div class="stats"><div class="stat"><div class="stat__k">Model MAE</div>
+                <div class="stat__v stat__v--signal">12.92</div></div>
+            <div class="stat"><div class="stat__k">Market</div>
+                <div class="stat__v stat__v--market">12.09</div></div>
+            <div class="stat"><div class="stat__k">Brier skill</div>
+                <div class="stat__v">20.9%</div></div>
+            <div class="stat"><div class="stat__k">Calib err</div>
+                <div class="stat__v">1.6%</div></div></div>
+
+        <dl class="key"><dt>Model MAE</dt>
+            <dd>
+                How many points the model misses a final margin by, on average.
+                Lower is better.
+            </dd>
+
+            <dt class="key__market">Market</dt>
+            <dd>
+                The same measure for the closing betting line. It is the benchmark,
+                and has not yet been beaten.
+            </dd>
+
+            <dt>Brier skill</dt>
+            <dd>
+                How much better its win probabilities are than always guessing the
+                base rate. Zero would mean it knows nothing beyond how often home
+                teams win.
+            </dd>
+
+            <dt>Calib err</dt>
+            <dd>
+                How far its stated confidence sits from what happens. Under 2% means
+                a 70% call really does win about 70% of the time.
+            </dd></dl></div></aside>
+
+    <main class="column"><header class="head"><div class="head__kicker">NFL · 2025</div>
+            <h1 class="head__title">How it actually <em>did</em></h1>
+            <p class="head__note">
+                Every completed game, graded against what the model said and what the market
+                said. Walk-forward, so each week was projected from the weeks before it and
+                nothing here has seen the result it is being judged on.
+            </p></header><div class="stats stats--wide"><div class="stat"><div class="stat__k">Games graded</div>
+                    <div class="stat__v">272</div></div>
+                <div class="stat"><div class="stat__k">Margin error</div>
+                    <div class="stat__v stat__v--signal">10.43</div>
+                    <div class="stat__sub"><span class="cool">market 9.72</span></div></div>
+                <div class="stat"><div class="stat__k">Straight up</div>
+                    <div class="stat__v stat__v--signal">167-104-1</div>
+                    <div class="stat__sub">61.6%<span class="cool"> · market 177-94-1</span></div></div>
+                <div class="stat"><div class="stat__k">Against the spread</div>
+                    <div class="stat__v">131-140-1</div>
+                    <div class="stat__sub">48.3%<span> · break-even 52.4%</span></div></div></div><div class="warn"><strong>Read the ATS column as variance, not as edge.</strong><span>
+                            This market has never been measured in the ledger, which is not
+                            the same as no edge having been found.
+                        </span><span>
+                        A season is 272 games. It takes several hundred
+                        before a spread record separates from a coin flip at all.
+                    </span></div><h2 class="section">Totals</h2>
+            <p class="section__note">
+                The same treatment for the total: how far off the model and the market ran,
+                and — where a line was captured — whether the model's Over/Under call beat it.
+            </p><div class="stats stats--wide"><div class="stat"><div class="stat__k">Total error</div>
+                    <div class="stat__v stat__v--signal">10.75</div>
+                    <div class="stat__sub"><span class="cool">market 10.39</span></div></div>
+                <div class="stat"><div class="stat__k">Over/Under</div>
+                    <div class="stat__v">143-129</div>
+                    <div class="stat__sub">52.6%<span> · break-even 52.4%</span></div></div></div><div class="warn"><strong>This is the weakest column on the page — read it as such.</strong><span>
+                            Measured elsewhere in the ledger: NFL total vs close ran 48.3%,
+                            worse than betting Over blind (49.8%); CFB vs close ran 49.4%.
+                            Nothing here has ever cleared.
+                        </span></div><div class="grid grid--totals"><div class="grid__head"><span>Wk</span>
+                    <span class="num">Games</span>
+                    <span class="num">Model</span>
+                    <span class="num">Market</span>
+                    <span class="num">Closer by</span>
+                    <span class="num">O/U</span></div><button class="grid__row "><span class="grid__wk">1</span>
+                        <span class="num">16</span>
+                        <span class="num hot">12.15</span>
+                        <span class="num cool">12.50</span>
+                        <span class="num hot">&#x2B;0.35</span>
+                        <span class="num">10-6</span></button><button class="grid__row "><span class="grid__wk">2</span>
+                        <span class="num">16</span>
+                        <span class="num hot">14.13</span>
+                        <span class="num cool">12.19</span>
+                        <span class="num ">-1.94</span>
+                        <span class="num">5-11</span></button><button class="grid__row "><span class="grid__wk">3</span>
+                        <span class="num">16</span>
+                        <span class="num hot">11.72</span>
+                        <span class="num cool">12.88</span>
+                        <span class="num hot">&#x2B;1.16</span>
+                        <span class="num">10-6</span></button><button class="grid__row "><span class="grid__wk">4</span>
+                        <span class="num">16</span>
+                        <span class="num hot">7.83</span>
+                        <span class="num cool">8.06</span>
+                        <span class="num hot">&#x2B;0.23</span>
+                        <span class="num">10-6</span></button><button class="grid__row "><span class="grid__wk">5</span>
+                        <span class="num">14</span>
+                        <span class="num hot">6.33</span>
+                        <span class="num cool">8.43</span>
+                        <span class="num hot">&#x2B;2.10</span>
+                        <span class="num">10-4</span></button><button class="grid__row "><span class="grid__wk">6</span>
+                        <span class="num">15</span>
+                        <span class="num hot">10.47</span>
+                        <span class="num cool">9.30</span>
+                        <span class="num ">-1.17</span>
+                        <span class="num">6-9</span></button><button class="grid__row "><span class="grid__wk">7</span>
+                        <span class="num">15</span>
+                        <span class="num hot">11.24</span>
+                        <span class="num cool">11.30</span>
+                        <span class="num hot">&#x2B;0.06</span>
+                        <span class="num">9-6</span></button><button class="grid__row "><span class="grid__wk">8</span>
+                        <span class="num">13</span>
+                        <span class="num hot">10.47</span>
+                        <span class="num cool">9.65</span>
+                        <span class="num ">-0.82</span>
+                        <span class="num">10-3</span></button><button class="grid__row "><span class="grid__wk">9</span>
+                        <span class="num">14</span>
+                        <span class="num hot">10.58</span>
+                        <span class="num cool">9.57</span>
+                        <span class="num ">-1.01</span>
+                        <span class="num">6-8</span></button><button class="grid__row "><span class="grid__wk">10</span>
+                        <span class="num">14</span>
+                        <span class="num hot">14.47</span>
+                        <span class="num cool">13.86</span>
+                        <span class="num ">-0.61</span>
+                        <span class="num">5-9</span></button><button class="grid__row "><span class="grid__wk">11</span>
+                        <span class="num">15</span>
+                        <span class="num hot">11.26</span>
+                        <span class="num cool">9.77</span>
+                        <span class="num ">-1.49</span>
+                        <span class="num">7-8</span></button><button class="grid__row "><span class="grid__wk">12</span>
+                        <span class="num">14</span>
+                        <span class="num hot">8.72</span>
+                        <span class="num cool">8.29</span>
+                        <span class="num ">-0.43</span>
+                        <span class="num">9-5</span></button><button class="grid__row "><span class="grid__wk">13</span>
+                        <span class="num">16</span>
+                        <span class="num hot">10.17</span>
+                        <span class="num cool">8.06</span>
+                        <span class="num ">-2.11</span>
+                        <span class="num">4-12</span></button><button class="grid__row "><span class="grid__wk">14</span>
+                        <span class="num">14</span>
+                        <span class="num hot">6.95</span>
+                        <span class="num cool">9.14</span>
+                        <span class="num hot">&#x2B;2.19</span>
+                        <span class="num">11-3</span></button><button class="grid__row "><span class="grid__wk">15</span>
+                        <span class="num">16</span>
+                        <span class="num hot">13.47</span>
+                        <span class="num cool">13.06</span>
+                        <span class="num ">-0.41</span>
+                        <span class="num">8-8</span></button><button class="grid__row "><span class="grid__wk">16</span>
+                        <span class="num">16</span>
+                        <span class="num hot">8.88</span>
+                        <span class="num cool">8.25</span>
+                        <span class="num ">-0.63</span>
+                        <span class="num">8-8</span></button><button class="grid__row "><span class="grid__wk">17</span>
+                        <span class="num">16</span>
+                        <span class="num hot">12.01</span>
+                        <span class="num cool">10.94</span>
+                        <span class="num ">-1.07</span>
+                        <span class="num">5-11</span></button><button class="grid__row grid__row--on"><span class="grid__wk">18</span>
+                        <span class="num">16</span>
+                        <span class="num hot">11.77</span>
+                        <span class="num cool">11.31</span>
+                        <span class="num ">-0.45</span>
+                        <span class="num">10-6</span></button></div><h2 class="section">Week by week</h2>
+            <p class="section__note">
+                Margin, the totals table above, and every per-game detail all open from
+                whichever row you click below. Each game carries three verdicts:
+                <strong>winner</strong>, whether the model picked the side that won,
+                <strong>vs spread</strong>, whether its margin beat the closing line, and
+                <strong>O/U</strong>, the same question for the total. A <em>push</em> is a
+                tie or a result exactly on the number; <em>no pick</em> means the model and
+                the market agreed, or no price existed.
+            </p><div class="grid"><div class="grid__head"><span>Wk</span>
+                    <span class="num">Games</span>
+                    <span class="num">Model</span>
+                    <span class="num">Market</span>
+                    <span class="num">Closer by</span>
+                    <span class="num">SU</span>
+                    <span class="num">ATS</span></div><button class="grid__row "><span class="grid__wk">1</span>
+                        <span class="num">16</span>
+                        <span class="num hot">6.28</span>
+                        <span class="num cool">5.94</span>
+                        <span class="num ">-0.34</span>
+                        <span class="num">13-3</span>
+                        <span class="num">10-6</span></button><button class="grid__row "><span class="grid__wk">2</span>
+                        <span class="num">16</span>
+                        <span class="num hot">8.52</span>
+                        <span class="num cool">8.19</span>
+                        <span class="num ">-0.33</span>
+                        <span class="num">11-5</span>
+                        <span class="num">8-8</span></button><button class="grid__row "><span class="grid__wk">3</span>
+                        <span class="num">16</span>
+                        <span class="num hot">12.70</span>
+                        <span class="num cool">12.22</span>
+                        <span class="num ">-0.48</span>
+                        <span class="num">12-4</span>
+                        <span class="num">7-9</span></button><button class="grid__row "><span class="grid__wk">4</span>
+                        <span class="num">16</span>
+                        <span class="num hot">10.08</span>
+                        <span class="num cool">9.03</span>
+                        <span class="num ">-1.05</span>
+                        <span class="num">7-8-1</span>
+                        <span class="num">7-9</span></button><button class="grid__row "><span class="grid__wk">5</span>
+                        <span class="num">14</span>
+                        <span class="num hot">12.85</span>
+                        <span class="num cool">11.68</span>
+                        <span class="num ">-1.17</span>
+                        <span class="num">5-9</span>
+                        <span class="num">6-8</span></button><button class="grid__row "><span class="grid__wk">6</span>
+                        <span class="num">15</span>
+                        <span class="num hot">8.88</span>
+                        <span class="num cool">7.70</span>
+                        <span class="num ">-1.18</span>
+                        <span class="num">9-6</span>
+                        <span class="num">7-8</span></button><button class="grid__row "><span class="grid__wk">7</span>
+                        <span class="num">15</span>
+                        <span class="num hot">12.23</span>
+                        <span class="num cool">11.50</span>
+                        <span class="num ">-0.73</span>
+                        <span class="num">10-5</span>
+                        <span class="num">7-8</span></button><button class="grid__row "><span class="grid__wk">8</span>
+                        <span class="num">13</span>
+                        <span class="num hot">13.87</span>
+                        <span class="num cool">14.35</span>
+                        <span class="num hot">&#x2B;0.47</span>
+                        <span class="num">10-3</span>
+                        <span class="num">8-5</span></button><button class="grid__row "><span class="grid__wk">9</span>
+                        <span class="num">14</span>
+                        <span class="num hot">10.04</span>
+                        <span class="num cool">9.32</span>
+                        <span class="num ">-0.72</span>
+                        <span class="num">8-6</span>
+                        <span class="num">5-9</span></button><button class="grid__row "><span class="grid__wk">10</span>
+                        <span class="num">14</span>
+                        <span class="num hot">10.12</span>
+                        <span class="num cool">9.43</span>
+                        <span class="num ">-0.70</span>
+                        <span class="num">9-5</span>
+                        <span class="num">7-7</span></button><button class="grid__row "><span class="grid__wk">11</span>
+                        <span class="num">15</span>
+                        <span class="num hot">9.03</span>
+                        <span class="num cool">7.50</span>
+                        <span class="num ">-1.53</span>
+                        <span class="num">9-6</span>
+                        <span class="num">5-10</span></button><button class="grid__row "><span class="grid__wk">12</span>
+                        <span class="num">14</span>
+                        <span class="num hot">6.90</span>
+                        <span class="num cool">7.07</span>
+                        <span class="num hot">&#x2B;0.18</span>
+                        <span class="num">10-4</span>
+                        <span class="num">8-5-1</span></button><button class="grid__row "><span class="grid__wk">13</span>
+                        <span class="num">16</span>
+                        <span class="num hot">11.45</span>
+                        <span class="num cool">10.47</span>
+                        <span class="num ">-0.98</span>
+                        <span class="num">9-7</span>
+                        <span class="num">5-11</span></button><button class="grid__row "><span class="grid__wk">14</span>
+                        <span class="num">14</span>
+                        <span class="num hot">12.46</span>
+                        <span class="num cool">12.43</span>
+                        <span class="num ">-0.03</span>
+                        <span class="num">7-7</span>
+                        <span class="num">8-6</span></button><button class="grid__row "><span class="grid__wk">15</span>
+                        <span class="num">16</span>
+                        <span class="num hot">9.10</span>
+                        <span class="num cool">10.25</span>
+                        <span class="num hot">&#x2B;1.15</span>
+                        <span class="num">12-4</span>
+                        <span class="num">11-5</span></button><button class="grid__row "><span class="grid__wk">16</span>
+                        <span class="num">16</span>
+                        <span class="num hot">13.06</span>
+                        <span class="num cool">10.63</span>
+                        <span class="num ">-2.43</span>
+                        <span class="num">7-9</span>
+                        <span class="num">4-12</span></button><button class="grid__row "><span class="grid__wk">17</span>
+                        <span class="num">16</span>
+                        <span class="num hot">11.53</span>
+                        <span class="num cool">10.25</span>
+                        <span class="num ">-1.28</span>
+                        <span class="num">6-10</span>
+                        <span class="num">8-8</span></button><button class="grid__row grid__row--on"><span class="grid__wk">18</span>
+                        <span class="num">16</span>
+                        <span class="num hot">9.22</span>
+                        <span class="num cool">7.94</span>
+                        <span class="num ">-1.28</span>
+                        <span class="num">13-3</span>
+                        <span class="num">10-6</span></button><div class="detail"><div class="row"><span class="row__match">Carolina Panthers @ Tampa Bay Buccaneers</span>
+
+                                    <span class="row__cell"><span class="row__k">model</span>
+                                        <span class="row__v hot">Tampa Bay Buccaneers 6.9</span></span>
+
+                                    <span class="row__cell"><span class="row__k">market</span>
+                                        <span class="row__v cool">Tampa Bay Buccaneers 3.0</span></span>
+
+                                    <span class="row__cell"><span class="row__k">final</span>
+                                        <span class="row__v">14–16</span></span>
+
+                                    <span class="row__cell"><span class="row__k">total</span>
+                                        <span class="row__v"><span class="hot">44.7</span><span class="cool"> / 43.5</span><span> → 30</span></span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">winner</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">vs spread</span>
+                                        <span class="row__v mark2 mark2--loss">&#x2717; miss</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">O/U</span>
+                                        <span class="row__v mark2 mark2--loss">&#x2717; miss</span></span></div><div class="row"><span class="row__match">Seattle Seahawks @ San Francisco 49ers</span>
+
+                                    <span class="row__cell"><span class="row__k">model</span>
+                                        <span class="row__v hot">Seattle Seahawks 3.3</span></span>
+
+                                    <span class="row__cell"><span class="row__k">market</span>
+                                        <span class="row__v cool">Seattle Seahawks 2.5</span></span>
+
+                                    <span class="row__cell"><span class="row__k">final</span>
+                                        <span class="row__v">13–3</span></span>
+
+                                    <span class="row__cell"><span class="row__k">total</span>
+                                        <span class="row__v"><span class="hot">50.2</span><span class="cool"> / 47.5</span><span> → 16</span></span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">winner</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">vs spread</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">O/U</span>
+                                        <span class="row__v mark2 mark2--loss">&#x2717; miss</span></span></div><div class="row"><span class="row__match">New Orleans Saints @ Atlanta Falcons</span>
+
+                                    <span class="row__cell"><span class="row__k">model</span>
+                                        <span class="row__v hot">Atlanta Falcons 4.4</span></span>
+
+                                    <span class="row__cell"><span class="row__k">market</span>
+                                        <span class="row__v cool">Atlanta Falcons 4.5</span></span>
+
+                                    <span class="row__cell"><span class="row__k">final</span>
+                                        <span class="row__v">17–19</span></span>
+
+                                    <span class="row__cell"><span class="row__k">total</span>
+                                        <span class="row__v"><span class="hot">39.8</span><span class="cool"> / 43.5</span><span> → 36</span></span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">winner</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">vs spread</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">O/U</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span></div><div class="row"><span class="row__match">Cleveland Browns @ Cincinnati Bengals</span>
+
+                                    <span class="row__cell"><span class="row__k">model</span>
+                                        <span class="row__v hot">Cincinnati Bengals 5.9</span></span>
+
+                                    <span class="row__cell"><span class="row__k">market</span>
+                                        <span class="row__v cool">Cincinnati Bengals 9.5</span></span>
+
+                                    <span class="row__cell"><span class="row__k">final</span>
+                                        <span class="row__v">20–18</span></span>
+
+                                    <span class="row__cell"><span class="row__k">total</span>
+                                        <span class="row__v"><span class="hot">46.2</span><span class="cool"> / 47.5</span><span> → 38</span></span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">winner</span>
+                                        <span class="row__v mark2 mark2--loss">&#x2717; miss</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">vs spread</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">O/U</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span></div><div class="row"><span class="row__match">Indianapolis Colts @ Houston Texans</span>
+
+                                    <span class="row__cell"><span class="row__k">model</span>
+                                        <span class="row__v hot">Houston Texans 5.3</span></span>
+
+                                    <span class="row__cell"><span class="row__k">market</span>
+                                        <span class="row__v cool">Houston Texans 9.5</span></span>
+
+                                    <span class="row__cell"><span class="row__k">final</span>
+                                        <span class="row__v">30–38</span></span>
+
+                                    <span class="row__cell"><span class="row__k">total</span>
+                                        <span class="row__v"><span class="hot">44.5</span><span class="cool"> / 37.5</span><span> → 68</span></span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">winner</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">vs spread</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">O/U</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span></div><div class="row"><span class="row__match">Tennessee Titans @ Jacksonville Jaguars</span>
+
+                                    <span class="row__cell"><span class="row__k">model</span>
+                                        <span class="row__v hot">Jacksonville Jaguars 14.6</span></span>
+
+                                    <span class="row__cell"><span class="row__k">market</span>
+                                        <span class="row__v cool">Jacksonville Jaguars 12.5</span></span>
+
+                                    <span class="row__cell"><span class="row__k">final</span>
+                                        <span class="row__v">7–41</span></span>
+
+                                    <span class="row__cell"><span class="row__k">total</span>
+                                        <span class="row__v"><span class="hot">47.1</span><span class="cool"> / 46.5</span><span> → 48</span></span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">winner</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">vs spread</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">O/U</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span></div><div class="row"><span class="row__match">Green Bay Packers @ Minnesota Vikings</span>
+
+                                    <span class="row__cell"><span class="row__k">model</span>
+                                        <span class="row__v hot">Minnesota Vikings 0.6</span></span>
+
+                                    <span class="row__cell"><span class="row__k">market</span>
+                                        <span class="row__v cool">Minnesota Vikings 12.5</span></span>
+
+                                    <span class="row__cell"><span class="row__k">final</span>
+                                        <span class="row__v">3–16</span></span>
+
+                                    <span class="row__cell"><span class="row__k">total</span>
+                                        <span class="row__v"><span class="hot">39.6</span><span class="cool"> / 37.5</span><span> → 19</span></span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">winner</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">vs spread</span>
+                                        <span class="row__v mark2 mark2--loss">&#x2717; miss</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">O/U</span>
+                                        <span class="row__v mark2 mark2--loss">&#x2717; miss</span></span></div><div class="row"><span class="row__match">Dallas Cowboys @ New York Giants</span>
+
+                                    <span class="row__cell"><span class="row__k">model</span>
+                                        <span class="row__v hot">New York Giants 0.7</span></span>
+
+                                    <span class="row__cell"><span class="row__k">market</span>
+                                        <span class="row__v cool">Dallas Cowboys 3.0</span></span>
+
+                                    <span class="row__cell"><span class="row__k">final</span>
+                                        <span class="row__v">17–34</span></span>
+
+                                    <span class="row__cell"><span class="row__k">total</span>
+                                        <span class="row__v"><span class="hot">57.9</span><span class="cool"> / 50.5</span><span> → 51</span></span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">winner</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">vs spread</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">O/U</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span></div><div class="row"><span class="row__match">New York Jets @ Buffalo Bills</span>
+
+                                    <span class="row__cell"><span class="row__k">model</span>
+                                        <span class="row__v hot">Buffalo Bills 17.0</span></span>
+
+                                    <span class="row__cell"><span class="row__k">market</span>
+                                        <span class="row__v cool">Buffalo Bills 12.5</span></span>
+
+                                    <span class="row__cell"><span class="row__k">final</span>
+                                        <span class="row__v">8–35</span></span>
+
+                                    <span class="row__cell"><span class="row__k">total</span>
+                                        <span class="row__v"><span class="hot">52.2</span><span class="cool"> / 39.5</span><span> → 43</span></span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">winner</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">vs spread</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">O/U</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span></div><div class="row"><span class="row__match">Detroit Lions @ Chicago Bears</span>
+
+                                    <span class="row__cell"><span class="row__k">model</span>
+                                        <span class="row__v hot">Detroit Lions 2.5</span></span>
+
+                                    <span class="row__cell"><span class="row__k">market</span>
+                                        <span class="row__v cool">Chicago Bears 3.5</span></span>
+
+                                    <span class="row__cell"><span class="row__k">final</span>
+                                        <span class="row__v">19–16</span></span>
+
+                                    <span class="row__cell"><span class="row__k">total</span>
+                                        <span class="row__v"><span class="hot">56.6</span><span class="cool"> / 51.5</span><span> → 35</span></span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">winner</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">vs spread</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">O/U</span>
+                                        <span class="row__v mark2 mark2--loss">&#x2717; miss</span></span></div><div class="row"><span class="row__match">Los Angeles Chargers @ Denver Broncos</span>
+
+                                    <span class="row__cell"><span class="row__k">model</span>
+                                        <span class="row__v hot">Denver Broncos 3.6</span></span>
+
+                                    <span class="row__cell"><span class="row__k">market</span>
+                                        <span class="row__v cool">Denver Broncos 14.5</span></span>
+
+                                    <span class="row__cell"><span class="row__k">final</span>
+                                        <span class="row__v">3–19</span></span>
+
+                                    <span class="row__cell"><span class="row__k">total</span>
+                                        <span class="row__v"><span class="hot">41.6</span><span class="cool"> / 37.5</span><span> → 22</span></span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">winner</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">vs spread</span>
+                                        <span class="row__v mark2 mark2--loss">&#x2717; miss</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">O/U</span>
+                                        <span class="row__v mark2 mark2--loss">&#x2717; miss</span></span></div><div class="row"><span class="row__match">Kansas City Chiefs @ Las Vegas Raiders</span>
+
+                                    <span class="row__cell"><span class="row__k">model</span>
+                                        <span class="row__v hot">Kansas City Chiefs 10.6</span></span>
+
+                                    <span class="row__cell"><span class="row__k">market</span>
+                                        <span class="row__v cool">Kansas City Chiefs 3.5</span></span>
+
+                                    <span class="row__cell"><span class="row__k">final</span>
+                                        <span class="row__v">12–14</span></span>
+
+                                    <span class="row__cell"><span class="row__k">total</span>
+                                        <span class="row__v"><span class="hot">37.1</span><span class="cool"> / 36.5</span><span> → 26</span></span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">winner</span>
+                                        <span class="row__v mark2 mark2--loss">&#x2717; miss</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">vs spread</span>
+                                        <span class="row__v mark2 mark2--loss">&#x2717; miss</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">O/U</span>
+                                        <span class="row__v mark2 mark2--loss">&#x2717; miss</span></span></div><div class="row"><span class="row__match">Arizona Cardinals @ Los Angeles Rams</span>
+
+                                    <span class="row__cell"><span class="row__k">model</span>
+                                        <span class="row__v hot">Los Angeles Rams 15.8</span></span>
+
+                                    <span class="row__cell"><span class="row__k">market</span>
+                                        <span class="row__v cool">Los Angeles Rams 14.5</span></span>
+
+                                    <span class="row__cell"><span class="row__k">final</span>
+                                        <span class="row__v">20–37</span></span>
+
+                                    <span class="row__cell"><span class="row__k">total</span>
+                                        <span class="row__v"><span class="hot">50.5</span><span class="cool"> / 49.5</span><span> → 57</span></span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">winner</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">vs spread</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">O/U</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span></div><div class="row"><span class="row__match">Miami Dolphins @ New England Patriots</span>
+
+                                    <span class="row__cell"><span class="row__k">model</span>
+                                        <span class="row__v hot">New England Patriots 9.7</span></span>
+
+                                    <span class="row__cell"><span class="row__k">market</span>
+                                        <span class="row__v cool">New England Patriots 14.0</span></span>
+
+                                    <span class="row__cell"><span class="row__k">final</span>
+                                        <span class="row__v">10–38</span></span>
+
+                                    <span class="row__cell"><span class="row__k">total</span>
+                                        <span class="row__v"><span class="hot">45.0</span><span class="cool"> / 44.5</span><span> → 48</span></span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">winner</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">vs spread</span>
+                                        <span class="row__v mark2 mark2--loss">&#x2717; miss</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">O/U</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span></div><div class="row"><span class="row__match">Washington Commanders @ Philadelphia Eagles</span>
+
+                                    <span class="row__cell"><span class="row__k">model</span>
+                                        <span class="row__v hot">Philadelphia Eagles 11.2</span></span>
+
+                                    <span class="row__cell"><span class="row__k">market</span>
+                                        <span class="row__v cool">Philadelphia Eagles 3.0</span></span>
+
+                                    <span class="row__cell"><span class="row__k">final</span>
+                                        <span class="row__v">24–17</span></span>
+
+                                    <span class="row__cell"><span class="row__k">total</span>
+                                        <span class="row__v"><span class="hot">42.8</span><span class="cool"> / 38.5</span><span> → 41</span></span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">winner</span>
+                                        <span class="row__v mark2 mark2--loss">&#x2717; miss</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">vs spread</span>
+                                        <span class="row__v mark2 mark2--loss">&#x2717; miss</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">O/U</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span></div><div class="row"><span class="row__match">Baltimore Ravens @ Pittsburgh Steelers</span>
+
+                                    <span class="row__cell"><span class="row__k">model</span>
+                                        <span class="row__v hot">Pittsburgh Steelers 0.3</span></span>
+
+                                    <span class="row__cell"><span class="row__k">market</span>
+                                        <span class="row__v cool">Baltimore Ravens 4.5</span></span>
+
+                                    <span class="row__cell"><span class="row__k">final</span>
+                                        <span class="row__v">24–26</span></span>
+
+                                    <span class="row__cell"><span class="row__k">total</span>
+                                        <span class="row__v"><span class="hot">47.3</span><span class="cool"> / 41.5</span><span> → 50</span></span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">winner</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">vs spread</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span>
+
+                                    <span class="row__cell row__cell--mark"><span class="row__k">O/U</span>
+                                        <span class="row__v mark2 mark2--win">&#x2713; hit</span></span></div></div></div><div class="caveats"><h2 class="read__head">How to read these</h2>
+                <ul class="caveats__list"><li><strong>Straight up is the honest headline.</strong> It needs no price,
+                        grades every game, and answers the question the model was built for:
+                        who wins. A tie is a push, never a loss.
+                    </li>
+                    <li><strong>Against the spread and O/U are both footnotes, shown because
+                        they were asked for.</strong> Agreeing with the market exactly is not a
+                        pick and is not counted, in either column. Eleven approaches have been
+                        measured against a closing line and none has cleared — the total is the
+                        weakest of the two, and has run worse than betting Over blind.
+                    </li>
+                    <li><strong>Model and market errors are measured on the same games.</strong>
+                        Where a game carried no price, it counts toward the model's error but
+                        not the comparison — 272 of
+                        272 games are directly comparable on margin,
+                        272 on the total.
+                    </li>
+                    <li><strong>Early weeks are rated on priors.</strong> Weeks 1–3 are included
+                        because the board really did show those projections, but the ratings
+                        behind them carry last season at
+                        85% and little else. The
+                        backtests exclude them; this page does not.
+                    </li>
+                    <li>
+                        Market numbers: nflverse closing lines, 272 of 272 fixtures joined. Ratings: 256 games played, primed with 2024 ratings carried at 85%.
+                    </li></ul></div></main></div>
+</body>
+</html>
