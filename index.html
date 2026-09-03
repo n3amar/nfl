@@ -1743,6 +1743,487 @@ a { color: inherit; text-decoration: none; }
 .export__said--ok  { border-left-color: var(--signal-dim); }
 .export__said--bad { border-left-color: var(--warn, #c8552b); }
 
+/* /Components/Layout/MainLayout.razor.rz.scp.css */
+#blazor-error-ui[b-yok0k17bsi] {
+    color-scheme: light only;
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .dismiss[b-yok0k17bsi] {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
+/* /Components/Layout/ReconnectModal.razor.rz.scp.css */
+.components-reconnect-first-attempt-visible[b-abqcnzr0l3],
+.components-reconnect-repeated-attempt-visible[b-abqcnzr0l3],
+.components-reconnect-failed-visible[b-abqcnzr0l3],
+.components-pause-visible[b-abqcnzr0l3],
+.components-resume-failed-visible[b-abqcnzr0l3],
+.components-rejoining-animation[b-abqcnzr0l3] {
+    display: none;
+}
+
+#components-reconnect-modal.components-reconnect-show .components-reconnect-first-attempt-visible[b-abqcnzr0l3],
+#components-reconnect-modal.components-reconnect-show .components-rejoining-animation[b-abqcnzr0l3],
+#components-reconnect-modal.components-reconnect-paused .components-pause-visible[b-abqcnzr0l3],
+#components-reconnect-modal.components-reconnect-resume-failed .components-resume-failed-visible[b-abqcnzr0l3],
+#components-reconnect-modal.components-reconnect-retrying[b-abqcnzr0l3],
+#components-reconnect-modal.components-reconnect-retrying .components-reconnect-repeated-attempt-visible[b-abqcnzr0l3],
+#components-reconnect-modal.components-reconnect-retrying .components-rejoining-animation[b-abqcnzr0l3],
+#components-reconnect-modal.components-reconnect-failed[b-abqcnzr0l3],
+#components-reconnect-modal.components-reconnect-failed .components-reconnect-failed-visible[b-abqcnzr0l3] {
+    display: block;
+}
+
+
+#components-reconnect-modal[b-abqcnzr0l3] {
+    background-color: white;
+    width: 20rem;
+    margin: 20vh auto;
+    padding: 2rem;
+    border: 0;
+    border-radius: 0.5rem;
+    box-shadow: 0 3px 6px 2px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: display 0.5s allow-discrete, overlay 0.5s allow-discrete;
+    animation: components-reconnect-modal-fadeOutOpacity-b-abqcnzr0l3 0.5s both;
+    &[open]
+
+{
+    animation: components-reconnect-modal-slideUp-b-abqcnzr0l3 1.5s cubic-bezier(.05, .89, .25, 1.02) 0.3s, components-reconnect-modal-fadeInOpacity-b-abqcnzr0l3 0.5s ease-in-out 0.3s;
+    animation-fill-mode: both;
+}
+
+}
+
+#components-reconnect-modal[b-abqcnzr0l3]::backdrop {
+    background-color: rgba(0, 0, 0, 0.4);
+    animation: components-reconnect-modal-fadeInOpacity-b-abqcnzr0l3 0.5s ease-in-out;
+    opacity: 1;
+}
+
+@keyframes components-reconnect-modal-slideUp-b-abqcnzr0l3 {
+    0% {
+        transform: translateY(30px) scale(0.95);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes components-reconnect-modal-fadeInOpacity-b-abqcnzr0l3 {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes components-reconnect-modal-fadeOutOpacity-b-abqcnzr0l3 {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.components-reconnect-container[b-abqcnzr0l3] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+#components-reconnect-modal p[b-abqcnzr0l3] {
+    margin: 0;
+    text-align: center;
+}
+
+#components-reconnect-modal button[b-abqcnzr0l3] {
+    border: 0;
+    background-color: #6b9ed2;
+    color: white;
+    padding: 4px 24px;
+    border-radius: 4px;
+}
+
+    #components-reconnect-modal button:hover[b-abqcnzr0l3] {
+        background-color: #3b6ea2;
+    }
+
+    #components-reconnect-modal button:active[b-abqcnzr0l3] {
+        background-color: #6b9ed2;
+    }
+
+.components-rejoining-animation[b-abqcnzr0l3] {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+    .components-rejoining-animation div[b-abqcnzr0l3] {
+        position: absolute;
+        border: 3px solid #0087ff;
+        opacity: 1;
+        border-radius: 50%;
+        animation: components-rejoining-animation-b-abqcnzr0l3 1.5s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+
+        .components-rejoining-animation div:nth-child(2)[b-abqcnzr0l3] {
+            animation-delay: -0.5s;
+        }
+
+@keyframes components-rejoining-animation-b-abqcnzr0l3 {
+    0% {
+        top: 40px;
+        left: 40px;
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+
+    4.9% {
+        top: 40px;
+        left: 40px;
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+
+    5% {
+        top: 40px;
+        left: 40px;
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+
+    100% {
+        top: 0px;
+        left: 0px;
+        width: 80px;
+        height: 80px;
+        opacity: 0;
+    }
+}
+/* /Components/Pages/SeasonResultsView.razor.rz.scp.css */
+/* The two voices stay what they are everywhere else on the site: green is the MODEL
+   speaking, cyan is the MARKET. Nothing on this page invents a third. */
+
+.hot[b-dkv3jdcz3w]  { color: var(--signal); }
+.cool[b-dkv3jdcz3w] { color: var(--market); }
+
+.controls[b-dkv3jdcz3w] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0 0 20px;
+}
+
+.stat__sub[b-dkv3jdcz3w] {
+    margin-top: 4px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--chalk-mute);
+}
+
+/* The ATS caveat. Deliberately not styled as a warning triangle — it is not an error,
+   it is context that stops a hot four weeks reading as a discovery. */
+.warn[b-dkv3jdcz3w] {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 18px 0 26px;
+    padding: 14px 16px;
+    border-left: 2px solid var(--market);
+    background: var(--market-wash);
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--chalk-dim);
+}
+
+.warn strong[b-dkv3jdcz3w] { color: var(--chalk); font-weight: 600; }
+
+.grid[b-dkv3jdcz3w] {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--rule);
+}
+
+.grid__head[b-dkv3jdcz3w],
+.grid__row[b-dkv3jdcz3w] {
+    display: grid;
+    grid-template-columns: 48px 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 8px;
+    align-items: center;
+    padding: 9px 12px;
+    text-align: left;
+}
+
+.grid__head[b-dkv3jdcz3w] {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    border-bottom: 1px solid var(--rule);
+}
+
+/* One fewer column than the margin grid — totals carry a single verdict (O/U),
+   where margin carries two (SU and ATS). */
+.grid--totals .grid__head[b-dkv3jdcz3w],
+.grid--totals .grid__row[b-dkv3jdcz3w] {
+    grid-template-columns: 48px 1fr 1fr 1fr 1fr 1fr;
+}
+
+.grid__row[b-dkv3jdcz3w] {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid var(--rule-soft);
+    background: transparent;
+    color: var(--chalk);
+    font-family: var(--mono);
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.grid__row:hover[b-dkv3jdcz3w] { background: var(--rule-soft); }
+
+.grid__row--on[b-dkv3jdcz3w] {
+    background: var(--signal-wash);
+    border-bottom-color: var(--signal-dim);
+}
+
+.grid__wk[b-dkv3jdcz3w] { font-weight: 600; }
+
+.num[b-dkv3jdcz3w] { text-align: right; }
+
+/* Per-game detail. A card per game rather than a second table: the four numbers each
+   game carries do not line up into columns without shrinking past readable. */
+.detail[b-dkv3jdcz3w] {
+    display: flex;
+    flex-direction: column;
+    padding: 4px 0 14px;
+    border-bottom: 1px solid var(--rule);
+}
+
+.tiers[b-dkv3jdcz3w] {
+    margin: 18px 0 0;
+    padding: 14px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+}
+
+.tiers__k[b-dkv3jdcz3w] {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    margin-bottom: 10px;
+}
+
+/* min() so a narrow viewport collapses to one column instead of setting the track width
+   from the widest cell — the automatic minimum of a grid item is min-content, which is
+   what pushed the board's right rail past a phone viewport. */
+.tiers__grid[b-dkv3jdcz3w] {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+    gap: 10px;
+}
+
+.tier[b-dkv3jdcz3w] {
+    min-width: 0;
+    padding: 10px 12px;
+    background: var(--panel);
+    border-radius: 2px;
+}
+
+.tier__k[b-dkv3jdcz3w] {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+}
+
+.tier__v[b-dkv3jdcz3w] {
+    font-family: var(--mono);
+    font-size: 18px;
+    color: var(--chalk);
+    margin-top: 2px;
+}
+
+.tier__sub[b-dkv3jdcz3w] {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--chalk-dim);
+}
+
+.tiers__note[b-dkv3jdcz3w] {
+    margin: 10px 0 0;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--chalk-dim);
+}
+
+.tiers__note strong[b-dkv3jdcz3w] { color: var(--chalk); font-weight: 600; }
+
+/* Three stacked bands, not one eight-column line. Eight columns inside the desk left
+   every track under 90px, which broke full team names mid-word and gave the named pick
+   nowhere to go. Each band now reflows independently. */
+.row[b-dkv3jdcz3w] {
+    display: flex;
+    flex-direction: column;
+    /* app.css:1046 declares a GLOBAL .row — align-items:center, justify-content:
+       space-between — for the rail lists. Scoping stops this file's rules leaking out; it
+       does nothing to stop that one leaking in. Both are neutralised by hand, because
+       center on a column flex shrink-wraps every band to its content: the numbers band
+       collapsed to 115px of a 976px row and centred itself. */
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 12px;
+    border-bottom: 1px solid var(--rule-soft);
+}
+
+.row:last-child[b-dkv3jdcz3w] { border-bottom: 0; }
+
+.row__head[b-dkv3jdcz3w] {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.row__match[b-dkv3jdcz3w] {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--chalk);
+    min-width: 0;
+}
+
+/* The score keeps its label: this row's own comment argues that an unlabelled mark is a
+   tooltip nobody hovers, and a bare pair of numbers is the same bet. */
+.row__final[b-dkv3jdcz3w] {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex: 0 0 auto;
+}
+
+.row__score[b-dkv3jdcz3w] {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--chalk);
+    font-variant-numeric: tabular-nums;
+}
+
+/* min() so a narrow viewport collapses to one column rather than taking the track width
+   from the widest cell — a grid item's automatic minimum is min-content, not zero. */
+.row__band--nums[b-dkv3jdcz3w] {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+    gap: 8px 12px;
+}
+
+/* Flex rather than grid: the spread cell has to hold a verdict AND a named position, so
+   it takes the slack while winner and O/U stay at their natural width. */
+.row__band--marks[b-dkv3jdcz3w] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 8px 18px;
+}
+
+/* Sizes to its content and no more. Letting it grow into the slack shoved O/U to the far
+   right of a 976px row, reading as though it belonged to something else. */
+.row__cell--spread[b-dkv3jdcz3w] { flex: 0 1 auto; }
+
+/* Verdict and position on one line, wrapping together when there is no room. */
+.row__marked[b-dkv3jdcz3w] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 10px;
+}
+
+.row__cell[b-dkv3jdcz3w] { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+
+.row__k[b-dkv3jdcz3w] {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+}
+
+.row__v[b-dkv3jdcz3w] {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--chalk-dim);
+}
+
+/* The position the verdict beside it graded. Deliberately quieter than the verdict: it is
+   the reader's check on the mark, not a second claim. */
+/* No nowrap: it previously sat in a 76px track and painted straight over its neighbours.
+   The band gives it room now, and wrapping is the correct failure on a narrow screen. */
+.row__pick[b-dkv3jdcz3w] {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--chalk-mute);
+    min-width: 0;
+}
+
+/* A result is carried three ways at once: a word, a glyph, and a colour. Colour alone is
+   never the sole carrier anywhere on this site, and a tick against a cross is a two-pixel
+   difference at this size. A miss is chalk-dim rather than chalk-mute — a loss is a real
+   result and should be legible, not faded out. */
+.mark2[b-dkv3jdcz3w] {
+    display: inline-flex;
+    gap: 4px;
+    align-items: baseline;
+    white-space: nowrap;
+    font-size: 11px;
+}
+
+.mark2--win[b-dkv3jdcz3w]  { color: var(--signal); }
+.mark2--loss[b-dkv3jdcz3w] { color: var(--chalk-dim); }
+.mark2--push[b-dkv3jdcz3w] { color: var(--chalk-mute); }
+.mark2--none[b-dkv3jdcz3w] { color: var(--chalk-mute); opacity: 0.6; }
+
+@media (max-width: 1100px) {
+    .grid__head[b-dkv3jdcz3w],
+    .grid__row[b-dkv3jdcz3w] { grid-template-columns: 36px repeat(6, 1fr); font-size: 12px; }
+
+    .grid--totals .grid__head[b-dkv3jdcz3w],
+    .grid--totals .grid__row[b-dkv3jdcz3w] { grid-template-columns: 36px repeat(5, 1fr); }
+
+    /* The row is three stacked bands now, each reflowing on its own, so it needs no
+       breakpoint of its own — the old grid-template-columns and grid-column rules here
+       were inert the moment .row stopped being a grid. Only the spread cell needs a
+       nudge: below this width it should take the whole line rather than sit beside the
+       winner mark and squeeze the named pick into wrapping. */
+    .row__cell--spread[b-dkv3jdcz3w] { flex: 1 1 100%; }
+}
+
 </style>
 </head>
 <body>
@@ -1814,17 +2295,17 @@ a { color: inherit; text-decoration: none; }
                             <div class="game__foot"><span class="spread">Seattle Seahawks by 6.2</span>
                                 <span>66%
                                     · O/U 45.0</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
-                                        <span class="mkt__src">consensus · 22d ago</span></div>
+                                        <span class="mkt__src">consensus · pulled 2 Sep 18:56 MST</span></div>
 
                                     <table class="mkt__grid"><thead><tr><th></th>
                                                 <th>Spread</th>
                                                 <th>Money</th></tr></thead>
                                         <tbody><tr><td class="mkt__team">New England Patriots</td>
                                                 <td>&#x2B;3.5  -110</td>
-                                                <td>&#x2B;165</td></tr>
+                                                <td>&#x2B;158</td></tr>
                                             <tr><td class="mkt__team">Seattle Seahawks</td>
-                                                <td>-3.5  -110</td>
-                                                <td>-198</td></tr>
+                                                <td>-3.5  -109</td>
+                                                <td>-185</td></tr>
                                             <tr class="mkt__tot"><td class="mkt__team">Total 44.5</td>
                                                 <td>over -110</td>
                                                 <td>under -110</td></tr></tbody></table></div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
@@ -1877,20 +2358,20 @@ a { color: inherit; text-decoration: none; }
                             <div class="game__foot"><span class="spread">Los Angeles Rams by 6.6</span>
                                 <span>67%
                                     · O/U 48.2</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
-                                        <span class="mkt__src">consensus · 22d ago</span></div>
+                                        <span class="mkt__src">consensus · pulled 2 Sep 18:56 MST</span></div>
 
                                     <table class="mkt__grid"><thead><tr><th></th>
                                                 <th>Spread</th>
                                                 <th>Money</th></tr></thead>
                                         <tbody><tr><td class="mkt__team">San Francisco 49ers</td>
-                                                <td>&#x2B;3.5  -110</td>
-                                                <td>&#x2B;159</td></tr>
+                                                <td>&#x2B;4.0  -110</td>
+                                                <td>&#x2B;166</td></tr>
                                             <tr><td class="mkt__team">Los Angeles Rams</td>
-                                                <td>-3.5  -110</td>
-                                                <td>-190</td></tr>
-                                            <tr class="mkt__tot"><td class="mkt__team">Total 48.5</td>
+                                                <td>-4.0  -110</td>
+                                                <td>-198</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 48.0</td>
                                                 <td>over -110</td>
-                                                <td>under -110</td></tr></tbody></table></div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
+                                                <td>under -110</td></tr></tbody></table><div class="mkt__drift">Opened Los Angeles Rams -3.5, now -4.0 &#x2014; 0.5 toward Los Angeles Rams</div></div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
                                     <tbody><tr><td class="grid__team">San Francisco 49ers</td>
                                             <td>&#x2B;2.3</td>
@@ -1940,7 +2421,7 @@ a { color: inherit; text-decoration: none; }
                             <div class="game__foot"><span class="spread">Chicago Bears by 0.9</span>
                                 <span>52%
                                     · O/U 43.0</span><span class="tag tag--key" title="Market &#x2B;2.5 teases to &#x2B;8.5 &#x2014; a qualifying leg">3 &amp; 7</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
-                                        <span class="mkt__src">consensus · 22d ago</span></div>
+                                        <span class="mkt__src">consensus · pulled 1 Aug 17:02 MST</span></div>
 
                                     <table class="mkt__grid"><thead><tr><th></th>
                                                 <th>Spread</th>
@@ -2003,7 +2484,7 @@ a { color: inherit; text-decoration: none; }
                             <div class="game__foot"><span class="spread">Tampa Bay Buccaneers by 0.3</span>
                                 <span>51%
                                     · O/U 50.1</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
-                                        <span class="mkt__src">consensus · 22d ago</span></div>
+                                        <span class="mkt__src">consensus · pulled 1 Aug 17:02 MST</span></div>
 
                                     <table class="mkt__grid"><thead><tr><th></th>
                                                 <th>Spread</th>
@@ -2066,7 +2547,7 @@ a { color: inherit; text-decoration: none; }
                             <div class="game__foot"><span class="spread">Detroit Lions by 8.3</span>
                                 <span>71%
                                     · O/U 44.4</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
-                                        <span class="mkt__src">consensus · 22d ago</span></div>
+                                        <span class="mkt__src">consensus · pulled 1 Aug 17:02 MST</span></div>
 
                                     <table class="mkt__grid"><thead><tr><th></th>
                                                 <th>Spread</th>
@@ -2129,7 +2610,7 @@ a { color: inherit; text-decoration: none; }
                             <div class="game__foot"><span class="spread">Houston Texans by 4.1</span>
                                 <span>61%
                                     · O/U 43.5</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
-                                        <span class="mkt__src">consensus · 22d ago</span></div>
+                                        <span class="mkt__src">consensus · pulled 1 Aug 17:02 MST</span></div>
 
                                     <table class="mkt__grid"><thead><tr><th></th>
                                                 <th>Spread</th>
@@ -2192,7 +2673,7 @@ a { color: inherit; text-decoration: none; }
                             <div class="game__foot"><span class="spread">Indianapolis Colts by 4.2</span>
                                 <span>61%
                                     · O/U 50.2</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
-                                        <span class="mkt__src">consensus · 22d ago</span></div>
+                                        <span class="mkt__src">consensus · pulled 1 Aug 17:02 MST</span></div>
 
                                     <table class="mkt__grid"><thead><tr><th></th>
                                                 <th>Spread</th>
@@ -2255,7 +2736,7 @@ a { color: inherit; text-decoration: none; }
                             <div class="game__foot"><span class="spread">Jacksonville Jaguars by 12.7</span>
                                 <span>80%
                                     · O/U 39.6</span><span class="tag tag--key" title="Market -7.5 teases to -1.5 &#x2014; a qualifying leg">3 &amp; 7</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
-                                        <span class="mkt__src">consensus · 22d ago</span></div>
+                                        <span class="mkt__src">consensus · pulled 1 Aug 17:02 MST</span></div>
 
                                     <table class="mkt__grid"><thead><tr><th></th>
                                                 <th>Spread</th>
@@ -2318,7 +2799,7 @@ a { color: inherit; text-decoration: none; }
                             <div class="game__foot"><span class="spread">Pittsburgh Steelers by 4.3</span>
                                 <span>61%
                                     · O/U 42.7</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
-                                        <span class="mkt__src">consensus · 22d ago</span></div>
+                                        <span class="mkt__src">consensus · pulled 1 Aug 17:02 MST</span></div>
 
                                     <table class="mkt__grid"><thead><tr><th></th>
                                                 <th>Spread</th>
@@ -2381,7 +2862,7 @@ a { color: inherit; text-decoration: none; }
                             <div class="game__foot"><span class="spread">Tennessee Titans by 4.5</span>
                                 <span>62%
                                     · O/U 44.2</span><span class="tag tag--key" title="Market &#x2B;2.5 teases to &#x2B;8.5 &#x2014; a qualifying leg">3 &amp; 7</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
-                                        <span class="mkt__src">consensus · 22d ago</span></div>
+                                        <span class="mkt__src">consensus · pulled 1 Aug 17:02 MST</span></div>
 
                                     <table class="mkt__grid"><thead><tr><th></th>
                                                 <th>Spread</th>
@@ -2444,7 +2925,7 @@ a { color: inherit; text-decoration: none; }
                             <div class="game__foot"><span class="spread">Miami Dolphins by 1.1</span>
                                 <span>53%
                                     · O/U 39.3</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
-                                        <span class="mkt__src">consensus · 22d ago</span></div>
+                                        <span class="mkt__src">consensus · pulled 1 Aug 17:02 MST</span></div>
 
                                     <table class="mkt__grid"><thead><tr><th></th>
                                                 <th>Spread</th>
@@ -2507,7 +2988,7 @@ a { color: inherit; text-decoration: none; }
                             <div class="game__foot"><span class="spread">Los Angeles Chargers by 6.5</span>
                                 <span>67%
                                     · O/U 43.6</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
-                                        <span class="mkt__src">consensus · 22d ago</span></div>
+                                        <span class="mkt__src">consensus · pulled 1 Aug 17:02 MST</span></div>
 
                                     <table class="mkt__grid"><thead><tr><th></th>
                                                 <th>Spread</th>
@@ -2570,7 +3051,7 @@ a { color: inherit; text-decoration: none; }
                             <div class="game__foot"><span class="spread">Minnesota Vikings by 1.9</span>
                                 <span>55%
                                     · O/U 37.3</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
-                                        <span class="mkt__src">consensus · 22d ago</span></div>
+                                        <span class="mkt__src">consensus · pulled 1 Aug 17:02 MST</span></div>
 
                                     <table class="mkt__grid"><thead><tr><th></th>
                                                 <th>Spread</th>
@@ -2633,7 +3114,7 @@ a { color: inherit; text-decoration: none; }
                             <div class="game__foot"><span class="spread">Philadelphia Eagles by 8.1</span>
                                 <span>70%
                                     · O/U 41.0</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
-                                        <span class="mkt__src">consensus · 22d ago</span></div>
+                                        <span class="mkt__src">consensus · pulled 1 Aug 17:02 MST</span></div>
 
                                     <table class="mkt__grid"><thead><tr><th></th>
                                                 <th>Spread</th>
@@ -2696,7 +3177,7 @@ a { color: inherit; text-decoration: none; }
                             <div class="game__foot"><span class="spread">New York Giants by 2.4</span>
                                 <span>56%
                                     · O/U 54.5</span><span class="tag tag--key" title="Market &#x2B;2.5 teases to &#x2B;8.5 &#x2014; a qualifying leg">3 &amp; 7</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
-                                        <span class="mkt__src">consensus · 22d ago</span></div>
+                                        <span class="mkt__src">consensus · pulled 1 Aug 17:02 MST</span></div>
 
                                     <table class="mkt__grid"><thead><tr><th></th>
                                                 <th>Spread</th>
@@ -2759,7 +3240,7 @@ a { color: inherit; text-decoration: none; }
                             <div class="game__foot"><span class="spread">Kansas City Chiefs by 0.9</span>
                                 <span>52%
                                     · O/U 37.7</span><span class="tag tag--thin">thin</span><span class="chev">&#x2B;</span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
-                                        <span class="mkt__src">consensus · 22d ago</span></div>
+                                        <span class="mkt__src">consensus · pulled 1 Aug 17:02 MST</span></div>
 
                                     <table class="mkt__grid"><thead><tr><th></th>
                                                 <th>Spread</th>
