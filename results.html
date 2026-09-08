@@ -621,10 +621,14 @@ a { color: inherit; text-decoration: none; }
 
 .side--fav .side__score { color: var(--signal); }
 
+/* Wraps so a long favourite ("Middle Tennessee State by 24.5") drops cleanly instead of
+   crowding the chevron. The chevron's margin-left:auto absorbs the free space before
+   space-between ever applies, so the row packs left and the chevron stays hard right. */
 .game__foot {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 8px;
     margin-top: 11px;
     padding-top: 10px;
@@ -635,6 +639,81 @@ a { color: inherit; text-decoration: none; }
 }
 
 .spread { color: var(--chalk); font-weight: 500; }
+
+/* The plays get a row to themselves. Sharing the foot put the position on line one or line
+   two depending on how long the team names were, and a row that moves between cards is a
+   row you have to hunt for on every one. Labelled, because two chips with no key read as
+   stray tags. */
+.game__plays {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 9px;
+}
+
+.game__plays-k {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    margin-right: 2px;
+}
+
+/* Open, the hairline belongs BELOW the plays rather than between them and the projection —
+   the two rows are one summary. Browsers without :has get a second hairline, not a break. */
+.game--open .game__foot:has(+ .game__plays) { border-bottom: none; padding-bottom: 0; }
+.game--open .game__plays {
+    border-bottom: 1px solid var(--rule-soft);
+    padding-bottom: 10px;
+}
+
+/* The named play itself. The selection is set in the reading weight of the card and the
+   tier follows it in the tag idiom, so the position is what you read and the conviction is
+   the qualifier — never the other way round. Colour is never the sole carrier: the tier
+   word is always present. */
+.play-chip {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 5px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    border: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 11px;
+    white-space: nowrap;
+    color: var(--chalk);
+}
+
+.play-chip__tier {
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+}
+
+.play-chip--strong {
+    color: var(--signal);
+    border-color: var(--signal-dim);
+    background: var(--signal-wash);
+}
+
+.play-chip--strong .play-chip__tier { color: var(--signal); }
+
+.play-chip--lean { border-color: var(--rule); }
+
+/* A coin flip is shown rather than hidden — the rail drops it, but a card that has a line
+   and says nothing about it reads as broken. Faded is the honest rendering. */
+.play-chip--flip { color: var(--chalk-mute); border-color: var(--rule-soft); }
+
+/* A line exists and the model is withholding. Dashed, like .tag--hint, because the
+   distinction that matters is "no opinion yet" against "a weak opinion". */
+.play-chip--held {
+    color: var(--chalk-mute);
+    border-color: var(--rule);
+    border-style: dashed;
+}
 
 .tag {
     font-family: var(--mono);
