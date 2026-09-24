@@ -546,9 +546,12 @@ a { color: inherit; text-decoration: none; }
 
 /* ── Game cards ──────────────────────────────────────────────────────────── */
 
+/* One card per row. It was two to a row at 330px minimum, which left an open card's
+   team stats one narrow column running the length of the page; full width gives them
+   room to sit offense beside defense. */
 .board {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     gap: 11px;
 }
 
@@ -594,7 +597,7 @@ a { color: inherit; text-decoration: none; }
 
 .side {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     gap: 10px;
     padding: 4px 0;
@@ -611,6 +614,37 @@ a { color: inherit; text-decoration: none; }
 }
 
 .side--fav .side__team { color: var(--chalk); font-weight: 600; }
+
+/* Logo + name. min-width: 0 so a long name still ellipsises beside the mark rather than
+   pushing the score off the card. */
+.side__id {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+/* Drawn at 32px from a 64px file, so it stays sharp on a high-density screen. */
+.mark-logo {
+    flex: none;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+/* No logo: the same footprint, so both rows of a card keep their names aligned. */
+.mark-logo--init {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--rule);
+    background: var(--rule-soft);
+    color: var(--chalk-mute);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+}
 
 .side__score {
     font-family: var(--mono);
@@ -827,6 +861,111 @@ a { color: inherit; text-decoration: none; }
 
 .grid__net { color: var(--signal); }
 .grid__dim { color: var(--chalk-mute); }
+
+/* ── Team stats, collapsed inside an open card ───────────────────────────── */
+
+.tstats {
+    margin: 4px 0 12px;
+    border-top: 1px solid var(--rule-soft);
+    padding-top: 9px;
+}
+
+.tstats__sum {
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    color: var(--chalk-dim);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+}
+
+.tstats__sum::-webkit-details-marker { display: none; }
+.tstats__sum::before { content: "+"; color: var(--chalk-mute); width: 10px; }
+.tstats[open] > .tstats__sum::before { content: "−"; color: var(--signal); }
+.tstats__sum:hover { color: var(--chalk); }
+
+.tstats__meta {
+    letter-spacing: 0.06em;
+    text-transform: none;
+    color: var(--chalk-mute);
+}
+
+.tstats__modes { display: flex; gap: 6px; margin: 10px 0 2px; }
+
+.tstats__mode {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 3px 9px;
+    cursor: pointer;
+}
+
+.tstats__mode:hover { color: var(--chalk); }
+.tstats__mode--on { color: var(--signal); border-color: var(--signal-dim); background: var(--signal-wash); }
+
+/* Offense left, defense right, so the list reads half as long. Stacks below 720px,
+   where two three-column tables side by side would crush the stat labels. */
+.tstats__cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 28px;
+    align-items: start;
+}
+
+@media (max-width: 720px) {
+    .tstats__cols { grid-template-columns: minmax(0, 1fr); }
+
+    /* Alignment padding only means something beside the offense column. */
+    .tstats__pad { display: none; }
+}
+
+.tstats__grid { margin: 10px 0 12px; table-layout: fixed; }
+.tstats__grid th:first-child { width: 42%; }
+
+.tstats__team {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    font-family: var(--sans);
+    font-size: 11px !important;
+    color: var(--chalk-dim) !important;
+}
+
+.tstats__group td {
+    text-align: left;
+    padding: 9px 0 3px;
+    font-size: 9.5px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    opacity: .8;
+}
+
+.tstats__grid td { padding-top: 4px; padding-bottom: 4px; white-space: nowrap; }
+
+.tstats__k {
+    text-align: left !important;
+    padding-left: 0 !important;
+    font-family: var(--sans);
+    color: var(--chalk-mute) !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tstats__rk { color: var(--chalk-mute); font-size: 10.5px; opacity: .85; }
+.tstats__grid td.tstats__win { color: var(--signal); }
 
 .build { margin-bottom: 11px; }
 
@@ -2426,9 +2565,9 @@ a { color: inherit; text-decoration: none; }
             <div class="stat"><div class="stat__k">Market</div>
                 <div class="stat__v stat__v--market">12.09</div></div>
             <div class="stat"><div class="stat__k">Brier skill</div>
-                <div class="stat__v">20.9%</div></div>
+                <div class="stat__v">21.1%</div></div>
             <div class="stat"><div class="stat__k">Calib err</div>
-                <div class="stat__v">1.6%</div></div></div>
+                <div class="stat__v">1.7%</div></div></div>
 
         <dl class="key"><dt>Model MAE</dt>
             <dd>

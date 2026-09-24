@@ -546,9 +546,12 @@ a { color: inherit; text-decoration: none; }
 
 /* ── Game cards ──────────────────────────────────────────────────────────── */
 
+/* One card per row. It was two to a row at 330px minimum, which left an open card's
+   team stats one narrow column running the length of the page; full width gives them
+   room to sit offense beside defense. */
 .board {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     gap: 11px;
 }
 
@@ -594,7 +597,7 @@ a { color: inherit; text-decoration: none; }
 
 .side {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     gap: 10px;
     padding: 4px 0;
@@ -611,6 +614,37 @@ a { color: inherit; text-decoration: none; }
 }
 
 .side--fav .side__team { color: var(--chalk); font-weight: 600; }
+
+/* Logo + name. min-width: 0 so a long name still ellipsises beside the mark rather than
+   pushing the score off the card. */
+.side__id {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+/* Drawn at 32px from a 64px file, so it stays sharp on a high-density screen. */
+.mark-logo {
+    flex: none;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+/* No logo: the same footprint, so both rows of a card keep their names aligned. */
+.mark-logo--init {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--rule);
+    background: var(--rule-soft);
+    color: var(--chalk-mute);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+}
 
 .side__score {
     font-family: var(--mono);
@@ -827,6 +861,111 @@ a { color: inherit; text-decoration: none; }
 
 .grid__net { color: var(--signal); }
 .grid__dim { color: var(--chalk-mute); }
+
+/* ── Team stats, collapsed inside an open card ───────────────────────────── */
+
+.tstats {
+    margin: 4px 0 12px;
+    border-top: 1px solid var(--rule-soft);
+    padding-top: 9px;
+}
+
+.tstats__sum {
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    color: var(--chalk-dim);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+}
+
+.tstats__sum::-webkit-details-marker { display: none; }
+.tstats__sum::before { content: "+"; color: var(--chalk-mute); width: 10px; }
+.tstats[open] > .tstats__sum::before { content: "−"; color: var(--signal); }
+.tstats__sum:hover { color: var(--chalk); }
+
+.tstats__meta {
+    letter-spacing: 0.06em;
+    text-transform: none;
+    color: var(--chalk-mute);
+}
+
+.tstats__modes { display: flex; gap: 6px; margin: 10px 0 2px; }
+
+.tstats__mode {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 3px 9px;
+    cursor: pointer;
+}
+
+.tstats__mode:hover { color: var(--chalk); }
+.tstats__mode--on { color: var(--signal); border-color: var(--signal-dim); background: var(--signal-wash); }
+
+/* Offense left, defense right, so the list reads half as long. Stacks below 720px,
+   where two three-column tables side by side would crush the stat labels. */
+.tstats__cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 28px;
+    align-items: start;
+}
+
+@media (max-width: 720px) {
+    .tstats__cols { grid-template-columns: minmax(0, 1fr); }
+
+    /* Alignment padding only means something beside the offense column. */
+    .tstats__pad { display: none; }
+}
+
+.tstats__grid { margin: 10px 0 12px; table-layout: fixed; }
+.tstats__grid th:first-child { width: 42%; }
+
+.tstats__team {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    font-family: var(--sans);
+    font-size: 11px !important;
+    color: var(--chalk-dim) !important;
+}
+
+.tstats__group td {
+    text-align: left;
+    padding: 9px 0 3px;
+    font-size: 9.5px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+    opacity: .8;
+}
+
+.tstats__grid td { padding-top: 4px; padding-bottom: 4px; white-space: nowrap; }
+
+.tstats__k {
+    text-align: left !important;
+    padding-left: 0 !important;
+    font-family: var(--sans);
+    color: var(--chalk-mute) !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tstats__rk { color: var(--chalk-mute); font-size: 10.5px; opacity: .85; }
+.tstats__grid td.tstats__win { color: var(--signal); }
 
 .build { margin-bottom: 11px; }
 
@@ -2424,9 +2563,9 @@ a { color: inherit; text-decoration: none; }
             <div class="stat"><div class="stat__k">Market</div>
                 <div class="stat__v stat__v--market">12.09</div></div>
             <div class="stat"><div class="stat__k">Brier skill</div>
-                <div class="stat__v">20.9%</div></div>
+                <div class="stat__v">21.1%</div></div>
             <div class="stat"><div class="stat__k">Calib err</div>
-                <div class="stat__v">1.6%</div></div></div>
+                <div class="stat__v">1.7%</div></div></div>
 
         <dl class="key"><dt>Model MAE</dt>
             <dd>
@@ -2479,10 +2618,10 @@ a { color: inherit; text-decoration: none; }
                 <p class="facets__record" data-facet-record="ml" hidden>Moneyline, measured: Moneyline vs close over 1,011 &#x2014; Backed 1,011 of 1,535 games at 3% minimum edge, flat stake. Returns -11.6% at the prices actually posted. A price band narrows what you are reading; no band has ever cleared the vig.</p></div><div class="board"><article class="game " data-game="Atlanta Falcons@Green Bay Packers" data-f-mkt="1" data-f-st="lean" data-f-tt="flip" data-f-ml="heavy" data-f-mlp="-250" data-f-gap="0-3" data-f-day="thu" data-f-slot="night" style="--conf:0.55; animation-delay:0ms"><div class="game__hit" data-toggle><div class="game__when"><span>Thu 24 Sep &#xB7; 17:15</span>
                                 <span></span></div>
 
-                            <div class="side "><span class="side__team">Atlanta Falcons</span>
+                            <div class="side "><span class="side__id"><span class="side__team">Atlanta Falcons</span></span>
                                 <span class="side__score">17.0</span></div>
 
-                            <div class="side side--fav"><span class="side__team">Green Bay Packers</span>
+                            <div class="side side--fav"><span class="side__id"><span class="side__team">Green Bay Packers</span></span>
                                 <span class="side__score">26.1</span></div>
 
                             <div class="meter"><div class="meter__fill" style="width:72.80936715595337%"></div></div>
@@ -2532,9 +2671,7 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">&#x2B;0.4</span></div><div class="build__row"><span class="build__k">Atlanta Falcons defence</span>
                                             <span class="build__v">&#x2B;2.1</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
-                                        <span class="build__v">26.1</span></div></div>
-
-                                <div class="dig__note">
+                                        <span class="build__v">26.1</span></div></div><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
                                             one that has not.
@@ -2542,10 +2679,10 @@ a { color: inherit; text-decoration: none; }
                                 </div></div></article><article class="game " data-game="Los Angeles Chargers@Buffalo Bills" data-f-mkt="1" data-f-st="lean" data-f-tt="lean" data-f-ml="heavy" data-f-mlp="-345" data-f-gap="3-7" data-f-day="sun" data-f-slot="early" style="--conf:0.67; animation-delay:22ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 27 Sep &#xB7; 10:00</span>
                                 <span></span></div>
 
-                            <div class="side "><span class="side__team">Los Angeles Chargers</span>
+                            <div class="side "><span class="side__id"><span class="side__team">Los Angeles Chargers</span></span>
                                 <span class="side__score">19.7</span></div>
 
-                            <div class="side side--fav"><span class="side__team">Buffalo Bills</span>
+                            <div class="side side--fav"><span class="side__id"><span class="side__team">Buffalo Bills</span></span>
                                 <span class="side__score">32.4</span></div>
 
                             <div class="meter"><div class="meter__fill" style="width:80.12017697530248%"></div></div>
@@ -2595,9 +2732,7 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">&#x2B;7.4</span></div><div class="build__row"><span class="build__k">Los Angeles Chargers defence</span>
                                             <span class="build__v">&#x2B;1.4</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
-                                        <span class="build__v">32.4</span></div></div>
-
-                                <div class="dig__note">
+                                        <span class="build__v">32.4</span></div></div><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
                                             one that has not.
@@ -2605,10 +2740,10 @@ a { color: inherit; text-decoration: none; }
                                 </div></div></article><article class="game " data-game="Carolina Panthers@Cleveland Browns" data-f-mkt="1" data-f-st="flip" data-f-tt="lean" data-f-ml="fav" data-f-mlp="-150" data-f-gap="0-3" data-f-day="sun" data-f-slot="early" style="--conf:0.28; animation-delay:44ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 27 Sep &#xB7; 10:00</span>
                                 <span></span></div>
 
-                            <div class="side side--fav"><span class="side__team">Carolina Panthers</span>
+                            <div class="side side--fav"><span class="side__id"><span class="side__team">Carolina Panthers</span></span>
                                 <span class="side__score">23.1</span></div>
 
-                            <div class="side "><span class="side__team">Cleveland Browns</span>
+                            <div class="side "><span class="side__id"><span class="side__team">Cleveland Browns</span></span>
                                 <span class="side__score">20.9</span></div>
 
                             <div class="meter"><div class="meter__fill" style="width:55.85819871659425%"></div></div>
@@ -2658,9 +2793,7 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">-5.2</span></div><div class="build__row"><span class="build__k">Carolina Panthers defence</span>
                                             <span class="build__v">&#x2B;2.5</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
-                                        <span class="build__v">20.9</span></div></div>
-
-                                <div class="dig__note">
+                                        <span class="build__v">20.9</span></div></div><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
                                             one that has not.
@@ -2668,10 +2801,10 @@ a { color: inherit; text-decoration: none; }
                                 </div></div></article><article class="game " data-game="New York Jets@Detroit Lions" data-f-mkt="1" data-f-st="flip" data-f-tt="lean" data-f-ml="heavy" data-f-mlp="-300" data-f-gap="0-3" data-f-day="sun" data-f-slot="early" style="--conf:0.55; animation-delay:66ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 27 Sep &#xB7; 10:00</span>
                                 <span></span></div>
 
-                            <div class="side "><span class="side__team">New York Jets</span>
+                            <div class="side "><span class="side__id"><span class="side__team">New York Jets</span></span>
                                 <span class="side__score">20.9</span></div>
 
-                            <div class="side side--fav"><span class="side__team">Detroit Lions</span>
+                            <div class="side side--fav"><span class="side__id"><span class="side__team">Detroit Lions</span></span>
                                 <span class="side__score">29.9</span></div>
 
                             <div class="meter"><div class="meter__fill" style="width:72.54816072150334%"></div></div>
@@ -2721,9 +2854,7 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">&#x2B;5.1</span></div><div class="build__row"><span class="build__k">New York Jets defence</span>
                                             <span class="build__v">&#x2B;1.2</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
-                                        <span class="build__v">29.9</span></div></div>
-
-                                <div class="dig__note">
+                                        <span class="build__v">29.9</span></div></div><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
                                             one that has not.
@@ -2731,10 +2862,10 @@ a { color: inherit; text-decoration: none; }
                                 </div></div></article><article class="game " data-game="Houston Texans@Indianapolis Colts" data-f-mkt="1" data-f-st="lean" data-f-tt="strong" data-f-ml="close" data-f-mlp="124" data-f-gap="3-7" data-f-day="sun" data-f-slot="early" style="--conf:0.23; animation-delay:88ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 27 Sep &#xB7; 10:00</span>
                                 <span></span></div>
 
-                            <div class="side "><span class="side__team">Houston Texans</span>
+                            <div class="side "><span class="side__id"><span class="side__team">Houston Texans</span></span>
                                 <span class="side__score">24.3</span></div>
 
-                            <div class="side side--fav"><span class="side__team">Indianapolis Colts</span>
+                            <div class="side side--fav"><span class="side__id"><span class="side__team">Indianapolis Colts</span></span>
                                 <span class="side__score">25.4</span></div>
 
                             <div class="meter"><div class="meter__fill" style="width:52.89671775888469%"></div></div>
@@ -2784,9 +2915,7 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">&#x2B;4.3</span></div><div class="build__row"><span class="build__k">Houston Texans defence</span>
                                             <span class="build__v">-2.4</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
-                                        <span class="build__v">25.4</span></div></div>
-
-                                <div class="dig__note">
+                                        <span class="build__v">25.4</span></div></div><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
                                             one that has not.
@@ -2794,10 +2923,10 @@ a { color: inherit; text-decoration: none; }
                                 </div></div></article><article class="game " data-game="New England Patriots@Jacksonville Jaguars" data-f-mkt="1" data-f-st="flip" data-f-tt="strong" data-f-ml="fav" data-f-mlp="-155" data-f-gap="0-3" data-f-day="sun" data-f-slot="early" style="--conf:0.24; animation-delay:110ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 27 Sep &#xB7; 10:00</span>
                                 <span></span></div>
 
-                            <div class="side "><span class="side__team">New England Patriots</span>
+                            <div class="side "><span class="side__id"><span class="side__team">New England Patriots</span></span>
                                 <span class="side__score">19.5</span></div>
 
-                            <div class="side side--fav"><span class="side__team">Jacksonville Jaguars</span>
+                            <div class="side side--fav"><span class="side__id"><span class="side__team">Jacksonville Jaguars</span></span>
                                 <span class="side__score">20.8</span></div>
 
                             <div class="meter"><div class="meter__fill" style="width:53.49866637197571%"></div></div>
@@ -2847,9 +2976,7 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">&#x2B;3.1</span></div><div class="build__row"><span class="build__k">New England Patriots defence</span>
                                             <span class="build__v">-5.9</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
-                                        <span class="build__v">20.8</span></div></div>
-
-                                <div class="dig__note">
+                                        <span class="build__v">20.8</span></div></div><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
                                             one that has not.
@@ -2857,10 +2984,10 @@ a { color: inherit; text-decoration: none; }
                                 </div></div></article><article class="game " data-game="Kansas City Chiefs@Miami Dolphins" data-f-mkt="1" data-f-st="lean" data-f-tt="lean" data-f-ml="heavy" data-f-mlp="-675" data-f-gap="0-3" data-f-day="sun" data-f-slot="early" style="--conf:0.55; animation-delay:132ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 27 Sep &#xB7; 10:00</span>
                                 <span></span></div>
 
-                            <div class="side side--fav"><span class="side__team">Kansas City Chiefs</span>
+                            <div class="side side--fav"><span class="side__id"><span class="side__team">Kansas City Chiefs</span></span>
                                 <span class="side__score">26.4</span></div>
 
-                            <div class="side "><span class="side__team">Miami Dolphins</span>
+                            <div class="side "><span class="side__id"><span class="side__team">Miami Dolphins</span></span>
                                 <span class="side__score">17.5</span></div>
 
                             <div class="meter"><div class="meter__fill" style="width:72.29610895069933%"></div></div>
@@ -2910,9 +3037,7 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">-3.5</span></div><div class="build__row"><span class="build__k">Kansas City Chiefs defence</span>
                                             <span class="build__v">-2.6</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
-                                        <span class="build__v">17.5</span></div></div>
-
-                                <div class="dig__note">
+                                        <span class="build__v">17.5</span></div></div><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
                                             one that has not.
@@ -2920,10 +3045,10 @@ a { color: inherit; text-decoration: none; }
                                 </div></div></article><article class="game " data-game="Tennessee Titans@New York Giants" data-f-mkt="1" data-f-st="strong" data-f-tt="lean" data-f-ml="fav" data-f-mlp="-145" data-f-gap="0-3" data-f-day="sun" data-f-slot="early" style="--conf:0.50; animation-delay:154ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 27 Sep &#xB7; 10:00</span>
                                 <span></span></div>
 
-                            <div class="side "><span class="side__team">Tennessee Titans</span>
+                            <div class="side "><span class="side__id"><span class="side__team">Tennessee Titans</span></span>
                                 <span class="side__score">17.3</span></div>
 
-                            <div class="side side--fav"><span class="side__team">New York Giants</span>
+                            <div class="side side--fav"><span class="side__id"><span class="side__team">New York Giants</span></span>
                                 <span class="side__score">24.9</span></div>
 
                             <div class="meter"><div class="meter__fill" style="width:69.38569301219935%"></div></div>
@@ -2973,9 +3098,7 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">-2.3</span></div><div class="build__row"><span class="build__k">Tennessee Titans defence</span>
                                             <span class="build__v">&#x2B;3.6</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
-                                        <span class="build__v">24.9</span></div></div>
-
-                                <div class="dig__note">
+                                        <span class="build__v">24.9</span></div></div><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
                                             one that has not.
@@ -2983,10 +3106,10 @@ a { color: inherit; text-decoration: none; }
                                 </div></div></article><article class="game " data-game="Cincinnati Bengals@Pittsburgh Steelers" data-f-mkt="1" data-f-st="lean" data-f-tt="flip" data-f-ml="fav" data-f-mlp="-190" data-f-gap="0-3" data-f-day="sun" data-f-slot="early" style="--conf:0.19; animation-delay:176ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 27 Sep &#xB7; 10:00</span>
                                 <span></span></div>
 
-                            <div class="side side--fav"><span class="side__team">Cincinnati Bengals</span>
+                            <div class="side side--fav"><span class="side__id"><span class="side__team">Cincinnati Bengals</span></span>
                                 <span class="side__score">21.9</span></div>
 
-                            <div class="side "><span class="side__team">Pittsburgh Steelers</span>
+                            <div class="side "><span class="side__id"><span class="side__team">Pittsburgh Steelers</span></span>
                                 <span class="side__score">21.6</span></div>
 
                             <div class="meter"><div class="meter__fill" style="width:50.67262769948919%"></div></div>
@@ -3036,9 +3159,7 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">-3.1</span></div><div class="build__row"><span class="build__k">Cincinnati Bengals defence</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
-                                        <span class="build__v">21.6</span></div></div>
-
-                                <div class="dig__note">
+                                        <span class="build__v">21.6</span></div></div><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
                                             one that has not.
@@ -3046,10 +3167,10 @@ a { color: inherit; text-decoration: none; }
                                 </div></div></article><article class="game " data-game="Seattle Seahawks@Washington Commanders" data-f-mkt="1" data-f-st="strong" data-f-tt="lean" data-f-ml="heavy" data-f-mlp="-330" data-f-gap="10plus" data-f-day="sun" data-f-slot="early" style="--conf:0.70; animation-delay:198ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 27 Sep &#xB7; 10:00</span>
                                 <span></span></div>
 
-                            <div class="side side--fav"><span class="side__team">Seattle Seahawks</span>
+                            <div class="side side--fav"><span class="side__id"><span class="side__team">Seattle Seahawks</span></span>
                                 <span class="side__score">28.1</span></div>
 
-                            <div class="side "><span class="side__team">Washington Commanders</span>
+                            <div class="side "><span class="side__id"><span class="side__team">Washington Commanders</span></span>
                                 <span class="side__score">14.5</span></div>
 
                             <div class="meter"><div class="meter__fill" style="width:81.91044512086336%"></div></div>
@@ -3099,9 +3220,7 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">-1.6</span></div><div class="build__row"><span class="build__k">Seattle Seahawks defence</span>
                                             <span class="build__v">-7.5</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
-                                        <span class="build__v">14.5</span></div></div>
-
-                                <div class="dig__note">
+                                        <span class="build__v">14.5</span></div></div><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
                                             one that has not.
@@ -3109,10 +3228,10 @@ a { color: inherit; text-decoration: none; }
                                 </div></div></article><article class="game " data-game="Arizona Cardinals@San Francisco 49ers" data-f-mkt="1" data-f-st="strong" data-f-tt="lean" data-f-ml="heavy" data-f-mlp="-441" data-f-gap="3-7" data-f-day="sun" data-f-slot="afternoon" style="--conf:0.74; animation-delay:220ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 27 Sep &#xB7; 13:05</span>
                                 <span></span></div>
 
-                            <div class="side "><span class="side__team">Arizona Cardinals</span>
+                            <div class="side "><span class="side__id"><span class="side__team">Arizona Cardinals</span></span>
                                 <span class="side__score">14.9</span></div>
 
-                            <div class="side side--fav"><span class="side__team">San Francisco 49ers</span>
+                            <div class="side side--fav"><span class="side__id"><span class="side__team">San Francisco 49ers</span></span>
                                 <span class="side__score">29.9</span></div>
 
                             <div class="meter"><div class="meter__fill" style="width:84.17870183231386%"></div></div>
@@ -3162,9 +3281,7 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">&#x2B;4.4</span></div><div class="build__row"><span class="build__k">Arizona Cardinals defence</span>
                                             <span class="build__v">&#x2B;1.9</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
-                                        <span class="build__v">29.9</span></div></div>
-
-                                <div class="dig__note">
+                                        <span class="build__v">29.9</span></div></div><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
                                             one that has not.
@@ -3172,10 +3289,10 @@ a { color: inherit; text-decoration: none; }
                                 </div></div></article><article class="game " data-game="Minnesota Vikings@Tampa Bay Buccaneers" data-f-mkt="1" data-f-st="strong" data-f-tt="lean" data-f-ml="fav" data-f-mlp="-125" data-f-gap="3-7" data-f-day="sun" data-f-slot="afternoon" style="--conf:0.41; animation-delay:242ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 27 Sep &#xB7; 13:05</span>
                                 <span></span></div>
 
-                            <div class="side side--fav"><span class="side__team">Minnesota Vikings</span>
+                            <div class="side side--fav"><span class="side__id"><span class="side__team">Minnesota Vikings</span></span>
                                 <span class="side__score">23.0</span></div>
 
-                            <div class="side "><span class="side__team">Tampa Bay Buccaneers</span>
+                            <div class="side "><span class="side__id"><span class="side__team">Tampa Bay Buccaneers</span></span>
                                 <span class="side__score">17.5</span></div>
 
                             <div class="meter"><div class="meter__fill" style="width:64.26780675931072%"></div></div>
@@ -3225,9 +3342,7 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">0.0</span></div><div class="build__row"><span class="build__k">Minnesota Vikings defence</span>
                                             <span class="build__v">-6.1</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
-                                        <span class="build__v">17.5</span></div></div>
-
-                                <div class="dig__note">
+                                        <span class="build__v">17.5</span></div></div><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
                                             one that has not.
@@ -3235,10 +3350,10 @@ a { color: inherit; text-decoration: none; }
                                 </div></div></article><article class="game " data-game="Baltimore Ravens@Dallas Cowboys" data-f-mkt="1" data-f-st="lean" data-f-tt="lean" data-f-ml="fav" data-f-mlp="-184" data-f-gap="0-3" data-f-day="sun" data-f-slot="afternoon" style="--conf:0.26; animation-delay:264ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 27 Sep &#xB7; 13:25</span>
                                 <span></span></div>
 
-                            <div class="side side--fav"><span class="side__team">Baltimore Ravens</span>
+                            <div class="side side--fav"><span class="side__id"><span class="side__team">Baltimore Ravens</span></span>
                                 <span class="side__score">28.8</span></div>
 
-                            <div class="side "><span class="side__team">Dallas Cowboys</span>
+                            <div class="side "><span class="side__id"><span class="side__team">Dallas Cowboys</span></span>
                                 <span class="side__score">27.0</span></div>
 
                             <div class="meter"><div class="meter__fill" style="width:54.738712398191105%"></div></div>
@@ -3288,9 +3403,7 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">&#x2B;3.4</span></div><div class="build__row"><span class="build__k">Baltimore Ravens defence</span>
                                             <span class="build__v">&#x2B;0.1</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
-                                        <span class="build__v">27.0</span></div></div>
-
-                                <div class="dig__note">
+                                        <span class="build__v">27.0</span></div></div><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
                                             one that has not.
@@ -3298,10 +3411,10 @@ a { color: inherit; text-decoration: none; }
                                 </div></div></article><article class="game " data-game="Las Vegas Raiders@New Orleans Saints" data-f-mkt="1" data-f-st="flip" data-f-tt="strong" data-f-ml="fav" data-f-mlp="-177" data-f-gap="0-3" data-f-day="sun" data-f-slot="afternoon" style="--conf:0.39; animation-delay:286ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 27 Sep &#xB7; 13:25</span>
                                 <span></span></div>
 
-                            <div class="side "><span class="side__team">Las Vegas Raiders</span>
+                            <div class="side "><span class="side__id"><span class="side__team">Las Vegas Raiders</span></span>
                                 <span class="side__score">16.8</span></div>
 
-                            <div class="side side--fav"><span class="side__team">New Orleans Saints</span>
+                            <div class="side side--fav"><span class="side__id"><span class="side__team">New Orleans Saints</span></span>
                                 <span class="side__score">21.7</span></div>
 
                             <div class="meter"><div class="meter__fill" style="width:62.74312040121244%"></div></div>
@@ -3351,9 +3464,7 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">-1.2</span></div><div class="build__row"><span class="build__k">Las Vegas Raiders defence</span>
                                             <span class="build__v">-0.7</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
-                                        <span class="build__v">21.7</span></div></div>
-
-                                <div class="dig__note">
+                                        <span class="build__v">21.7</span></div></div><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
                                             one that has not.
@@ -3361,10 +3472,10 @@ a { color: inherit; text-decoration: none; }
                                 </div></div></article><article class="game " data-game="Los Angeles Rams@Denver Broncos" data-f-mkt="1" data-f-st="flip" data-f-tt="strong" data-f-ml="fav" data-f-mlp="-143" data-f-gap="0-3" data-f-day="sun" data-f-slot="night" style="--conf:0.30; animation-delay:308ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 27 Sep &#xB7; 17:20</span>
                                 <span></span></div>
 
-                            <div class="side side--fav"><span class="side__team">Los Angeles Rams</span>
+                            <div class="side side--fav"><span class="side__id"><span class="side__team">Los Angeles Rams</span></span>
                                 <span class="side__score">21.2</span></div>
 
-                            <div class="side "><span class="side__team">Denver Broncos</span>
+                            <div class="side "><span class="side__id"><span class="side__team">Denver Broncos</span></span>
                                 <span class="side__score">18.4</span></div>
 
                             <div class="meter"><div class="meter__fill" style="width:57.26277546667933%"></div></div>
@@ -3414,9 +3525,7 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">-1.6</span></div><div class="build__row"><span class="build__k">Los Angeles Rams defence</span>
                                             <span class="build__v">-3.6</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
-                                        <span class="build__v">18.4</span></div></div>
-
-                                <div class="dig__note">
+                                        <span class="build__v">18.4</span></div></div><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
                                             one that has not.
@@ -3424,10 +3533,10 @@ a { color: inherit; text-decoration: none; }
                                 </div></div></article><article class="game " data-game="Philadelphia Eagles@Chicago Bears" data-f-mkt="1" data-f-st="strong" data-f-tt="strong" data-f-ml="dog" data-f-mlp="190" data-f-gap="7-10" data-f-day="mon" data-f-slot="night" style="--conf:0.43; animation-delay:308ms"><div class="game__hit" data-toggle><div class="game__when"><span>Mon 28 Sep &#xB7; 17:15</span>
                                 <span></span></div>
 
-                            <div class="side "><span class="side__team">Philadelphia Eagles</span>
+                            <div class="side "><span class="side__id"><span class="side__team">Philadelphia Eagles</span></span>
                                 <span class="side__score">21.0</span></div>
 
-                            <div class="side side--fav"><span class="side__team">Chicago Bears</span>
+                            <div class="side side--fav"><span class="side__id"><span class="side__team">Chicago Bears</span></span>
                                 <span class="side__score">26.8</span></div>
 
                             <div class="meter"><div class="meter__fill" style="width:65.02323796164747%"></div></div>
@@ -3477,9 +3586,7 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">&#x2B;4.7</span></div><div class="build__row"><span class="build__k">Philadelphia Eagles defence</span>
                                             <span class="build__v">-1.4</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
-                                        <span class="build__v">26.8</span></div></div>
-
-                                <div class="dig__note">
+                                        <span class="build__v">26.8</span></div></div><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
                                             one that has not.
