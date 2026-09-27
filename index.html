@@ -979,6 +979,36 @@ a { color: inherit; text-decoration: none; }
 .tstats__rk { color: var(--chalk-mute); font-size: 10.5px; opacity: .85; }
 .tstats__grid td.tstats__win { color: var(--signal); }
 
+/* ── Matchup edges: one line per mismatch, area label left ───────────────── */
+
+.edges { margin: 10px 0 8px; display: grid; gap: 6px; }
+
+.edges__row {
+    display: grid;
+    grid-template-columns: 104px minmax(0, 1fr);
+    gap: 10px;
+    align-items: baseline;
+    font-size: 12px;
+    color: var(--chalk-dim);
+}
+
+.edges__area {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--chalk-mute);
+}
+
+.edges__row b { color: var(--signal); font-weight: 600; }
+.edges__row--tag .edges__area { color: var(--signal); }
+.edges__vs { color: var(--chalk-mute); padding: 0 3px; }
+.edges__none { font-size: 12px; color: var(--chalk-mute); }
+
+@media (max-width: 720px) {
+    .edges__row { grid-template-columns: minmax(0, 1fr); gap: 1px; }
+}
+
 .build { margin-bottom: 11px; }
 
 .build__head {
@@ -2684,6 +2714,20 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">&#x2B;2.1</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
                                         <span class="build__v">26.1</span></div></div><details class="tstats"><summary class="tstats__sum">
+                                            Matchup edges
+                                            <span class="tstats__meta">
+                                                top third vs bottom third · from 2 / 2 gm
+                                            </span></summary>
+
+                                        <div class="edges"><div class="edges__row"><span class="edges__area">Rushing</span>
+                                                    <span class="edges__text"><b>Atlanta Falcons run defense #4 (&#x2212;0.26 EPA/carry allowed)</b> <span class="edges__vs">vs</span>Green Bay Packers run offense #32 (&#x2212;0.43 EPA/carry)</span></div><div class="edges__row"><span class="edges__area">Rushing</span>
+                                                    <span class="edges__text"><b>Green Bay Packers run defense #7 (&#x2212;0.22 EPA/carry allowed)</b> <span class="edges__vs">vs</span>Atlanta Falcons run offense #23 (&#x2212;0.15 EPA/carry)</span></div></div>
+
+                                        <div class="dig__note">
+                                            A unit in the top third of 32 against one in the bottom third, on the
+                                            raw season stats below. Not adjusted for opponent and not tested against results —
+                                            a way to read the matchup, not a pick. Bold is the side holding the edge.
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
                                             Team stats
                                             <span class="tstats__meta">
                                                 season to date · 2 / 2 gm · ranks of 32</span></summary>
@@ -2889,6 +2933,20 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">&#x2B;1.4</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
                                         <span class="build__v">32.4</span></div></div><details class="tstats"><summary class="tstats__sum">
+                                            Matchup edges
+                                            <span class="tstats__meta">
+                                                top third vs bottom third · from 2 / 2 gm
+                                            </span></summary>
+
+                                        <div class="edges"><div class="edges__row"><span class="edges__area">Ball security</span>
+                                                    <span class="edges__text"><b>Buffalo Bills ball security #1 (0.00 Turnovers/g)</b> <span class="edges__vs">vs</span>Los Angeles Chargers takeaways #24 (0.50 Takeaways/g)</span></div><div class="edges__row"><span class="edges__area">Passing</span>
+                                                    <span class="edges__text"><b>Buffalo Bills pass offense #2 (&#x2B;0.49 EPA/att)</b> <span class="edges__vs">vs</span>Los Angeles Chargers pass defense #23 (&#x2B;0.23 EPA/att allowed)</span></div></div>
+
+                                        <div class="dig__note">
+                                            A unit in the top third of 32 against one in the bottom third, on the
+                                            raw season stats below. Not adjusted for opponent and not tested against results —
+                                            a way to read the matchup, not a pick. Bold is the side holding the edge.
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
                                             Team stats
                                             <span class="tstats__meta">
                                                 season to date · 2 / 2 gm · ranks of 32</span></summary>
@@ -3094,6 +3152,18 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">&#x2B;2.5</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
                                         <span class="build__v">20.9</span></div></div><details class="tstats"><summary class="tstats__sum">
+                                            Matchup edges
+                                            <span class="tstats__meta">
+                                                top third vs bottom third · from 2 / 2 gm
+                                            </span></summary>
+
+                                        <div class="edges"><div class="edges__none">No clear mismatches.</div></div>
+
+                                        <div class="dig__note">
+                                            A unit in the top third of 32 against one in the bottom third, on the
+                                            raw season stats below. Not adjusted for opponent and not tested against results —
+                                            a way to read the matchup, not a pick. Bold is the side holding the edge.
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
                                             Team stats
                                             <span class="tstats__meta">
                                                 season to date · 2 / 2 gm · ranks of 32</span></summary>
@@ -3299,6 +3369,18 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">&#x2B;1.2</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
                                         <span class="build__v">29.9</span></div></div><details class="tstats"><summary class="tstats__sum">
+                                            Matchup edges
+                                            <span class="tstats__meta">
+                                                top third vs bottom third · from 2 / 2 gm
+                                            </span></summary>
+
+                                        <div class="edges"><div class="edges__none">No clear mismatches.</div></div>
+
+                                        <div class="dig__note">
+                                            A unit in the top third of 32 against one in the bottom third, on the
+                                            raw season stats below. Not adjusted for opponent and not tested against results —
+                                            a way to read the matchup, not a pick. Bold is the side holding the edge.
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
                                             Team stats
                                             <span class="tstats__meta">
                                                 season to date · 2 / 2 gm · ranks of 32</span></summary>
@@ -3504,6 +3586,18 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">-2.4</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
                                         <span class="build__v">25.4</span></div></div><details class="tstats"><summary class="tstats__sum">
+                                            Matchup edges
+                                            <span class="tstats__meta">
+                                                top third vs bottom third · from 2 / 2 gm
+                                            </span></summary>
+
+                                        <div class="edges"><div class="edges__none">No clear mismatches.</div></div>
+
+                                        <div class="dig__note">
+                                            A unit in the top third of 32 against one in the bottom third, on the
+                                            raw season stats below. Not adjusted for opponent and not tested against results —
+                                            a way to read the matchup, not a pick. Bold is the side holding the edge.
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
                                             Team stats
                                             <span class="tstats__meta">
                                                 season to date · 2 / 2 gm · ranks of 32</span></summary>
@@ -3709,6 +3803,19 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">-5.9</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
                                         <span class="build__v">20.8</span></div></div><details class="tstats"><summary class="tstats__sum">
+                                            Matchup edges
+                                            <span class="tstats__meta">
+                                                top third vs bottom third · from 2 / 2 gm
+                                            </span></summary>
+
+                                        <div class="edges"><div class="edges__row"><span class="edges__area">Ball security</span>
+                                                    <span class="edges__text"><b>Jacksonville Jaguars takeaways #7 (1.50 Takeaways/g)</b> <span class="edges__vs">vs</span>New England Patriots ball security #29 (2.50 Turnovers/g)</span></div></div>
+
+                                        <div class="dig__note">
+                                            A unit in the top third of 32 against one in the bottom third, on the
+                                            raw season stats below. Not adjusted for opponent and not tested against results —
+                                            a way to read the matchup, not a pick. Bold is the side holding the edge.
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
                                             Team stats
                                             <span class="tstats__meta">
                                                 season to date · 2 / 2 gm · ranks of 32</span></summary>
@@ -3914,6 +4021,18 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">-2.6</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
                                         <span class="build__v">17.5</span></div></div><details class="tstats"><summary class="tstats__sum">
+                                            Matchup edges
+                                            <span class="tstats__meta">
+                                                top third vs bottom third · from 2 / 2 gm
+                                            </span></summary>
+
+                                        <div class="edges"><div class="edges__none">No clear mismatches.</div></div>
+
+                                        <div class="dig__note">
+                                            A unit in the top third of 32 against one in the bottom third, on the
+                                            raw season stats below. Not adjusted for opponent and not tested against results —
+                                            a way to read the matchup, not a pick. Bold is the side holding the edge.
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
                                             Team stats
                                             <span class="tstats__meta">
                                                 season to date · 2 / 2 gm · ranks of 32</span></summary>
@@ -4119,6 +4238,18 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">&#x2B;3.6</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
                                         <span class="build__v">24.9</span></div></div><details class="tstats"><summary class="tstats__sum">
+                                            Matchup edges
+                                            <span class="tstats__meta">
+                                                top third vs bottom third · from 2 / 2 gm
+                                            </span></summary>
+
+                                        <div class="edges"><div class="edges__none">No clear mismatches.</div></div>
+
+                                        <div class="dig__note">
+                                            A unit in the top third of 32 against one in the bottom third, on the
+                                            raw season stats below. Not adjusted for opponent and not tested against results —
+                                            a way to read the matchup, not a pick. Bold is the side holding the edge.
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
                                             Team stats
                                             <span class="tstats__meta">
                                                 season to date · 2 / 2 gm · ranks of 32</span></summary>
@@ -4324,6 +4455,20 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
                                         <span class="build__v">21.6</span></div></div><details class="tstats"><summary class="tstats__sum">
+                                            Matchup edges
+                                            <span class="tstats__meta">
+                                                top third vs bottom third · from 2 / 2 gm
+                                            </span></summary>
+
+                                        <div class="edges"><div class="edges__row"><span class="edges__area">Passing</span>
+                                                    <span class="edges__text"><b>Cincinnati Bengals pass defense #5 (&#x2212;0.18 EPA/att allowed)</b> <span class="edges__vs">vs</span>Pittsburgh Steelers pass offense #31 (&#x2212;0.39 EPA/att)</span></div><div class="edges__row"><span class="edges__area">Rushing</span>
+                                                    <span class="edges__text"><b>Cincinnati Bengals run defense #2 (&#x2212;0.30 EPA/carry allowed)</b> <span class="edges__vs">vs</span>Pittsburgh Steelers run offense #26 (&#x2212;0.18 EPA/carry)</span></div></div>
+
+                                        <div class="dig__note">
+                                            A unit in the top third of 32 against one in the bottom third, on the
+                                            raw season stats below. Not adjusted for opponent and not tested against results —
+                                            a way to read the matchup, not a pick. Bold is the side holding the edge.
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
                                             Team stats
                                             <span class="tstats__meta">
                                                 season to date · 2 / 2 gm · ranks of 32</span></summary>
@@ -4529,6 +4674,20 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">-7.5</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
                                         <span class="build__v">14.5</span></div></div><details class="tstats"><summary class="tstats__sum">
+                                            Matchup edges
+                                            <span class="tstats__meta">
+                                                top third vs bottom third · from 2 / 2 gm
+                                            </span></summary>
+
+                                        <div class="edges"><div class="edges__row"><span class="edges__area">Ball security</span>
+                                                    <span class="edges__text"><b>Seattle Seahawks ball security #3 (0.50 Turnovers/g)</b> <span class="edges__vs">vs</span>Washington Commanders takeaways #30 (0.00 Takeaways/g)</span></div><div class="edges__row"><span class="edges__area">Passing</span>
+                                                    <span class="edges__text"><b>Seattle Seahawks pass offense #3 (&#x2B;0.41 EPA/att)</b> <span class="edges__vs">vs</span>Washington Commanders pass defense #27 (&#x2B;0.29 EPA/att allowed)</span></div></div>
+
+                                        <div class="dig__note">
+                                            A unit in the top third of 32 against one in the bottom third, on the
+                                            raw season stats below. Not adjusted for opponent and not tested against results —
+                                            a way to read the matchup, not a pick. Bold is the side holding the edge.
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
                                             Team stats
                                             <span class="tstats__meta">
                                                 season to date · 2 / 2 gm · ranks of 32</span></summary>
@@ -4734,6 +4893,18 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">&#x2B;1.9</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
                                         <span class="build__v">29.9</span></div></div><details class="tstats"><summary class="tstats__sum">
+                                            Matchup edges
+                                            <span class="tstats__meta">
+                                                top third vs bottom third · from 2 / 2 gm
+                                            </span></summary>
+
+                                        <div class="edges"><div class="edges__none">No clear mismatches.</div></div>
+
+                                        <div class="dig__note">
+                                            A unit in the top third of 32 against one in the bottom third, on the
+                                            raw season stats below. Not adjusted for opponent and not tested against results —
+                                            a way to read the matchup, not a pick. Bold is the side holding the edge.
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
                                             Team stats
                                             <span class="tstats__meta">
                                                 season to date · 2 / 2 gm · ranks of 32</span></summary>
@@ -4939,6 +5110,21 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">-6.1</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
                                         <span class="build__v">17.5</span></div></div><details class="tstats"><summary class="tstats__sum">
+                                            Matchup edges
+                                            <span class="tstats__meta">
+                                                top third vs bottom third · from 2 / 2 gm
+                                            </span></summary>
+
+                                        <div class="edges"><div class="edges__row"><span class="edges__area">Pass rush</span>
+                                                    <span class="edges__text"><b>Minnesota Vikings pass rush #1 (4.00 Sacks/g)</b> <span class="edges__vs">vs</span>Tampa Bay Buccaneers protection #27 (3.50 Sacks taken/g)</span></div><div class="edges__row"><span class="edges__area">Ball security</span>
+                                                    <span class="edges__text"><b>Minnesota Vikings takeaways #3 (2.00 Takeaways/g)</b> <span class="edges__vs">vs</span>Tampa Bay Buccaneers ball security #29 (2.50 Turnovers/g)</span></div><div class="edges__row"><span class="edges__area">Ball security</span>
+                                                    <span class="edges__text"><b>Minnesota Vikings ball security #3 (0.50 Turnovers/g)</b> <span class="edges__vs">vs</span>Tampa Bay Buccaneers takeaways #24 (0.50 Takeaways/g)</span></div></div>
+
+                                        <div class="dig__note">
+                                            A unit in the top third of 32 against one in the bottom third, on the
+                                            raw season stats below. Not adjusted for opponent and not tested against results —
+                                            a way to read the matchup, not a pick. Bold is the side holding the edge.
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
                                             Team stats
                                             <span class="tstats__meta">
                                                 season to date · 2 / 2 gm · ranks of 32</span></summary>
@@ -5144,6 +5330,20 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">&#x2B;0.1</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
                                         <span class="build__v">27.0</span></div></div><details class="tstats"><summary class="tstats__sum">
+                                            Matchup edges
+                                            <span class="tstats__meta">
+                                                top third vs bottom third · from 2 / 2 gm
+                                            </span></summary>
+
+                                        <div class="edges"><div class="edges__row"><span class="edges__area">Rushing</span>
+                                                    <span class="edges__text"><b>Baltimore Ravens run offense #2 (&#x2B;0.16 EPA/carry)</b> <span class="edges__vs">vs</span>Dallas Cowboys run defense #24 (&#x2B;0.04 EPA/carry allowed)</span></div><div class="edges__row"><span class="edges__area">Passing</span>
+                                                    <span class="edges__text"><b>Baltimore Ravens pass offense #8 (&#x2B;0.24 EPA/att)</b> <span class="edges__vs">vs</span>Dallas Cowboys pass defense #30 (&#x2B;0.43 EPA/att allowed)</span></div></div>
+
+                                        <div class="dig__note">
+                                            A unit in the top third of 32 against one in the bottom third, on the
+                                            raw season stats below. Not adjusted for opponent and not tested against results —
+                                            a way to read the matchup, not a pick. Bold is the side holding the edge.
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
                                             Team stats
                                             <span class="tstats__meta">
                                                 season to date · 2 / 2 gm · ranks of 32</span></summary>
@@ -5349,6 +5549,19 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">-0.7</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
                                         <span class="build__v">21.7</span></div></div><details class="tstats"><summary class="tstats__sum">
+                                            Matchup edges
+                                            <span class="tstats__meta">
+                                                top third vs bottom third · from 2 / 2 gm
+                                            </span></summary>
+
+                                        <div class="edges"><div class="edges__row"><span class="edges__area">Pass rush</span>
+                                                    <span class="edges__text"><b>Las Vegas Raiders pass rush #1 (4.00 Sacks/g)</b> <span class="edges__vs">vs</span>New Orleans Saints protection #31 (4.00 Sacks taken/g)</span></div></div>
+
+                                        <div class="dig__note">
+                                            A unit in the top third of 32 against one in the bottom third, on the
+                                            raw season stats below. Not adjusted for opponent and not tested against results —
+                                            a way to read the matchup, not a pick. Bold is the side holding the edge.
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
                                             Team stats
                                             <span class="tstats__meta">
                                                 season to date · 2 / 2 gm · ranks of 32</span></summary>
@@ -5554,6 +5767,20 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">-3.6</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
                                         <span class="build__v">18.4</span></div></div><details class="tstats"><summary class="tstats__sum">
+                                            Matchup edges
+                                            <span class="tstats__meta">
+                                                top third vs bottom third · from 2 / 2 gm
+                                            </span></summary>
+
+                                        <div class="edges"><div class="edges__row"><span class="edges__area">Passing</span>
+                                                    <span class="edges__text"><b>Los Angeles Rams pass defense #4 (&#x2212;0.19 EPA/att allowed)</b> <span class="edges__vs">vs</span>Denver Broncos pass offense #26 (&#x2212;0.10 EPA/att)</span></div><div class="edges__row"><span class="edges__area">Pass rush</span>
+                                                    <span class="edges__text"><b>Denver Broncos protection #7 (1.50 Sacks taken/g)</b> <span class="edges__vs">vs</span>Los Angeles Rams pass rush #29 (1.00 Sacks/g)</span></div></div>
+
+                                        <div class="dig__note">
+                                            A unit in the top third of 32 against one in the bottom third, on the
+                                            raw season stats below. Not adjusted for opponent and not tested against results —
+                                            a way to read the matchup, not a pick. Bold is the side holding the edge.
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
                                             Team stats
                                             <span class="tstats__meta">
                                                 season to date · 2 / 2 gm · ranks of 32</span></summary>
@@ -5759,6 +5986,19 @@ a { color: inherit; text-decoration: none; }
                                             <span class="build__v">-1.4</span></div><div class="build__row"><span class="build__k">Home field</span>
                                             <span class="build__v">&#x2B;1.1</span></div><div class="build__row build__row--sum"><span class="build__k">Projected</span>
                                         <span class="build__v">26.8</span></div></div><details class="tstats"><summary class="tstats__sum">
+                                            Matchup edges
+                                            <span class="tstats__meta">
+                                                top third vs bottom third · from 2 / 2 gm
+                                            </span></summary>
+
+                                        <div class="edges"><div class="edges__row"><span class="edges__area">Rushing</span>
+                                                    <span class="edges__text"><b>Chicago Bears run offense #3 (&#x2B;0.14 EPA/carry)</b> <span class="edges__vs">vs</span>Philadelphia Eagles run defense #28 (&#x2B;0.07 EPA/carry allowed)</span></div></div>
+
+                                        <div class="dig__note">
+                                            A unit in the top third of 32 against one in the bottom third, on the
+                                            raw season stats below. Not adjusted for opponent and not tested against results —
+                                            a way to read the matchup, not a pick. Bold is the side holding the edge.
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
                                             Team stats
                                             <span class="tstats__meta">
                                                 season to date · 2 / 2 gm · ranks of 32</span></summary>
