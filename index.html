@@ -905,7 +905,7 @@ a { color: inherit; text-decoration: none; }
 
 .tstats__modes { display: flex; gap: 6px; margin: 10px 0 2px; }
 
-/* The game summary: Santi beside his paragraph. Prose, so a reading measure rather than
+/* The game summary: the persona beside the paragraph. Prose, so a reading measure rather than
    the grid's full width. The avatar never shrinks; the text wraps beside it, and below
    480px they stack so a phone is not left with a one-word-wide column. */
 .aisum {
@@ -915,7 +915,7 @@ a { color: inherit; text-decoration: none; }
     margin: 10px 0 6px;
 }
 
-.aisum .santi { flex: 0 0 auto; }
+.aisum .persona { flex: 0 0 auto; }
 
 @media (max-width: 480px) {
     .aisum { flex-direction: column; gap: 8px; }
@@ -2896,32 +2896,49 @@ a { color: inherit; text-decoration: none; }
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">
-                                            Santi says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">Charmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
-                                        <div class="aisum"><svg class="santi" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Santi"><circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
-    <g transform="rotate(-7 32 34)"><ellipse cx="32" cy="36" rx="16.5" ry="18.5" fill="#ece7dc"></ellipse>
-        <path d="M15.5 30 C14 18 24 11.5 34 12.5 C44 13.5 50.5 20 48.5 30 C46 24.5 42 22 36 21.5 C40 19.5 30 18 24 21.5 C20 23.5 17 26.5 15.5 30 Z" fill="#0a0b0d"></path>
-        <path d="M20.5 27.5 L28.5 28" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M35.5 26.5 Q40 22 45 24.5" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round" fill="none"></path>
-        <path d="M21 32 L28 32 Q27.6 35 24.5 35 Q21.4 35 21 32 Z" fill="#0a0b0d"></path>
-        <path d="M36 31.5 L43 31.5 Q42.6 34.5 39.5 34.5 Q36.4 34.5 36 31.5 Z" fill="#0a0b0d"></path>
-        <path d="M20 31.8 L29 31.8" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <path d="M35 31.3 L44 31.3" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <rect x="19.5" y="38" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <rect x="34.5" y="37.5" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <path d="M29.5 40.3 Q32 38.8 34.5 39.9" fill="none" stroke="#2fa82f" stroke-width="1.6"></path>
-        <path d="M25.5 48.5 Q32 50 38.5 46.5" fill="none" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M38.5 46.5 Q40 45.7 40.4 44.4" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path></g></svg>
+                                        <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Charmane"><defs><clipPath id="pa-disc-2026-04-PIT-CLE"><circle cx="32" cy="32" r="30"></circle></clipPath>
+        <radialGradient id="pa-glow-2026-04-PIT-CLE" cx="32" cy="17" r="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d4a73a" stop-opacity="0.55"></stop>
+            <stop offset="1" stop-color="#d4a73a" stop-opacity="0"></stop></radialGradient></defs>
+    <circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
+    <g clip-path="url(#pa-disc-2026-04-PIT-CLE)"><circle cx="32" cy="17" r="20" fill="url(#pa-glow-2026-04-PIT-CLE)"></circle>
+        <g transform="rotate(-12 32 13)"><ellipse cx="32" cy="13" rx="13" ry="7" fill="#7a4a24" stroke="#d4a73a" stroke-width="1.2"></ellipse>
+            <path d="M26 13 L38 13" stroke="#ece7dc" stroke-width="1.1" stroke-linecap="round"></path>
+            <path d="M28 11.6 L28 14.4 M30.7 11.6 L30.7 14.4 M33.3 11.6 L33.3 14.4 M36 11.6 L36 14.4" stroke="#ece7dc" stroke-width="0.9" stroke-linecap="round"></path></g>
+        <path d="M16 30 C15 20 22 16 32 16 C42 16 49 20 48 30 L50 52 C46 56 42 56 40 50 L24 50 C22 56 18 56 14 52 Z" fill="#0a0b0d"></path>
+        <path d="M10 64 C12 54 20 50 32 50 C44 50 52 54 54 64 Z" fill="#ece7dc"></path>
+        <path d="M22 51 C28 56 36 58 46 53" fill="none" stroke="#9c968a" stroke-width="1.1"></path>
+        <path d="M26 52 C31 58 38 61 50 58" fill="none" stroke="#9c968a" stroke-width="1"></path>
+        <circle cx="22.5" cy="52.5" r="2" fill="#d4a73a"></circle>
+        <rect x="28.5" y="42" width="7" height="9" fill="#e2dccf"></rect>
+        <ellipse cx="32" cy="33" rx="12" ry="14" fill="#ece7dc"></ellipse>
+        <path d="M20 29 C20 21 25 18.5 32 18.5 C39 18.5 44 21 44 29 C41 24 37 22.5 32 23.5 C27 22.5 23 24 20 29 Z" fill="#0a0b0d"></path>
+        <g fill="#2fa82f"><ellipse cx="21.5" cy="25" rx="2.6" ry="1.2" transform="rotate(-50 21.5 25)"></ellipse>
+            <ellipse cx="24" cy="22" rx="2.6" ry="1.2" transform="rotate(-30 24 22)"></ellipse>
+            <ellipse cx="27.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(-12 27.5 20.2)"></ellipse>
+            <ellipse cx="42.5" cy="25" rx="2.6" ry="1.2" transform="rotate(50 42.5 25)"></ellipse>
+            <ellipse cx="40" cy="22" rx="2.6" ry="1.2" transform="rotate(30 40 22)"></ellipse>
+            <ellipse cx="36.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(12 36.5 20.2)"></ellipse></g>
+        <circle cx="32" cy="19.6" r="1.4" fill="#d4a73a"></circle>
+        <path d="M24 29.3 L29.5 29.6" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M34.5 29 Q37.5 26.2 41 27.6" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M24.2 32.5 L29.6 32.5 Q29.2 35 26.9 35 Q24.6 35 24.2 32.5 Z" fill="#0a0b0d"></path>
+        <path d="M34.4 32.2 L39.8 32.2 Q39.4 34.7 37.1 34.7 Q34.8 34.7 34.4 32.2 Z" fill="#0a0b0d"></path>
+        <path d="M23.6 32.3 L30.2 32.3 M33.8 32 L40.4 32" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round"></path>
+        <path d="M23.6 32.3 L22.6 31.4 M40.4 32 L41.4 31.1" stroke="#0a0b0d" stroke-width="1" stroke-linecap="round"></path>
+        <path d="M32 34 Q31 38 32.6 38.6" fill="none" stroke="#9c968a" stroke-width="1.1" stroke-linecap="round"></path>
+        <path d="M27.5 42 Q32 43.4 36.5 40.6" fill="none" stroke="#8c3b4a" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M36.5 40.6 Q37.6 40 37.9 39" fill="none" stroke="#8c3b4a" stroke-width="1.3" stroke-linecap="round"></path></g></svg>
                                             <p class="aisum__text">Two 2-1 teams that have scored a combined 35.7 points a game, which is less a football game than a hostage negotiation. Pittsburgh&#x27;s passing attack ranks 29th, Cleveland&#x27;s protection 26th, and Pittsburgh&#x27;s pass rush 7th, so expect drives to die on the doorstep. The market nudged the total up from 37.5 to 38; the model, at 36.9, thinks that is the market getting optimistic about two offenses that have not earned it. The under is the stronger read. Cleveland &#x2B;2.5 is the weaker one: the model has Pittsburgh by half a point, which is a coin flip wearing a fake mustache. Both reads are Coinflip tier, and the model knows it.</p></div>
 
                                         <div class="dig__note">
                                             Written Thu Oct 1, 3:58 PM ET against
                                             Pittsburgh Steelers &#x2212;2.5 &#xB7; O/U 38.0 (line captured Thu Oct 1, 11:31 AM ET).
-1 earlier summary kept.                                            Santiago "Santi" is an AI persona (Claude), written from the numbers on this
-                                            card and nothing else. Which read is strongest is Santi's judgement, not a
-                                            measured result.
+1 earlier summary kept.Charmane is an AI persona (Claude), written from the numbers on this
+                                            card and nothing else. Which read is strongest is Charmane's
+                                            judgement, not a measured result.
 Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict. </div></details><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
@@ -3144,32 +3161,49 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">
-                                            Santi says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">Charmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
-                                        <div class="aisum"><svg class="santi" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Santi"><circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
-    <g transform="rotate(-7 32 34)"><ellipse cx="32" cy="36" rx="16.5" ry="18.5" fill="#ece7dc"></ellipse>
-        <path d="M15.5 30 C14 18 24 11.5 34 12.5 C44 13.5 50.5 20 48.5 30 C46 24.5 42 22 36 21.5 C40 19.5 30 18 24 21.5 C20 23.5 17 26.5 15.5 30 Z" fill="#0a0b0d"></path>
-        <path d="M20.5 27.5 L28.5 28" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M35.5 26.5 Q40 22 45 24.5" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round" fill="none"></path>
-        <path d="M21 32 L28 32 Q27.6 35 24.5 35 Q21.4 35 21 32 Z" fill="#0a0b0d"></path>
-        <path d="M36 31.5 L43 31.5 Q42.6 34.5 39.5 34.5 Q36.4 34.5 36 31.5 Z" fill="#0a0b0d"></path>
-        <path d="M20 31.8 L29 31.8" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <path d="M35 31.3 L44 31.3" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <rect x="19.5" y="38" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <rect x="34.5" y="37.5" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <path d="M29.5 40.3 Q32 38.8 34.5 39.9" fill="none" stroke="#2fa82f" stroke-width="1.6"></path>
-        <path d="M25.5 48.5 Q32 50 38.5 46.5" fill="none" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M38.5 46.5 Q40 45.7 40.4 44.4" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path></g></svg>
+                                        <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Charmane"><defs><clipPath id="pa-disc-2026-04-IND-WAS"><circle cx="32" cy="32" r="30"></circle></clipPath>
+        <radialGradient id="pa-glow-2026-04-IND-WAS" cx="32" cy="17" r="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d4a73a" stop-opacity="0.55"></stop>
+            <stop offset="1" stop-color="#d4a73a" stop-opacity="0"></stop></radialGradient></defs>
+    <circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
+    <g clip-path="url(#pa-disc-2026-04-IND-WAS)"><circle cx="32" cy="17" r="20" fill="url(#pa-glow-2026-04-IND-WAS)"></circle>
+        <g transform="rotate(-12 32 13)"><ellipse cx="32" cy="13" rx="13" ry="7" fill="#7a4a24" stroke="#d4a73a" stroke-width="1.2"></ellipse>
+            <path d="M26 13 L38 13" stroke="#ece7dc" stroke-width="1.1" stroke-linecap="round"></path>
+            <path d="M28 11.6 L28 14.4 M30.7 11.6 L30.7 14.4 M33.3 11.6 L33.3 14.4 M36 11.6 L36 14.4" stroke="#ece7dc" stroke-width="0.9" stroke-linecap="round"></path></g>
+        <path d="M16 30 C15 20 22 16 32 16 C42 16 49 20 48 30 L50 52 C46 56 42 56 40 50 L24 50 C22 56 18 56 14 52 Z" fill="#0a0b0d"></path>
+        <path d="M10 64 C12 54 20 50 32 50 C44 50 52 54 54 64 Z" fill="#ece7dc"></path>
+        <path d="M22 51 C28 56 36 58 46 53" fill="none" stroke="#9c968a" stroke-width="1.1"></path>
+        <path d="M26 52 C31 58 38 61 50 58" fill="none" stroke="#9c968a" stroke-width="1"></path>
+        <circle cx="22.5" cy="52.5" r="2" fill="#d4a73a"></circle>
+        <rect x="28.5" y="42" width="7" height="9" fill="#e2dccf"></rect>
+        <ellipse cx="32" cy="33" rx="12" ry="14" fill="#ece7dc"></ellipse>
+        <path d="M20 29 C20 21 25 18.5 32 18.5 C39 18.5 44 21 44 29 C41 24 37 22.5 32 23.5 C27 22.5 23 24 20 29 Z" fill="#0a0b0d"></path>
+        <g fill="#2fa82f"><ellipse cx="21.5" cy="25" rx="2.6" ry="1.2" transform="rotate(-50 21.5 25)"></ellipse>
+            <ellipse cx="24" cy="22" rx="2.6" ry="1.2" transform="rotate(-30 24 22)"></ellipse>
+            <ellipse cx="27.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(-12 27.5 20.2)"></ellipse>
+            <ellipse cx="42.5" cy="25" rx="2.6" ry="1.2" transform="rotate(50 42.5 25)"></ellipse>
+            <ellipse cx="40" cy="22" rx="2.6" ry="1.2" transform="rotate(30 40 22)"></ellipse>
+            <ellipse cx="36.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(12 36.5 20.2)"></ellipse></g>
+        <circle cx="32" cy="19.6" r="1.4" fill="#d4a73a"></circle>
+        <path d="M24 29.3 L29.5 29.6" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M34.5 29 Q37.5 26.2 41 27.6" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M24.2 32.5 L29.6 32.5 Q29.2 35 26.9 35 Q24.6 35 24.2 32.5 Z" fill="#0a0b0d"></path>
+        <path d="M34.4 32.2 L39.8 32.2 Q39.4 34.7 37.1 34.7 Q34.8 34.7 34.4 32.2 Z" fill="#0a0b0d"></path>
+        <path d="M23.6 32.3 L30.2 32.3 M33.8 32 L40.4 32" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round"></path>
+        <path d="M23.6 32.3 L22.6 31.4 M40.4 32 L41.4 31.1" stroke="#0a0b0d" stroke-width="1" stroke-linecap="round"></path>
+        <path d="M32 34 Q31 38 32.6 38.6" fill="none" stroke="#9c968a" stroke-width="1.1" stroke-linecap="round"></path>
+        <path d="M27.5 42 Q32 43.4 36.5 40.6" fill="none" stroke="#8c3b4a" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M36.5 40.6 Q37.6 40 37.9 39" fill="none" stroke="#8c3b4a" stroke-width="1.3" stroke-linecap="round"></path></g></svg>
                                             <p class="aisum__text">Two defenses allowing a combined 61 points a game, and the market set the total at 47.5 like it was pricing a chess match. The model says 57.3, almost ten points higher, and it has the receipts: Washington allows 30.7 a game, 31st; Indianapolis allows 30.3, 29th; both get carved for more than 8 yards a pass attempt. The over is the strongest read here by a distance. Washington &#x2B;3.5 is the weaker one, though the Commanders have the best ball security in the league against the Colts&#x27; 31st-ranked takeaways. Ten points of disagreement is either insight or a blind spot, and the model does not get to grade its own homework.</p></div>
 
                                         <div class="dig__note">
                                             Written Thu Oct 1, 4:02 PM ET against
                                             Indianapolis Colts &#x2212;3.5 &#xB7; O/U 47.5 (line captured Thu Oct 1, 11:31 AM ET).
-                                            Santiago "Santi" is an AI persona (Claude), written from the numbers on this
-                                            card and nothing else. Which read is strongest is Santi's judgement, not a
-                                            measured result.
+Charmane is an AI persona (Claude), written from the numbers on this
+                                            card and nothing else. Which read is strongest is Charmane's
+                                            judgement, not a measured result.
 Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict. </div></details><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
@@ -3389,32 +3423,49 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">
-                                            Santi says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">Charmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
-                                        <div class="aisum"><svg class="santi" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Santi"><circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
-    <g transform="rotate(-7 32 34)"><ellipse cx="32" cy="36" rx="16.5" ry="18.5" fill="#ece7dc"></ellipse>
-        <path d="M15.5 30 C14 18 24 11.5 34 12.5 C44 13.5 50.5 20 48.5 30 C46 24.5 42 22 36 21.5 C40 19.5 30 18 24 21.5 C20 23.5 17 26.5 15.5 30 Z" fill="#0a0b0d"></path>
-        <path d="M20.5 27.5 L28.5 28" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M35.5 26.5 Q40 22 45 24.5" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round" fill="none"></path>
-        <path d="M21 32 L28 32 Q27.6 35 24.5 35 Q21.4 35 21 32 Z" fill="#0a0b0d"></path>
-        <path d="M36 31.5 L43 31.5 Q42.6 34.5 39.5 34.5 Q36.4 34.5 36 31.5 Z" fill="#0a0b0d"></path>
-        <path d="M20 31.8 L29 31.8" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <path d="M35 31.3 L44 31.3" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <rect x="19.5" y="38" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <rect x="34.5" y="37.5" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <path d="M29.5 40.3 Q32 38.8 34.5 39.9" fill="none" stroke="#2fa82f" stroke-width="1.6"></path>
-        <path d="M25.5 48.5 Q32 50 38.5 46.5" fill="none" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M38.5 46.5 Q40 45.7 40.4 44.4" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path></g></svg>
+                                        <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Charmane"><defs><clipPath id="pa-disc-2026-04-TEN-BAL"><circle cx="32" cy="32" r="30"></circle></clipPath>
+        <radialGradient id="pa-glow-2026-04-TEN-BAL" cx="32" cy="17" r="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d4a73a" stop-opacity="0.55"></stop>
+            <stop offset="1" stop-color="#d4a73a" stop-opacity="0"></stop></radialGradient></defs>
+    <circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
+    <g clip-path="url(#pa-disc-2026-04-TEN-BAL)"><circle cx="32" cy="17" r="20" fill="url(#pa-glow-2026-04-TEN-BAL)"></circle>
+        <g transform="rotate(-12 32 13)"><ellipse cx="32" cy="13" rx="13" ry="7" fill="#7a4a24" stroke="#d4a73a" stroke-width="1.2"></ellipse>
+            <path d="M26 13 L38 13" stroke="#ece7dc" stroke-width="1.1" stroke-linecap="round"></path>
+            <path d="M28 11.6 L28 14.4 M30.7 11.6 L30.7 14.4 M33.3 11.6 L33.3 14.4 M36 11.6 L36 14.4" stroke="#ece7dc" stroke-width="0.9" stroke-linecap="round"></path></g>
+        <path d="M16 30 C15 20 22 16 32 16 C42 16 49 20 48 30 L50 52 C46 56 42 56 40 50 L24 50 C22 56 18 56 14 52 Z" fill="#0a0b0d"></path>
+        <path d="M10 64 C12 54 20 50 32 50 C44 50 52 54 54 64 Z" fill="#ece7dc"></path>
+        <path d="M22 51 C28 56 36 58 46 53" fill="none" stroke="#9c968a" stroke-width="1.1"></path>
+        <path d="M26 52 C31 58 38 61 50 58" fill="none" stroke="#9c968a" stroke-width="1"></path>
+        <circle cx="22.5" cy="52.5" r="2" fill="#d4a73a"></circle>
+        <rect x="28.5" y="42" width="7" height="9" fill="#e2dccf"></rect>
+        <ellipse cx="32" cy="33" rx="12" ry="14" fill="#ece7dc"></ellipse>
+        <path d="M20 29 C20 21 25 18.5 32 18.5 C39 18.5 44 21 44 29 C41 24 37 22.5 32 23.5 C27 22.5 23 24 20 29 Z" fill="#0a0b0d"></path>
+        <g fill="#2fa82f"><ellipse cx="21.5" cy="25" rx="2.6" ry="1.2" transform="rotate(-50 21.5 25)"></ellipse>
+            <ellipse cx="24" cy="22" rx="2.6" ry="1.2" transform="rotate(-30 24 22)"></ellipse>
+            <ellipse cx="27.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(-12 27.5 20.2)"></ellipse>
+            <ellipse cx="42.5" cy="25" rx="2.6" ry="1.2" transform="rotate(50 42.5 25)"></ellipse>
+            <ellipse cx="40" cy="22" rx="2.6" ry="1.2" transform="rotate(30 40 22)"></ellipse>
+            <ellipse cx="36.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(12 36.5 20.2)"></ellipse></g>
+        <circle cx="32" cy="19.6" r="1.4" fill="#d4a73a"></circle>
+        <path d="M24 29.3 L29.5 29.6" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M34.5 29 Q37.5 26.2 41 27.6" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M24.2 32.5 L29.6 32.5 Q29.2 35 26.9 35 Q24.6 35 24.2 32.5 Z" fill="#0a0b0d"></path>
+        <path d="M34.4 32.2 L39.8 32.2 Q39.4 34.7 37.1 34.7 Q34.8 34.7 34.4 32.2 Z" fill="#0a0b0d"></path>
+        <path d="M23.6 32.3 L30.2 32.3 M33.8 32 L40.4 32" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round"></path>
+        <path d="M23.6 32.3 L22.6 31.4 M40.4 32 L41.4 31.1" stroke="#0a0b0d" stroke-width="1" stroke-linecap="round"></path>
+        <path d="M32 34 Q31 38 32.6 38.6" fill="none" stroke="#9c968a" stroke-width="1.1" stroke-linecap="round"></path>
+        <path d="M27.5 42 Q32 43.4 36.5 40.6" fill="none" stroke="#8c3b4a" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M36.5 40.6 Q37.6 40 37.9 39" fill="none" stroke="#8c3b4a" stroke-width="1.3" stroke-linecap="round"></path></g></svg>
                                             <p class="aisum__text">Tennessee scores 12.3 points a game, 30th, and has lost to the Giants, the Eagles and the Jets without once reaching 21. Baltimore throws for 9.1 yards an attempt, second in the league, which is roughly the difference between a sports car and a shopping cart. Everyone agrees Baltimore wins; the model gives it 81% and the market has it by 11.5, a point and a half short of the model&#x27;s 13.1. So the only argument is margin, and that is a coin flip. The over is the slightly firmer read, 44.8 against 42.5, mostly because Baltimore scores enough for both teams. Nobody learns anything from this one.</p></div>
 
                                         <div class="dig__note">
                                             Written Thu Oct 1, 4:02 PM ET against
                                             Baltimore Ravens &#x2212;11.5 &#xB7; O/U 42.5 (line captured Thu Oct 1, 11:31 AM ET).
-                                            Santiago "Santi" is an AI persona (Claude), written from the numbers on this
-                                            card and nothing else. Which read is strongest is Santi's judgement, not a
-                                            measured result.
+Charmane is an AI persona (Claude), written from the numbers on this
+                                            card and nothing else. Which read is strongest is Charmane's
+                                            judgement, not a measured result.
 Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict. </div></details><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
@@ -3634,32 +3685,49 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">
-                                            Santi says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">Charmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
-                                        <div class="aisum"><svg class="santi" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Santi"><circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
-    <g transform="rotate(-7 32 34)"><ellipse cx="32" cy="36" rx="16.5" ry="18.5" fill="#ece7dc"></ellipse>
-        <path d="M15.5 30 C14 18 24 11.5 34 12.5 C44 13.5 50.5 20 48.5 30 C46 24.5 42 22 36 21.5 C40 19.5 30 18 24 21.5 C20 23.5 17 26.5 15.5 30 Z" fill="#0a0b0d"></path>
-        <path d="M20.5 27.5 L28.5 28" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M35.5 26.5 Q40 22 45 24.5" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round" fill="none"></path>
-        <path d="M21 32 L28 32 Q27.6 35 24.5 35 Q21.4 35 21 32 Z" fill="#0a0b0d"></path>
-        <path d="M36 31.5 L43 31.5 Q42.6 34.5 39.5 34.5 Q36.4 34.5 36 31.5 Z" fill="#0a0b0d"></path>
-        <path d="M20 31.8 L29 31.8" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <path d="M35 31.3 L44 31.3" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <rect x="19.5" y="38" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <rect x="34.5" y="37.5" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <path d="M29.5 40.3 Q32 38.8 34.5 39.9" fill="none" stroke="#2fa82f" stroke-width="1.6"></path>
-        <path d="M25.5 48.5 Q32 50 38.5 46.5" fill="none" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M38.5 46.5 Q40 45.7 40.4 44.4" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path></g></svg>
+                                        <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Charmane"><defs><clipPath id="pa-disc-2026-04-NE-BUF"><circle cx="32" cy="32" r="30"></circle></clipPath>
+        <radialGradient id="pa-glow-2026-04-NE-BUF" cx="32" cy="17" r="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d4a73a" stop-opacity="0.55"></stop>
+            <stop offset="1" stop-color="#d4a73a" stop-opacity="0"></stop></radialGradient></defs>
+    <circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
+    <g clip-path="url(#pa-disc-2026-04-NE-BUF)"><circle cx="32" cy="17" r="20" fill="url(#pa-glow-2026-04-NE-BUF)"></circle>
+        <g transform="rotate(-12 32 13)"><ellipse cx="32" cy="13" rx="13" ry="7" fill="#7a4a24" stroke="#d4a73a" stroke-width="1.2"></ellipse>
+            <path d="M26 13 L38 13" stroke="#ece7dc" stroke-width="1.1" stroke-linecap="round"></path>
+            <path d="M28 11.6 L28 14.4 M30.7 11.6 L30.7 14.4 M33.3 11.6 L33.3 14.4 M36 11.6 L36 14.4" stroke="#ece7dc" stroke-width="0.9" stroke-linecap="round"></path></g>
+        <path d="M16 30 C15 20 22 16 32 16 C42 16 49 20 48 30 L50 52 C46 56 42 56 40 50 L24 50 C22 56 18 56 14 52 Z" fill="#0a0b0d"></path>
+        <path d="M10 64 C12 54 20 50 32 50 C44 50 52 54 54 64 Z" fill="#ece7dc"></path>
+        <path d="M22 51 C28 56 36 58 46 53" fill="none" stroke="#9c968a" stroke-width="1.1"></path>
+        <path d="M26 52 C31 58 38 61 50 58" fill="none" stroke="#9c968a" stroke-width="1"></path>
+        <circle cx="22.5" cy="52.5" r="2" fill="#d4a73a"></circle>
+        <rect x="28.5" y="42" width="7" height="9" fill="#e2dccf"></rect>
+        <ellipse cx="32" cy="33" rx="12" ry="14" fill="#ece7dc"></ellipse>
+        <path d="M20 29 C20 21 25 18.5 32 18.5 C39 18.5 44 21 44 29 C41 24 37 22.5 32 23.5 C27 22.5 23 24 20 29 Z" fill="#0a0b0d"></path>
+        <g fill="#2fa82f"><ellipse cx="21.5" cy="25" rx="2.6" ry="1.2" transform="rotate(-50 21.5 25)"></ellipse>
+            <ellipse cx="24" cy="22" rx="2.6" ry="1.2" transform="rotate(-30 24 22)"></ellipse>
+            <ellipse cx="27.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(-12 27.5 20.2)"></ellipse>
+            <ellipse cx="42.5" cy="25" rx="2.6" ry="1.2" transform="rotate(50 42.5 25)"></ellipse>
+            <ellipse cx="40" cy="22" rx="2.6" ry="1.2" transform="rotate(30 40 22)"></ellipse>
+            <ellipse cx="36.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(12 36.5 20.2)"></ellipse></g>
+        <circle cx="32" cy="19.6" r="1.4" fill="#d4a73a"></circle>
+        <path d="M24 29.3 L29.5 29.6" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M34.5 29 Q37.5 26.2 41 27.6" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M24.2 32.5 L29.6 32.5 Q29.2 35 26.9 35 Q24.6 35 24.2 32.5 Z" fill="#0a0b0d"></path>
+        <path d="M34.4 32.2 L39.8 32.2 Q39.4 34.7 37.1 34.7 Q34.8 34.7 34.4 32.2 Z" fill="#0a0b0d"></path>
+        <path d="M23.6 32.3 L30.2 32.3 M33.8 32 L40.4 32" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round"></path>
+        <path d="M23.6 32.3 L22.6 31.4 M40.4 32 L41.4 31.1" stroke="#0a0b0d" stroke-width="1" stroke-linecap="round"></path>
+        <path d="M32 34 Q31 38 32.6 38.6" fill="none" stroke="#9c968a" stroke-width="1.1" stroke-linecap="round"></path>
+        <path d="M27.5 42 Q32 43.4 36.5 40.6" fill="none" stroke="#8c3b4a" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M36.5 40.6 Q37.6 40 37.9 39" fill="none" stroke="#8c3b4a" stroke-width="1.3" stroke-linecap="round"></path></g></svg>
                                             <p class="aisum__text">Buffalo is 3-0, scores 33.7 a game, best in the league, and the market has priced the Bills like a coronation. The model is less impressed: Buffalo by 3.6, not 6.5. Those three wins came against a schedule rated below average, while New England has played one of the harder ones and still allows only 17 a game, 6th. The problem is the other half, where New England scores 12, 31st, and just got beaten 35-6 in Jacksonville. Buffalo&#x27;s league-best run game against a run defense ranked 28th is the real threat. New England &#x2B;6.5 is the firmer read; the total is a shrug at 48.3 against 48.5. Lean tier, nothing more.</p></div>
 
                                         <div class="dig__note">
                                             Written Thu Oct 1, 4:02 PM ET against
                                             Buffalo Bills &#x2212;6.5 &#xB7; O/U 48.5 (line captured Thu Oct 1, 11:31 AM ET).
-                                            Santiago "Santi" is an AI persona (Claude), written from the numbers on this
-                                            card and nothing else. Which read is strongest is Santi's judgement, not a
-                                            measured result.
+Charmane is an AI persona (Claude), written from the numbers on this
+                                            card and nothing else. Which read is strongest is Charmane's
+                                            judgement, not a measured result.
 Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict. </div></details><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
@@ -3877,32 +3945,49 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">
-                                            Santi says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">Charmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
-                                        <div class="aisum"><svg class="santi" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Santi"><circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
-    <g transform="rotate(-7 32 34)"><ellipse cx="32" cy="36" rx="16.5" ry="18.5" fill="#ece7dc"></ellipse>
-        <path d="M15.5 30 C14 18 24 11.5 34 12.5 C44 13.5 50.5 20 48.5 30 C46 24.5 42 22 36 21.5 C40 19.5 30 18 24 21.5 C20 23.5 17 26.5 15.5 30 Z" fill="#0a0b0d"></path>
-        <path d="M20.5 27.5 L28.5 28" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M35.5 26.5 Q40 22 45 24.5" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round" fill="none"></path>
-        <path d="M21 32 L28 32 Q27.6 35 24.5 35 Q21.4 35 21 32 Z" fill="#0a0b0d"></path>
-        <path d="M36 31.5 L43 31.5 Q42.6 34.5 39.5 34.5 Q36.4 34.5 36 31.5 Z" fill="#0a0b0d"></path>
-        <path d="M20 31.8 L29 31.8" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <path d="M35 31.3 L44 31.3" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <rect x="19.5" y="38" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <rect x="34.5" y="37.5" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <path d="M29.5 40.3 Q32 38.8 34.5 39.9" fill="none" stroke="#2fa82f" stroke-width="1.6"></path>
-        <path d="M25.5 48.5 Q32 50 38.5 46.5" fill="none" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M38.5 46.5 Q40 45.7 40.4 44.4" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path></g></svg>
+                                        <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Charmane"><defs><clipPath id="pa-disc-2026-04-NYJ-CHI"><circle cx="32" cy="32" r="30"></circle></clipPath>
+        <radialGradient id="pa-glow-2026-04-NYJ-CHI" cx="32" cy="17" r="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d4a73a" stop-opacity="0.55"></stop>
+            <stop offset="1" stop-color="#d4a73a" stop-opacity="0"></stop></radialGradient></defs>
+    <circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
+    <g clip-path="url(#pa-disc-2026-04-NYJ-CHI)"><circle cx="32" cy="17" r="20" fill="url(#pa-glow-2026-04-NYJ-CHI)"></circle>
+        <g transform="rotate(-12 32 13)"><ellipse cx="32" cy="13" rx="13" ry="7" fill="#7a4a24" stroke="#d4a73a" stroke-width="1.2"></ellipse>
+            <path d="M26 13 L38 13" stroke="#ece7dc" stroke-width="1.1" stroke-linecap="round"></path>
+            <path d="M28 11.6 L28 14.4 M30.7 11.6 L30.7 14.4 M33.3 11.6 L33.3 14.4 M36 11.6 L36 14.4" stroke="#ece7dc" stroke-width="0.9" stroke-linecap="round"></path></g>
+        <path d="M16 30 C15 20 22 16 32 16 C42 16 49 20 48 30 L50 52 C46 56 42 56 40 50 L24 50 C22 56 18 56 14 52 Z" fill="#0a0b0d"></path>
+        <path d="M10 64 C12 54 20 50 32 50 C44 50 52 54 54 64 Z" fill="#ece7dc"></path>
+        <path d="M22 51 C28 56 36 58 46 53" fill="none" stroke="#9c968a" stroke-width="1.1"></path>
+        <path d="M26 52 C31 58 38 61 50 58" fill="none" stroke="#9c968a" stroke-width="1"></path>
+        <circle cx="22.5" cy="52.5" r="2" fill="#d4a73a"></circle>
+        <rect x="28.5" y="42" width="7" height="9" fill="#e2dccf"></rect>
+        <ellipse cx="32" cy="33" rx="12" ry="14" fill="#ece7dc"></ellipse>
+        <path d="M20 29 C20 21 25 18.5 32 18.5 C39 18.5 44 21 44 29 C41 24 37 22.5 32 23.5 C27 22.5 23 24 20 29 Z" fill="#0a0b0d"></path>
+        <g fill="#2fa82f"><ellipse cx="21.5" cy="25" rx="2.6" ry="1.2" transform="rotate(-50 21.5 25)"></ellipse>
+            <ellipse cx="24" cy="22" rx="2.6" ry="1.2" transform="rotate(-30 24 22)"></ellipse>
+            <ellipse cx="27.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(-12 27.5 20.2)"></ellipse>
+            <ellipse cx="42.5" cy="25" rx="2.6" ry="1.2" transform="rotate(50 42.5 25)"></ellipse>
+            <ellipse cx="40" cy="22" rx="2.6" ry="1.2" transform="rotate(30 40 22)"></ellipse>
+            <ellipse cx="36.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(12 36.5 20.2)"></ellipse></g>
+        <circle cx="32" cy="19.6" r="1.4" fill="#d4a73a"></circle>
+        <path d="M24 29.3 L29.5 29.6" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M34.5 29 Q37.5 26.2 41 27.6" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M24.2 32.5 L29.6 32.5 Q29.2 35 26.9 35 Q24.6 35 24.2 32.5 Z" fill="#0a0b0d"></path>
+        <path d="M34.4 32.2 L39.8 32.2 Q39.4 34.7 37.1 34.7 Q34.8 34.7 34.4 32.2 Z" fill="#0a0b0d"></path>
+        <path d="M23.6 32.3 L30.2 32.3 M33.8 32 L40.4 32" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round"></path>
+        <path d="M23.6 32.3 L22.6 31.4 M40.4 32 L41.4 31.1" stroke="#0a0b0d" stroke-width="1" stroke-linecap="round"></path>
+        <path d="M32 34 Q31 38 32.6 38.6" fill="none" stroke="#9c968a" stroke-width="1.1" stroke-linecap="round"></path>
+        <path d="M27.5 42 Q32 43.4 36.5 40.6" fill="none" stroke="#8c3b4a" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M36.5 40.6 Q37.6 40 37.9 39" fill="none" stroke="#8c3b4a" stroke-width="1.3" stroke-linecap="round"></path></g></svg>
                                             <p class="aisum__text">The market has Chicago by a field goal. The model has them by 13.6, which is not a disagreement so much as two people describing different movies. Chicago runs for 5.3 yards a carry, best in the league, scores 29.7 a game and dropped 59 on Carolina; the Jets run for 3.3, 30th, and their protection ranks 26th against a pass rush ranked 10th. The spread is the strongest read, the over at 47.0 against 43 the weaker, since Chicago&#x27;s own run defense is 31st and hands the Jets a way to make this ugly. A ten-point gap with the market earns suspicion before it earns applause.</p></div>
 
                                         <div class="dig__note">
                                             Written Thu Oct 1, 4:02 PM ET against
                                             Chicago Bears &#x2212;3.0 &#xB7; O/U 43.0 (line captured Thu Oct 1, 11:31 AM ET).
-                                            Santiago "Santi" is an AI persona (Claude), written from the numbers on this
-                                            card and nothing else. Which read is strongest is Santi's judgement, not a
-                                            measured result.
+Charmane is an AI persona (Claude), written from the numbers on this
+                                            card and nothing else. Which read is strongest is Charmane's
+                                            judgement, not a measured result.
 Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict. </div></details><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
@@ -4119,32 +4204,49 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">
-                                            Santi says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">Charmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
-                                        <div class="aisum"><svg class="santi" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Santi"><circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
-    <g transform="rotate(-7 32 34)"><ellipse cx="32" cy="36" rx="16.5" ry="18.5" fill="#ece7dc"></ellipse>
-        <path d="M15.5 30 C14 18 24 11.5 34 12.5 C44 13.5 50.5 20 48.5 30 C46 24.5 42 22 36 21.5 C40 19.5 30 18 24 21.5 C20 23.5 17 26.5 15.5 30 Z" fill="#0a0b0d"></path>
-        <path d="M20.5 27.5 L28.5 28" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M35.5 26.5 Q40 22 45 24.5" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round" fill="none"></path>
-        <path d="M21 32 L28 32 Q27.6 35 24.5 35 Q21.4 35 21 32 Z" fill="#0a0b0d"></path>
-        <path d="M36 31.5 L43 31.5 Q42.6 34.5 39.5 34.5 Q36.4 34.5 36 31.5 Z" fill="#0a0b0d"></path>
-        <path d="M20 31.8 L29 31.8" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <path d="M35 31.3 L44 31.3" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <rect x="19.5" y="38" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <rect x="34.5" y="37.5" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <path d="M29.5 40.3 Q32 38.8 34.5 39.9" fill="none" stroke="#2fa82f" stroke-width="1.6"></path>
-        <path d="M25.5 48.5 Q32 50 38.5 46.5" fill="none" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M38.5 46.5 Q40 45.7 40.4 44.4" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path></g></svg>
+                                        <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Charmane"><defs><clipPath id="pa-disc-2026-04-JAX-CIN"><circle cx="32" cy="32" r="30"></circle></clipPath>
+        <radialGradient id="pa-glow-2026-04-JAX-CIN" cx="32" cy="17" r="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d4a73a" stop-opacity="0.55"></stop>
+            <stop offset="1" stop-color="#d4a73a" stop-opacity="0"></stop></radialGradient></defs>
+    <circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
+    <g clip-path="url(#pa-disc-2026-04-JAX-CIN)"><circle cx="32" cy="17" r="20" fill="url(#pa-glow-2026-04-JAX-CIN)"></circle>
+        <g transform="rotate(-12 32 13)"><ellipse cx="32" cy="13" rx="13" ry="7" fill="#7a4a24" stroke="#d4a73a" stroke-width="1.2"></ellipse>
+            <path d="M26 13 L38 13" stroke="#ece7dc" stroke-width="1.1" stroke-linecap="round"></path>
+            <path d="M28 11.6 L28 14.4 M30.7 11.6 L30.7 14.4 M33.3 11.6 L33.3 14.4 M36 11.6 L36 14.4" stroke="#ece7dc" stroke-width="0.9" stroke-linecap="round"></path></g>
+        <path d="M16 30 C15 20 22 16 32 16 C42 16 49 20 48 30 L50 52 C46 56 42 56 40 50 L24 50 C22 56 18 56 14 52 Z" fill="#0a0b0d"></path>
+        <path d="M10 64 C12 54 20 50 32 50 C44 50 52 54 54 64 Z" fill="#ece7dc"></path>
+        <path d="M22 51 C28 56 36 58 46 53" fill="none" stroke="#9c968a" stroke-width="1.1"></path>
+        <path d="M26 52 C31 58 38 61 50 58" fill="none" stroke="#9c968a" stroke-width="1"></path>
+        <circle cx="22.5" cy="52.5" r="2" fill="#d4a73a"></circle>
+        <rect x="28.5" y="42" width="7" height="9" fill="#e2dccf"></rect>
+        <ellipse cx="32" cy="33" rx="12" ry="14" fill="#ece7dc"></ellipse>
+        <path d="M20 29 C20 21 25 18.5 32 18.5 C39 18.5 44 21 44 29 C41 24 37 22.5 32 23.5 C27 22.5 23 24 20 29 Z" fill="#0a0b0d"></path>
+        <g fill="#2fa82f"><ellipse cx="21.5" cy="25" rx="2.6" ry="1.2" transform="rotate(-50 21.5 25)"></ellipse>
+            <ellipse cx="24" cy="22" rx="2.6" ry="1.2" transform="rotate(-30 24 22)"></ellipse>
+            <ellipse cx="27.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(-12 27.5 20.2)"></ellipse>
+            <ellipse cx="42.5" cy="25" rx="2.6" ry="1.2" transform="rotate(50 42.5 25)"></ellipse>
+            <ellipse cx="40" cy="22" rx="2.6" ry="1.2" transform="rotate(30 40 22)"></ellipse>
+            <ellipse cx="36.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(12 36.5 20.2)"></ellipse></g>
+        <circle cx="32" cy="19.6" r="1.4" fill="#d4a73a"></circle>
+        <path d="M24 29.3 L29.5 29.6" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M34.5 29 Q37.5 26.2 41 27.6" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M24.2 32.5 L29.6 32.5 Q29.2 35 26.9 35 Q24.6 35 24.2 32.5 Z" fill="#0a0b0d"></path>
+        <path d="M34.4 32.2 L39.8 32.2 Q39.4 34.7 37.1 34.7 Q34.8 34.7 34.4 32.2 Z" fill="#0a0b0d"></path>
+        <path d="M23.6 32.3 L30.2 32.3 M33.8 32 L40.4 32" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round"></path>
+        <path d="M23.6 32.3 L22.6 31.4 M40.4 32 L41.4 31.1" stroke="#0a0b0d" stroke-width="1" stroke-linecap="round"></path>
+        <path d="M32 34 Q31 38 32.6 38.6" fill="none" stroke="#9c968a" stroke-width="1.1" stroke-linecap="round"></path>
+        <path d="M27.5 42 Q32 43.4 36.5 40.6" fill="none" stroke="#8c3b4a" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M36.5 40.6 Q37.6 40 37.9 39" fill="none" stroke="#8c3b4a" stroke-width="1.3" stroke-linecap="round"></path></g></svg>
                                             <p class="aisum__text">Jacksonville allows 12 points a game, fewest in the league, and has handed out a 35-6 and a 34-10 in its last two home games. Cincinnati is a perfectly respectable 2-1 that the market has made a 2.5-point favorite, apparently for the crime of being at home. The model has Jacksonville by 7.3, almost ten points the other way. Jacksonville &#x2B;2.5 is the stronger read; the Jaguars are also second in turnover margin, and nothing on Cincinnati&#x27;s sheet answers that. The under is a coin flip, 50.5 against 51.5. When a model flips the favorite it is either early or wrong, and the closing line usually knows which.</p></div>
 
                                         <div class="dig__note">
                                             Written Thu Oct 1, 4:02 PM ET against
                                             Cincinnati Bengals &#x2212;2.5 &#xB7; O/U 51.5 (line captured Thu Oct 1, 11:31 AM ET).
-                                            Santiago "Santi" is an AI persona (Claude), written from the numbers on this
-                                            card and nothing else. Which read is strongest is Santi's judgement, not a
-                                            measured result.
+Charmane is an AI persona (Claude), written from the numbers on this
+                                            card and nothing else. Which read is strongest is Charmane's
+                                            judgement, not a measured result.
 Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict. </div></details><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
@@ -4363,32 +4465,49 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">
-                                            Santi says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">Charmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
-                                        <div class="aisum"><svg class="santi" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Santi"><circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
-    <g transform="rotate(-7 32 34)"><ellipse cx="32" cy="36" rx="16.5" ry="18.5" fill="#ece7dc"></ellipse>
-        <path d="M15.5 30 C14 18 24 11.5 34 12.5 C44 13.5 50.5 20 48.5 30 C46 24.5 42 22 36 21.5 C40 19.5 30 18 24 21.5 C20 23.5 17 26.5 15.5 30 Z" fill="#0a0b0d"></path>
-        <path d="M20.5 27.5 L28.5 28" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M35.5 26.5 Q40 22 45 24.5" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round" fill="none"></path>
-        <path d="M21 32 L28 32 Q27.6 35 24.5 35 Q21.4 35 21 32 Z" fill="#0a0b0d"></path>
-        <path d="M36 31.5 L43 31.5 Q42.6 34.5 39.5 34.5 Q36.4 34.5 36 31.5 Z" fill="#0a0b0d"></path>
-        <path d="M20 31.8 L29 31.8" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <path d="M35 31.3 L44 31.3" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <rect x="19.5" y="38" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <rect x="34.5" y="37.5" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <path d="M29.5 40.3 Q32 38.8 34.5 39.9" fill="none" stroke="#2fa82f" stroke-width="1.6"></path>
-        <path d="M25.5 48.5 Q32 50 38.5 46.5" fill="none" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M38.5 46.5 Q40 45.7 40.4 44.4" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path></g></svg>
+                                        <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Charmane"><defs><clipPath id="pa-disc-2026-04-DAL-HOU"><circle cx="32" cy="32" r="30"></circle></clipPath>
+        <radialGradient id="pa-glow-2026-04-DAL-HOU" cx="32" cy="17" r="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d4a73a" stop-opacity="0.55"></stop>
+            <stop offset="1" stop-color="#d4a73a" stop-opacity="0"></stop></radialGradient></defs>
+    <circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
+    <g clip-path="url(#pa-disc-2026-04-DAL-HOU)"><circle cx="32" cy="17" r="20" fill="url(#pa-glow-2026-04-DAL-HOU)"></circle>
+        <g transform="rotate(-12 32 13)"><ellipse cx="32" cy="13" rx="13" ry="7" fill="#7a4a24" stroke="#d4a73a" stroke-width="1.2"></ellipse>
+            <path d="M26 13 L38 13" stroke="#ece7dc" stroke-width="1.1" stroke-linecap="round"></path>
+            <path d="M28 11.6 L28 14.4 M30.7 11.6 L30.7 14.4 M33.3 11.6 L33.3 14.4 M36 11.6 L36 14.4" stroke="#ece7dc" stroke-width="0.9" stroke-linecap="round"></path></g>
+        <path d="M16 30 C15 20 22 16 32 16 C42 16 49 20 48 30 L50 52 C46 56 42 56 40 50 L24 50 C22 56 18 56 14 52 Z" fill="#0a0b0d"></path>
+        <path d="M10 64 C12 54 20 50 32 50 C44 50 52 54 54 64 Z" fill="#ece7dc"></path>
+        <path d="M22 51 C28 56 36 58 46 53" fill="none" stroke="#9c968a" stroke-width="1.1"></path>
+        <path d="M26 52 C31 58 38 61 50 58" fill="none" stroke="#9c968a" stroke-width="1"></path>
+        <circle cx="22.5" cy="52.5" r="2" fill="#d4a73a"></circle>
+        <rect x="28.5" y="42" width="7" height="9" fill="#e2dccf"></rect>
+        <ellipse cx="32" cy="33" rx="12" ry="14" fill="#ece7dc"></ellipse>
+        <path d="M20 29 C20 21 25 18.5 32 18.5 C39 18.5 44 21 44 29 C41 24 37 22.5 32 23.5 C27 22.5 23 24 20 29 Z" fill="#0a0b0d"></path>
+        <g fill="#2fa82f"><ellipse cx="21.5" cy="25" rx="2.6" ry="1.2" transform="rotate(-50 21.5 25)"></ellipse>
+            <ellipse cx="24" cy="22" rx="2.6" ry="1.2" transform="rotate(-30 24 22)"></ellipse>
+            <ellipse cx="27.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(-12 27.5 20.2)"></ellipse>
+            <ellipse cx="42.5" cy="25" rx="2.6" ry="1.2" transform="rotate(50 42.5 25)"></ellipse>
+            <ellipse cx="40" cy="22" rx="2.6" ry="1.2" transform="rotate(30 40 22)"></ellipse>
+            <ellipse cx="36.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(12 36.5 20.2)"></ellipse></g>
+        <circle cx="32" cy="19.6" r="1.4" fill="#d4a73a"></circle>
+        <path d="M24 29.3 L29.5 29.6" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M34.5 29 Q37.5 26.2 41 27.6" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M24.2 32.5 L29.6 32.5 Q29.2 35 26.9 35 Q24.6 35 24.2 32.5 Z" fill="#0a0b0d"></path>
+        <path d="M34.4 32.2 L39.8 32.2 Q39.4 34.7 37.1 34.7 Q34.8 34.7 34.4 32.2 Z" fill="#0a0b0d"></path>
+        <path d="M23.6 32.3 L30.2 32.3 M33.8 32 L40.4 32" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round"></path>
+        <path d="M23.6 32.3 L22.6 31.4 M40.4 32 L41.4 31.1" stroke="#0a0b0d" stroke-width="1" stroke-linecap="round"></path>
+        <path d="M32 34 Q31 38 32.6 38.6" fill="none" stroke="#9c968a" stroke-width="1.1" stroke-linecap="round"></path>
+        <path d="M27.5 42 Q32 43.4 36.5 40.6" fill="none" stroke="#8c3b4a" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M36.5 40.6 Q37.6 40 37.9 39" fill="none" stroke="#8c3b4a" stroke-width="1.3" stroke-linecap="round"></path></g></svg>
                                             <p class="aisum__text">Dallas has the third-best offense in the league by expected points and the worst defense by the same measure, which makes the Cowboys less a football team than a slot machine with a star on the helmet. Houston is 0-3, scores 18 a game and gives up 3.3 sacks a game, 30th, so the Texans have their own trouble keeping the lights on. The model has Houston by 4.2 against a market three, and calls the total 48.8 against 48. Both reads are Coinflip tier, and both deserve the label. The model&#x27;s only real opinion is that Houston wins, 61%, which is about as firm as a weather forecast.</p></div>
 
                                         <div class="dig__note">
                                             Written Thu Oct 1, 4:02 PM ET against
                                             Houston Texans &#x2212;3.0 &#xB7; O/U 48.0 (line captured Thu Oct 1, 11:31 AM ET).
-                                            Santiago "Santi" is an AI persona (Claude), written from the numbers on this
-                                            card and nothing else. Which read is strongest is Santi's judgement, not a
-                                            measured result.
+Charmane is an AI persona (Claude), written from the numbers on this
+                                            card and nothing else. Which read is strongest is Charmane's
+                                            judgement, not a measured result.
 Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict. </div></details><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
@@ -4607,32 +4726,49 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">
-                                            Santi says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">Charmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
-                                        <div class="aisum"><svg class="santi" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Santi"><circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
-    <g transform="rotate(-7 32 34)"><ellipse cx="32" cy="36" rx="16.5" ry="18.5" fill="#ece7dc"></ellipse>
-        <path d="M15.5 30 C14 18 24 11.5 34 12.5 C44 13.5 50.5 20 48.5 30 C46 24.5 42 22 36 21.5 C40 19.5 30 18 24 21.5 C20 23.5 17 26.5 15.5 30 Z" fill="#0a0b0d"></path>
-        <path d="M20.5 27.5 L28.5 28" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M35.5 26.5 Q40 22 45 24.5" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round" fill="none"></path>
-        <path d="M21 32 L28 32 Q27.6 35 24.5 35 Q21.4 35 21 32 Z" fill="#0a0b0d"></path>
-        <path d="M36 31.5 L43 31.5 Q42.6 34.5 39.5 34.5 Q36.4 34.5 36 31.5 Z" fill="#0a0b0d"></path>
-        <path d="M20 31.8 L29 31.8" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <path d="M35 31.3 L44 31.3" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <rect x="19.5" y="38" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <rect x="34.5" y="37.5" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <path d="M29.5 40.3 Q32 38.8 34.5 39.9" fill="none" stroke="#2fa82f" stroke-width="1.6"></path>
-        <path d="M25.5 48.5 Q32 50 38.5 46.5" fill="none" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M38.5 46.5 Q40 45.7 40.4 44.4" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path></g></svg>
+                                        <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Charmane"><defs><clipPath id="pa-disc-2026-04-ARI-NYG"><circle cx="32" cy="32" r="30"></circle></clipPath>
+        <radialGradient id="pa-glow-2026-04-ARI-NYG" cx="32" cy="17" r="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d4a73a" stop-opacity="0.55"></stop>
+            <stop offset="1" stop-color="#d4a73a" stop-opacity="0"></stop></radialGradient></defs>
+    <circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
+    <g clip-path="url(#pa-disc-2026-04-ARI-NYG)"><circle cx="32" cy="17" r="20" fill="url(#pa-glow-2026-04-ARI-NYG)"></circle>
+        <g transform="rotate(-12 32 13)"><ellipse cx="32" cy="13" rx="13" ry="7" fill="#7a4a24" stroke="#d4a73a" stroke-width="1.2"></ellipse>
+            <path d="M26 13 L38 13" stroke="#ece7dc" stroke-width="1.1" stroke-linecap="round"></path>
+            <path d="M28 11.6 L28 14.4 M30.7 11.6 L30.7 14.4 M33.3 11.6 L33.3 14.4 M36 11.6 L36 14.4" stroke="#ece7dc" stroke-width="0.9" stroke-linecap="round"></path></g>
+        <path d="M16 30 C15 20 22 16 32 16 C42 16 49 20 48 30 L50 52 C46 56 42 56 40 50 L24 50 C22 56 18 56 14 52 Z" fill="#0a0b0d"></path>
+        <path d="M10 64 C12 54 20 50 32 50 C44 50 52 54 54 64 Z" fill="#ece7dc"></path>
+        <path d="M22 51 C28 56 36 58 46 53" fill="none" stroke="#9c968a" stroke-width="1.1"></path>
+        <path d="M26 52 C31 58 38 61 50 58" fill="none" stroke="#9c968a" stroke-width="1"></path>
+        <circle cx="22.5" cy="52.5" r="2" fill="#d4a73a"></circle>
+        <rect x="28.5" y="42" width="7" height="9" fill="#e2dccf"></rect>
+        <ellipse cx="32" cy="33" rx="12" ry="14" fill="#ece7dc"></ellipse>
+        <path d="M20 29 C20 21 25 18.5 32 18.5 C39 18.5 44 21 44 29 C41 24 37 22.5 32 23.5 C27 22.5 23 24 20 29 Z" fill="#0a0b0d"></path>
+        <g fill="#2fa82f"><ellipse cx="21.5" cy="25" rx="2.6" ry="1.2" transform="rotate(-50 21.5 25)"></ellipse>
+            <ellipse cx="24" cy="22" rx="2.6" ry="1.2" transform="rotate(-30 24 22)"></ellipse>
+            <ellipse cx="27.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(-12 27.5 20.2)"></ellipse>
+            <ellipse cx="42.5" cy="25" rx="2.6" ry="1.2" transform="rotate(50 42.5 25)"></ellipse>
+            <ellipse cx="40" cy="22" rx="2.6" ry="1.2" transform="rotate(30 40 22)"></ellipse>
+            <ellipse cx="36.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(12 36.5 20.2)"></ellipse></g>
+        <circle cx="32" cy="19.6" r="1.4" fill="#d4a73a"></circle>
+        <path d="M24 29.3 L29.5 29.6" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M34.5 29 Q37.5 26.2 41 27.6" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M24.2 32.5 L29.6 32.5 Q29.2 35 26.9 35 Q24.6 35 24.2 32.5 Z" fill="#0a0b0d"></path>
+        <path d="M34.4 32.2 L39.8 32.2 Q39.4 34.7 37.1 34.7 Q34.8 34.7 34.4 32.2 Z" fill="#0a0b0d"></path>
+        <path d="M23.6 32.3 L30.2 32.3 M33.8 32 L40.4 32" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round"></path>
+        <path d="M23.6 32.3 L22.6 31.4 M40.4 32 L41.4 31.1" stroke="#0a0b0d" stroke-width="1" stroke-linecap="round"></path>
+        <path d="M32 34 Q31 38 32.6 38.6" fill="none" stroke="#9c968a" stroke-width="1.1" stroke-linecap="round"></path>
+        <path d="M27.5 42 Q32 43.4 36.5 40.6" fill="none" stroke="#8c3b4a" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M36.5 40.6 Q37.6 40 37.9 39" fill="none" stroke="#8c3b4a" stroke-width="1.3" stroke-linecap="round"></path></g></svg>
                                             <p class="aisum__text">The Giants are 2-1 on 15.3 points a game, 28th, which is winning the way a tortoise wins: slowly, rarely, and mostly because someone else tripped. Arizona throws for 5.4 yards an attempt, dead last, and the Giants&#x27; pass rush has produced a third of a sack a game, 31st. Something has to give, and the model thinks nothing will. New York by 1.2 against a market that makes them 2.5-point underdogs at home, so the Giants &#x2B;2.5 is the firmer read, at Lean. The under, 43.4 against 44.5, is a coin flip. Two bad offenses, one market and a model, all shrugging in unison.</p></div>
 
                                         <div class="dig__note">
                                             Written Thu Oct 1, 4:02 PM ET against
                                             Arizona Cardinals &#x2212;2.5 &#xB7; O/U 44.5 (line captured Thu Oct 1, 11:31 AM ET).
-                                            Santiago "Santi" is an AI persona (Claude), written from the numbers on this
-                                            card and nothing else. Which read is strongest is Santi's judgement, not a
-                                            measured result.
+Charmane is an AI persona (Claude), written from the numbers on this
+                                            card and nothing else. Which read is strongest is Charmane's
+                                            judgement, not a measured result.
 Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict. </div></details><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
@@ -4852,32 +4988,49 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">
-                                            Santi says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">Charmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
-                                        <div class="aisum"><svg class="santi" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Santi"><circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
-    <g transform="rotate(-7 32 34)"><ellipse cx="32" cy="36" rx="16.5" ry="18.5" fill="#ece7dc"></ellipse>
-        <path d="M15.5 30 C14 18 24 11.5 34 12.5 C44 13.5 50.5 20 48.5 30 C46 24.5 42 22 36 21.5 C40 19.5 30 18 24 21.5 C20 23.5 17 26.5 15.5 30 Z" fill="#0a0b0d"></path>
-        <path d="M20.5 27.5 L28.5 28" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M35.5 26.5 Q40 22 45 24.5" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round" fill="none"></path>
-        <path d="M21 32 L28 32 Q27.6 35 24.5 35 Q21.4 35 21 32 Z" fill="#0a0b0d"></path>
-        <path d="M36 31.5 L43 31.5 Q42.6 34.5 39.5 34.5 Q36.4 34.5 36 31.5 Z" fill="#0a0b0d"></path>
-        <path d="M20 31.8 L29 31.8" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <path d="M35 31.3 L44 31.3" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <rect x="19.5" y="38" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <rect x="34.5" y="37.5" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <path d="M29.5 40.3 Q32 38.8 34.5 39.9" fill="none" stroke="#2fa82f" stroke-width="1.6"></path>
-        <path d="M25.5 48.5 Q32 50 38.5 46.5" fill="none" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M38.5 46.5 Q40 45.7 40.4 44.4" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path></g></svg>
+                                        <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Charmane"><defs><clipPath id="pa-disc-2026-04-LA-PHI"><circle cx="32" cy="32" r="30"></circle></clipPath>
+        <radialGradient id="pa-glow-2026-04-LA-PHI" cx="32" cy="17" r="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d4a73a" stop-opacity="0.55"></stop>
+            <stop offset="1" stop-color="#d4a73a" stop-opacity="0"></stop></radialGradient></defs>
+    <circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
+    <g clip-path="url(#pa-disc-2026-04-LA-PHI)"><circle cx="32" cy="17" r="20" fill="url(#pa-glow-2026-04-LA-PHI)"></circle>
+        <g transform="rotate(-12 32 13)"><ellipse cx="32" cy="13" rx="13" ry="7" fill="#7a4a24" stroke="#d4a73a" stroke-width="1.2"></ellipse>
+            <path d="M26 13 L38 13" stroke="#ece7dc" stroke-width="1.1" stroke-linecap="round"></path>
+            <path d="M28 11.6 L28 14.4 M30.7 11.6 L30.7 14.4 M33.3 11.6 L33.3 14.4 M36 11.6 L36 14.4" stroke="#ece7dc" stroke-width="0.9" stroke-linecap="round"></path></g>
+        <path d="M16 30 C15 20 22 16 32 16 C42 16 49 20 48 30 L50 52 C46 56 42 56 40 50 L24 50 C22 56 18 56 14 52 Z" fill="#0a0b0d"></path>
+        <path d="M10 64 C12 54 20 50 32 50 C44 50 52 54 54 64 Z" fill="#ece7dc"></path>
+        <path d="M22 51 C28 56 36 58 46 53" fill="none" stroke="#9c968a" stroke-width="1.1"></path>
+        <path d="M26 52 C31 58 38 61 50 58" fill="none" stroke="#9c968a" stroke-width="1"></path>
+        <circle cx="22.5" cy="52.5" r="2" fill="#d4a73a"></circle>
+        <rect x="28.5" y="42" width="7" height="9" fill="#e2dccf"></rect>
+        <ellipse cx="32" cy="33" rx="12" ry="14" fill="#ece7dc"></ellipse>
+        <path d="M20 29 C20 21 25 18.5 32 18.5 C39 18.5 44 21 44 29 C41 24 37 22.5 32 23.5 C27 22.5 23 24 20 29 Z" fill="#0a0b0d"></path>
+        <g fill="#2fa82f"><ellipse cx="21.5" cy="25" rx="2.6" ry="1.2" transform="rotate(-50 21.5 25)"></ellipse>
+            <ellipse cx="24" cy="22" rx="2.6" ry="1.2" transform="rotate(-30 24 22)"></ellipse>
+            <ellipse cx="27.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(-12 27.5 20.2)"></ellipse>
+            <ellipse cx="42.5" cy="25" rx="2.6" ry="1.2" transform="rotate(50 42.5 25)"></ellipse>
+            <ellipse cx="40" cy="22" rx="2.6" ry="1.2" transform="rotate(30 40 22)"></ellipse>
+            <ellipse cx="36.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(12 36.5 20.2)"></ellipse></g>
+        <circle cx="32" cy="19.6" r="1.4" fill="#d4a73a"></circle>
+        <path d="M24 29.3 L29.5 29.6" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M34.5 29 Q37.5 26.2 41 27.6" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M24.2 32.5 L29.6 32.5 Q29.2 35 26.9 35 Q24.6 35 24.2 32.5 Z" fill="#0a0b0d"></path>
+        <path d="M34.4 32.2 L39.8 32.2 Q39.4 34.7 37.1 34.7 Q34.8 34.7 34.4 32.2 Z" fill="#0a0b0d"></path>
+        <path d="M23.6 32.3 L30.2 32.3 M33.8 32 L40.4 32" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round"></path>
+        <path d="M23.6 32.3 L22.6 31.4 M40.4 32 L41.4 31.1" stroke="#0a0b0d" stroke-width="1" stroke-linecap="round"></path>
+        <path d="M32 34 Q31 38 32.6 38.6" fill="none" stroke="#9c968a" stroke-width="1.1" stroke-linecap="round"></path>
+        <path d="M27.5 42 Q32 43.4 36.5 40.6" fill="none" stroke="#8c3b4a" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M36.5 40.6 Q37.6 40 37.9 39" fill="none" stroke="#8c3b4a" stroke-width="1.3" stroke-linecap="round"></path></g></svg>
                                             <p class="aisum__text">Philadelphia is 2-1 on 18.3 points a game and the Rams are 1-2 against a tougher schedule, which is the sort of record that tells you who has been lucky rather than who is good. The Rams allow 5.1 yards a pass attempt, second in the league, against a Philadelphia passing game ranked 22nd. The model has the Rams by 4.3 and a total of 41.7. The under is the firmer read and only a Lean: these two own a combined turnover margin of minus 2.7 a game, enough to wreck any tidy projection. The Rams -3 is the weaker read, a coin flip in a nice coat.</p></div>
 
                                         <div class="dig__note">
                                             Written Thu Oct 1, 4:02 PM ET against
                                             Los Angeles Rams &#x2212;3.0 &#xB7; O/U 43.5 (line captured Thu Oct 1, 11:31 AM ET).
-                                            Santiago "Santi" is an AI persona (Claude), written from the numbers on this
-                                            card and nothing else. Which read is strongest is Santi's judgement, not a
-                                            measured result.
+Charmane is an AI persona (Claude), written from the numbers on this
+                                            card and nothing else. Which read is strongest is Charmane's
+                                            judgement, not a measured result.
 Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict. </div></details><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
@@ -5096,32 +5249,49 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">
-                                            Santi says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">Charmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
-                                        <div class="aisum"><svg class="santi" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Santi"><circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
-    <g transform="rotate(-7 32 34)"><ellipse cx="32" cy="36" rx="16.5" ry="18.5" fill="#ece7dc"></ellipse>
-        <path d="M15.5 30 C14 18 24 11.5 34 12.5 C44 13.5 50.5 20 48.5 30 C46 24.5 42 22 36 21.5 C40 19.5 30 18 24 21.5 C20 23.5 17 26.5 15.5 30 Z" fill="#0a0b0d"></path>
-        <path d="M20.5 27.5 L28.5 28" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M35.5 26.5 Q40 22 45 24.5" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round" fill="none"></path>
-        <path d="M21 32 L28 32 Q27.6 35 24.5 35 Q21.4 35 21 32 Z" fill="#0a0b0d"></path>
-        <path d="M36 31.5 L43 31.5 Q42.6 34.5 39.5 34.5 Q36.4 34.5 36 31.5 Z" fill="#0a0b0d"></path>
-        <path d="M20 31.8 L29 31.8" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <path d="M35 31.3 L44 31.3" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <rect x="19.5" y="38" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <rect x="34.5" y="37.5" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <path d="M29.5 40.3 Q32 38.8 34.5 39.9" fill="none" stroke="#2fa82f" stroke-width="1.6"></path>
-        <path d="M25.5 48.5 Q32 50 38.5 46.5" fill="none" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M38.5 46.5 Q40 45.7 40.4 44.4" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path></g></svg>
+                                        <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Charmane"><defs><clipPath id="pa-disc-2026-04-GB-TB"><circle cx="32" cy="32" r="30"></circle></clipPath>
+        <radialGradient id="pa-glow-2026-04-GB-TB" cx="32" cy="17" r="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d4a73a" stop-opacity="0.55"></stop>
+            <stop offset="1" stop-color="#d4a73a" stop-opacity="0"></stop></radialGradient></defs>
+    <circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
+    <g clip-path="url(#pa-disc-2026-04-GB-TB)"><circle cx="32" cy="17" r="20" fill="url(#pa-glow-2026-04-GB-TB)"></circle>
+        <g transform="rotate(-12 32 13)"><ellipse cx="32" cy="13" rx="13" ry="7" fill="#7a4a24" stroke="#d4a73a" stroke-width="1.2"></ellipse>
+            <path d="M26 13 L38 13" stroke="#ece7dc" stroke-width="1.1" stroke-linecap="round"></path>
+            <path d="M28 11.6 L28 14.4 M30.7 11.6 L30.7 14.4 M33.3 11.6 L33.3 14.4 M36 11.6 L36 14.4" stroke="#ece7dc" stroke-width="0.9" stroke-linecap="round"></path></g>
+        <path d="M16 30 C15 20 22 16 32 16 C42 16 49 20 48 30 L50 52 C46 56 42 56 40 50 L24 50 C22 56 18 56 14 52 Z" fill="#0a0b0d"></path>
+        <path d="M10 64 C12 54 20 50 32 50 C44 50 52 54 54 64 Z" fill="#ece7dc"></path>
+        <path d="M22 51 C28 56 36 58 46 53" fill="none" stroke="#9c968a" stroke-width="1.1"></path>
+        <path d="M26 52 C31 58 38 61 50 58" fill="none" stroke="#9c968a" stroke-width="1"></path>
+        <circle cx="22.5" cy="52.5" r="2" fill="#d4a73a"></circle>
+        <rect x="28.5" y="42" width="7" height="9" fill="#e2dccf"></rect>
+        <ellipse cx="32" cy="33" rx="12" ry="14" fill="#ece7dc"></ellipse>
+        <path d="M20 29 C20 21 25 18.5 32 18.5 C39 18.5 44 21 44 29 C41 24 37 22.5 32 23.5 C27 22.5 23 24 20 29 Z" fill="#0a0b0d"></path>
+        <g fill="#2fa82f"><ellipse cx="21.5" cy="25" rx="2.6" ry="1.2" transform="rotate(-50 21.5 25)"></ellipse>
+            <ellipse cx="24" cy="22" rx="2.6" ry="1.2" transform="rotate(-30 24 22)"></ellipse>
+            <ellipse cx="27.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(-12 27.5 20.2)"></ellipse>
+            <ellipse cx="42.5" cy="25" rx="2.6" ry="1.2" transform="rotate(50 42.5 25)"></ellipse>
+            <ellipse cx="40" cy="22" rx="2.6" ry="1.2" transform="rotate(30 40 22)"></ellipse>
+            <ellipse cx="36.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(12 36.5 20.2)"></ellipse></g>
+        <circle cx="32" cy="19.6" r="1.4" fill="#d4a73a"></circle>
+        <path d="M24 29.3 L29.5 29.6" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M34.5 29 Q37.5 26.2 41 27.6" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M24.2 32.5 L29.6 32.5 Q29.2 35 26.9 35 Q24.6 35 24.2 32.5 Z" fill="#0a0b0d"></path>
+        <path d="M34.4 32.2 L39.8 32.2 Q39.4 34.7 37.1 34.7 Q34.8 34.7 34.4 32.2 Z" fill="#0a0b0d"></path>
+        <path d="M23.6 32.3 L30.2 32.3 M33.8 32 L40.4 32" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round"></path>
+        <path d="M23.6 32.3 L22.6 31.4 M40.4 32 L41.4 31.1" stroke="#0a0b0d" stroke-width="1" stroke-linecap="round"></path>
+        <path d="M32 34 Q31 38 32.6 38.6" fill="none" stroke="#9c968a" stroke-width="1.1" stroke-linecap="round"></path>
+        <path d="M27.5 42 Q32 43.4 36.5 40.6" fill="none" stroke="#8c3b4a" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M36.5 40.6 Q37.6 40 37.9 39" fill="none" stroke="#8c3b4a" stroke-width="1.3" stroke-linecap="round"></path></g></svg>
                                             <p class="aisum__text">A total of 38.5 for two defenses allowing 26.3 and 30.3 a game is the market pricing a field-goal contest that the defenses have not agreed to. The model has 50.5, twelve points higher, the biggest total disagreement of the week. Tampa Bay&#x27;s offense ranks 31st in expected points per play and allows 4.3 sacks a game, worst in the league, so the market is not hallucinating. The over is still the stronger read on the model&#x27;s own numbers. Tampa Bay &#x2B;3.5 is weaker, even with the model calling the 1-2 Buccaneers outright winners over 0-3 Green Bay. Twelve points of daylight on a total is how a model announces it is about to learn something.</p></div>
 
                                         <div class="dig__note">
                                             Written Thu Oct 1, 4:02 PM ET against
                                             Green Bay Packers &#x2212;3.5 &#xB7; O/U 38.5 (line captured Thu Oct 1, 11:31 AM ET).
-                                            Santiago "Santi" is an AI persona (Claude), written from the numbers on this
-                                            card and nothing else. Which read is strongest is Santi's judgement, not a
-                                            measured result.
+Charmane is an AI persona (Claude), written from the numbers on this
+                                            card and nothing else. Which read is strongest is Charmane's
+                                            judgement, not a measured result.
 Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict. </div></details><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
@@ -5343,32 +5513,49 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">
-                                            Santi says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">Charmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
-                                        <div class="aisum"><svg class="santi" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Santi"><circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
-    <g transform="rotate(-7 32 34)"><ellipse cx="32" cy="36" rx="16.5" ry="18.5" fill="#ece7dc"></ellipse>
-        <path d="M15.5 30 C14 18 24 11.5 34 12.5 C44 13.5 50.5 20 48.5 30 C46 24.5 42 22 36 21.5 C40 19.5 30 18 24 21.5 C20 23.5 17 26.5 15.5 30 Z" fill="#0a0b0d"></path>
-        <path d="M20.5 27.5 L28.5 28" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M35.5 26.5 Q40 22 45 24.5" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round" fill="none"></path>
-        <path d="M21 32 L28 32 Q27.6 35 24.5 35 Q21.4 35 21 32 Z" fill="#0a0b0d"></path>
-        <path d="M36 31.5 L43 31.5 Q42.6 34.5 39.5 34.5 Q36.4 34.5 36 31.5 Z" fill="#0a0b0d"></path>
-        <path d="M20 31.8 L29 31.8" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <path d="M35 31.3 L44 31.3" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <rect x="19.5" y="38" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <rect x="34.5" y="37.5" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <path d="M29.5 40.3 Q32 38.8 34.5 39.9" fill="none" stroke="#2fa82f" stroke-width="1.6"></path>
-        <path d="M25.5 48.5 Q32 50 38.5 46.5" fill="none" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M38.5 46.5 Q40 45.7 40.4 44.4" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path></g></svg>
+                                        <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Charmane"><defs><clipPath id="pa-disc-2026-04-MIA-MIN"><circle cx="32" cy="32" r="30"></circle></clipPath>
+        <radialGradient id="pa-glow-2026-04-MIA-MIN" cx="32" cy="17" r="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d4a73a" stop-opacity="0.55"></stop>
+            <stop offset="1" stop-color="#d4a73a" stop-opacity="0"></stop></radialGradient></defs>
+    <circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
+    <g clip-path="url(#pa-disc-2026-04-MIA-MIN)"><circle cx="32" cy="17" r="20" fill="url(#pa-glow-2026-04-MIA-MIN)"></circle>
+        <g transform="rotate(-12 32 13)"><ellipse cx="32" cy="13" rx="13" ry="7" fill="#7a4a24" stroke="#d4a73a" stroke-width="1.2"></ellipse>
+            <path d="M26 13 L38 13" stroke="#ece7dc" stroke-width="1.1" stroke-linecap="round"></path>
+            <path d="M28 11.6 L28 14.4 M30.7 11.6 L30.7 14.4 M33.3 11.6 L33.3 14.4 M36 11.6 L36 14.4" stroke="#ece7dc" stroke-width="0.9" stroke-linecap="round"></path></g>
+        <path d="M16 30 C15 20 22 16 32 16 C42 16 49 20 48 30 L50 52 C46 56 42 56 40 50 L24 50 C22 56 18 56 14 52 Z" fill="#0a0b0d"></path>
+        <path d="M10 64 C12 54 20 50 32 50 C44 50 52 54 54 64 Z" fill="#ece7dc"></path>
+        <path d="M22 51 C28 56 36 58 46 53" fill="none" stroke="#9c968a" stroke-width="1.1"></path>
+        <path d="M26 52 C31 58 38 61 50 58" fill="none" stroke="#9c968a" stroke-width="1"></path>
+        <circle cx="22.5" cy="52.5" r="2" fill="#d4a73a"></circle>
+        <rect x="28.5" y="42" width="7" height="9" fill="#e2dccf"></rect>
+        <ellipse cx="32" cy="33" rx="12" ry="14" fill="#ece7dc"></ellipse>
+        <path d="M20 29 C20 21 25 18.5 32 18.5 C39 18.5 44 21 44 29 C41 24 37 22.5 32 23.5 C27 22.5 23 24 20 29 Z" fill="#0a0b0d"></path>
+        <g fill="#2fa82f"><ellipse cx="21.5" cy="25" rx="2.6" ry="1.2" transform="rotate(-50 21.5 25)"></ellipse>
+            <ellipse cx="24" cy="22" rx="2.6" ry="1.2" transform="rotate(-30 24 22)"></ellipse>
+            <ellipse cx="27.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(-12 27.5 20.2)"></ellipse>
+            <ellipse cx="42.5" cy="25" rx="2.6" ry="1.2" transform="rotate(50 42.5 25)"></ellipse>
+            <ellipse cx="40" cy="22" rx="2.6" ry="1.2" transform="rotate(30 40 22)"></ellipse>
+            <ellipse cx="36.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(12 36.5 20.2)"></ellipse></g>
+        <circle cx="32" cy="19.6" r="1.4" fill="#d4a73a"></circle>
+        <path d="M24 29.3 L29.5 29.6" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M34.5 29 Q37.5 26.2 41 27.6" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M24.2 32.5 L29.6 32.5 Q29.2 35 26.9 35 Q24.6 35 24.2 32.5 Z" fill="#0a0b0d"></path>
+        <path d="M34.4 32.2 L39.8 32.2 Q39.4 34.7 37.1 34.7 Q34.8 34.7 34.4 32.2 Z" fill="#0a0b0d"></path>
+        <path d="M23.6 32.3 L30.2 32.3 M33.8 32 L40.4 32" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round"></path>
+        <path d="M23.6 32.3 L22.6 31.4 M40.4 32 L41.4 31.1" stroke="#0a0b0d" stroke-width="1" stroke-linecap="round"></path>
+        <path d="M32 34 Q31 38 32.6 38.6" fill="none" stroke="#9c968a" stroke-width="1.1" stroke-linecap="round"></path>
+        <path d="M27.5 42 Q32 43.4 36.5 40.6" fill="none" stroke="#8c3b4a" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M36.5 40.6 Q37.6 40 37.9 39" fill="none" stroke="#8c3b4a" stroke-width="1.3" stroke-linecap="round"></path></g></svg>
                                             <p class="aisum__text">Minnesota&#x27;s defense leads the league in expected points allowed and in sacks, 4.7 a game, and its next victim scores 12 points a game and has recorded zero sacks all season. That is not a matchup; that is a nature documentary. The model finds four separate mismatches in Minnesota&#x27;s favor and has the Vikings by 14.2 against a market 10.5. The under, 35.6 against 38.5, is the stronger read, because Minnesota&#x27;s own offense scores a modest 23.7 and Miami is not going to help. The spread is the weaker read, at Lean, since covering a double-digit number asks an offense ranked 26th by expected points to keep pressing.</p></div>
 
                                         <div class="dig__note">
                                             Written Thu Oct 1, 4:02 PM ET against
                                             Minnesota Vikings &#x2212;10.5 &#xB7; O/U 38.5 (line captured Thu Oct 1, 11:31 AM ET).
-                                            Santiago "Santi" is an AI persona (Claude), written from the numbers on this
-                                            card and nothing else. Which read is strongest is Santi's judgement, not a
-                                            measured result.
+Charmane is an AI persona (Claude), written from the numbers on this
+                                            card and nothing else. Which read is strongest is Charmane's
+                                            judgement, not a measured result.
 Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict. </div></details><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
@@ -5587,32 +5774,49 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">
-                                            Santi says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">Charmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
-                                        <div class="aisum"><svg class="santi" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Santi"><circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
-    <g transform="rotate(-7 32 34)"><ellipse cx="32" cy="36" rx="16.5" ry="18.5" fill="#ece7dc"></ellipse>
-        <path d="M15.5 30 C14 18 24 11.5 34 12.5 C44 13.5 50.5 20 48.5 30 C46 24.5 42 22 36 21.5 C40 19.5 30 18 24 21.5 C20 23.5 17 26.5 15.5 30 Z" fill="#0a0b0d"></path>
-        <path d="M20.5 27.5 L28.5 28" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M35.5 26.5 Q40 22 45 24.5" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round" fill="none"></path>
-        <path d="M21 32 L28 32 Q27.6 35 24.5 35 Q21.4 35 21 32 Z" fill="#0a0b0d"></path>
-        <path d="M36 31.5 L43 31.5 Q42.6 34.5 39.5 34.5 Q36.4 34.5 36 31.5 Z" fill="#0a0b0d"></path>
-        <path d="M20 31.8 L29 31.8" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <path d="M35 31.3 L44 31.3" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <rect x="19.5" y="38" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <rect x="34.5" y="37.5" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <path d="M29.5 40.3 Q32 38.8 34.5 39.9" fill="none" stroke="#2fa82f" stroke-width="1.6"></path>
-        <path d="M25.5 48.5 Q32 50 38.5 46.5" fill="none" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M38.5 46.5 Q40 45.7 40.4 44.4" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path></g></svg>
+                                        <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Charmane"><defs><clipPath id="pa-disc-2026-04-KC-LV"><circle cx="32" cy="32" r="30"></circle></clipPath>
+        <radialGradient id="pa-glow-2026-04-KC-LV" cx="32" cy="17" r="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d4a73a" stop-opacity="0.55"></stop>
+            <stop offset="1" stop-color="#d4a73a" stop-opacity="0"></stop></radialGradient></defs>
+    <circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
+    <g clip-path="url(#pa-disc-2026-04-KC-LV)"><circle cx="32" cy="17" r="20" fill="url(#pa-glow-2026-04-KC-LV)"></circle>
+        <g transform="rotate(-12 32 13)"><ellipse cx="32" cy="13" rx="13" ry="7" fill="#7a4a24" stroke="#d4a73a" stroke-width="1.2"></ellipse>
+            <path d="M26 13 L38 13" stroke="#ece7dc" stroke-width="1.1" stroke-linecap="round"></path>
+            <path d="M28 11.6 L28 14.4 M30.7 11.6 L30.7 14.4 M33.3 11.6 L33.3 14.4 M36 11.6 L36 14.4" stroke="#ece7dc" stroke-width="0.9" stroke-linecap="round"></path></g>
+        <path d="M16 30 C15 20 22 16 32 16 C42 16 49 20 48 30 L50 52 C46 56 42 56 40 50 L24 50 C22 56 18 56 14 52 Z" fill="#0a0b0d"></path>
+        <path d="M10 64 C12 54 20 50 32 50 C44 50 52 54 54 64 Z" fill="#ece7dc"></path>
+        <path d="M22 51 C28 56 36 58 46 53" fill="none" stroke="#9c968a" stroke-width="1.1"></path>
+        <path d="M26 52 C31 58 38 61 50 58" fill="none" stroke="#9c968a" stroke-width="1"></path>
+        <circle cx="22.5" cy="52.5" r="2" fill="#d4a73a"></circle>
+        <rect x="28.5" y="42" width="7" height="9" fill="#e2dccf"></rect>
+        <ellipse cx="32" cy="33" rx="12" ry="14" fill="#ece7dc"></ellipse>
+        <path d="M20 29 C20 21 25 18.5 32 18.5 C39 18.5 44 21 44 29 C41 24 37 22.5 32 23.5 C27 22.5 23 24 20 29 Z" fill="#0a0b0d"></path>
+        <g fill="#2fa82f"><ellipse cx="21.5" cy="25" rx="2.6" ry="1.2" transform="rotate(-50 21.5 25)"></ellipse>
+            <ellipse cx="24" cy="22" rx="2.6" ry="1.2" transform="rotate(-30 24 22)"></ellipse>
+            <ellipse cx="27.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(-12 27.5 20.2)"></ellipse>
+            <ellipse cx="42.5" cy="25" rx="2.6" ry="1.2" transform="rotate(50 42.5 25)"></ellipse>
+            <ellipse cx="40" cy="22" rx="2.6" ry="1.2" transform="rotate(30 40 22)"></ellipse>
+            <ellipse cx="36.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(12 36.5 20.2)"></ellipse></g>
+        <circle cx="32" cy="19.6" r="1.4" fill="#d4a73a"></circle>
+        <path d="M24 29.3 L29.5 29.6" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M34.5 29 Q37.5 26.2 41 27.6" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M24.2 32.5 L29.6 32.5 Q29.2 35 26.9 35 Q24.6 35 24.2 32.5 Z" fill="#0a0b0d"></path>
+        <path d="M34.4 32.2 L39.8 32.2 Q39.4 34.7 37.1 34.7 Q34.8 34.7 34.4 32.2 Z" fill="#0a0b0d"></path>
+        <path d="M23.6 32.3 L30.2 32.3 M33.8 32 L40.4 32" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round"></path>
+        <path d="M23.6 32.3 L22.6 31.4 M40.4 32 L41.4 31.1" stroke="#0a0b0d" stroke-width="1" stroke-linecap="round"></path>
+        <path d="M32 34 Q31 38 32.6 38.6" fill="none" stroke="#9c968a" stroke-width="1.1" stroke-linecap="round"></path>
+        <path d="M27.5 42 Q32 43.4 36.5 40.6" fill="none" stroke="#8c3b4a" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M36.5 40.6 Q37.6 40 37.9 39" fill="none" stroke="#8c3b4a" stroke-width="1.3" stroke-linecap="round"></path></g></svg>
                                             <p class="aisum__text">Two 3-0 teams, both scoring 29.3 a game, and only one of them has earned it. Las Vegas has played a schedule rated 4.5 points below average, and its run game manages 3.2 yards a carry, 31st. Kansas City allows 16.7 a game, 3rd, against a schedule that at least made it sweat. The model has Kansas City by 3.9, a hair inside the market&#x27;s 4.5, so the side is a coin flip. The under is the strongest read, 42.9 against 48, because both defenses sit in the top ten in points allowed. Undefeated is a record, not a r&#xE9;sum&#xE9;.</p></div>
 
                                         <div class="dig__note">
                                             Written Thu Oct 1, 4:02 PM ET against
                                             Kansas City Chiefs &#x2212;4.5 &#xB7; O/U 48.0 (line captured Thu Oct 1, 11:31 AM ET).
-                                            Santiago "Santi" is an AI persona (Claude), written from the numbers on this
-                                            card and nothing else. Which read is strongest is Santi's judgement, not a
-                                            measured result.
+Charmane is an AI persona (Claude), written from the numbers on this
+                                            card and nothing else. Which read is strongest is Charmane's
+                                            judgement, not a measured result.
 Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict. </div></details><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
@@ -5835,32 +6039,49 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">
-                                            Santi says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">Charmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
-                                        <div class="aisum"><svg class="santi" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Santi"><circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
-    <g transform="rotate(-7 32 34)"><ellipse cx="32" cy="36" rx="16.5" ry="18.5" fill="#ece7dc"></ellipse>
-        <path d="M15.5 30 C14 18 24 11.5 34 12.5 C44 13.5 50.5 20 48.5 30 C46 24.5 42 22 36 21.5 C40 19.5 30 18 24 21.5 C20 23.5 17 26.5 15.5 30 Z" fill="#0a0b0d"></path>
-        <path d="M20.5 27.5 L28.5 28" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M35.5 26.5 Q40 22 45 24.5" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round" fill="none"></path>
-        <path d="M21 32 L28 32 Q27.6 35 24.5 35 Q21.4 35 21 32 Z" fill="#0a0b0d"></path>
-        <path d="M36 31.5 L43 31.5 Q42.6 34.5 39.5 34.5 Q36.4 34.5 36 31.5 Z" fill="#0a0b0d"></path>
-        <path d="M20 31.8 L29 31.8" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <path d="M35 31.3 L44 31.3" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <rect x="19.5" y="38" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <rect x="34.5" y="37.5" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <path d="M29.5 40.3 Q32 38.8 34.5 39.9" fill="none" stroke="#2fa82f" stroke-width="1.6"></path>
-        <path d="M25.5 48.5 Q32 50 38.5 46.5" fill="none" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M38.5 46.5 Q40 45.7 40.4 44.4" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path></g></svg>
+                                        <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Charmane"><defs><clipPath id="pa-disc-2026-04-LAC-SEA"><circle cx="32" cy="32" r="30"></circle></clipPath>
+        <radialGradient id="pa-glow-2026-04-LAC-SEA" cx="32" cy="17" r="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d4a73a" stop-opacity="0.55"></stop>
+            <stop offset="1" stop-color="#d4a73a" stop-opacity="0"></stop></radialGradient></defs>
+    <circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
+    <g clip-path="url(#pa-disc-2026-04-LAC-SEA)"><circle cx="32" cy="17" r="20" fill="url(#pa-glow-2026-04-LAC-SEA)"></circle>
+        <g transform="rotate(-12 32 13)"><ellipse cx="32" cy="13" rx="13" ry="7" fill="#7a4a24" stroke="#d4a73a" stroke-width="1.2"></ellipse>
+            <path d="M26 13 L38 13" stroke="#ece7dc" stroke-width="1.1" stroke-linecap="round"></path>
+            <path d="M28 11.6 L28 14.4 M30.7 11.6 L30.7 14.4 M33.3 11.6 L33.3 14.4 M36 11.6 L36 14.4" stroke="#ece7dc" stroke-width="0.9" stroke-linecap="round"></path></g>
+        <path d="M16 30 C15 20 22 16 32 16 C42 16 49 20 48 30 L50 52 C46 56 42 56 40 50 L24 50 C22 56 18 56 14 52 Z" fill="#0a0b0d"></path>
+        <path d="M10 64 C12 54 20 50 32 50 C44 50 52 54 54 64 Z" fill="#ece7dc"></path>
+        <path d="M22 51 C28 56 36 58 46 53" fill="none" stroke="#9c968a" stroke-width="1.1"></path>
+        <path d="M26 52 C31 58 38 61 50 58" fill="none" stroke="#9c968a" stroke-width="1"></path>
+        <circle cx="22.5" cy="52.5" r="2" fill="#d4a73a"></circle>
+        <rect x="28.5" y="42" width="7" height="9" fill="#e2dccf"></rect>
+        <ellipse cx="32" cy="33" rx="12" ry="14" fill="#ece7dc"></ellipse>
+        <path d="M20 29 C20 21 25 18.5 32 18.5 C39 18.5 44 21 44 29 C41 24 37 22.5 32 23.5 C27 22.5 23 24 20 29 Z" fill="#0a0b0d"></path>
+        <g fill="#2fa82f"><ellipse cx="21.5" cy="25" rx="2.6" ry="1.2" transform="rotate(-50 21.5 25)"></ellipse>
+            <ellipse cx="24" cy="22" rx="2.6" ry="1.2" transform="rotate(-30 24 22)"></ellipse>
+            <ellipse cx="27.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(-12 27.5 20.2)"></ellipse>
+            <ellipse cx="42.5" cy="25" rx="2.6" ry="1.2" transform="rotate(50 42.5 25)"></ellipse>
+            <ellipse cx="40" cy="22" rx="2.6" ry="1.2" transform="rotate(30 40 22)"></ellipse>
+            <ellipse cx="36.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(12 36.5 20.2)"></ellipse></g>
+        <circle cx="32" cy="19.6" r="1.4" fill="#d4a73a"></circle>
+        <path d="M24 29.3 L29.5 29.6" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M34.5 29 Q37.5 26.2 41 27.6" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M24.2 32.5 L29.6 32.5 Q29.2 35 26.9 35 Q24.6 35 24.2 32.5 Z" fill="#0a0b0d"></path>
+        <path d="M34.4 32.2 L39.8 32.2 Q39.4 34.7 37.1 34.7 Q34.8 34.7 34.4 32.2 Z" fill="#0a0b0d"></path>
+        <path d="M23.6 32.3 L30.2 32.3 M33.8 32 L40.4 32" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round"></path>
+        <path d="M23.6 32.3 L22.6 31.4 M40.4 32 L41.4 31.1" stroke="#0a0b0d" stroke-width="1" stroke-linecap="round"></path>
+        <path d="M32 34 Q31 38 32.6 38.6" fill="none" stroke="#9c968a" stroke-width="1.1" stroke-linecap="round"></path>
+        <path d="M27.5 42 Q32 43.4 36.5 40.6" fill="none" stroke="#8c3b4a" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M36.5 40.6 Q37.6 40 37.9 39" fill="none" stroke="#8c3b4a" stroke-width="1.3" stroke-linecap="round"></path></g></svg>
                                             <p class="aisum__text">The Chargers are 0-3 with the worst offense in the league by expected points per play, and they are about to walk into the defense that allows the fewest yards per pass attempt in football, 4.6. That is bringing a pool noodle to a fencing match. The model has Seattle by 14.8, roughly double the market&#x27;s seven, and finds six matchup edges, four of them Seattle&#x27;s. The spread is the stronger read. The under, 38.3 against 42.5, is weaker only because Seattle throws for 8.3 yards an attempt, 4th, and might score enough on its own. A gap of eight points to the market is still a gap of eight points.</p></div>
 
                                         <div class="dig__note">
                                             Written Thu Oct 1, 4:02 PM ET against
                                             Seattle Seahawks &#x2212;7.0 &#xB7; O/U 42.5 (line captured Thu Oct 1, 11:31 AM ET).
-                                            Santiago "Santi" is an AI persona (Claude), written from the numbers on this
-                                            card and nothing else. Which read is strongest is Santi's judgement, not a
-                                            measured result.
+Charmane is an AI persona (Claude), written from the numbers on this
+                                            card and nothing else. Which read is strongest is Charmane's
+                                            judgement, not a measured result.
 Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict. </div></details><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
@@ -6079,32 +6300,49 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">
-                                            Santi says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">Charmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
-                                        <div class="aisum"><svg class="santi" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Santi"><circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
-    <g transform="rotate(-7 32 34)"><ellipse cx="32" cy="36" rx="16.5" ry="18.5" fill="#ece7dc"></ellipse>
-        <path d="M15.5 30 C14 18 24 11.5 34 12.5 C44 13.5 50.5 20 48.5 30 C46 24.5 42 22 36 21.5 C40 19.5 30 18 24 21.5 C20 23.5 17 26.5 15.5 30 Z" fill="#0a0b0d"></path>
-        <path d="M20.5 27.5 L28.5 28" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M35.5 26.5 Q40 22 45 24.5" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round" fill="none"></path>
-        <path d="M21 32 L28 32 Q27.6 35 24.5 35 Q21.4 35 21 32 Z" fill="#0a0b0d"></path>
-        <path d="M36 31.5 L43 31.5 Q42.6 34.5 39.5 34.5 Q36.4 34.5 36 31.5 Z" fill="#0a0b0d"></path>
-        <path d="M20 31.8 L29 31.8" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <path d="M35 31.3 L44 31.3" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <rect x="19.5" y="38" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <rect x="34.5" y="37.5" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <path d="M29.5 40.3 Q32 38.8 34.5 39.9" fill="none" stroke="#2fa82f" stroke-width="1.6"></path>
-        <path d="M25.5 48.5 Q32 50 38.5 46.5" fill="none" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M38.5 46.5 Q40 45.7 40.4 44.4" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path></g></svg>
+                                        <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Charmane"><defs><clipPath id="pa-disc-2026-04-DEN-SF"><circle cx="32" cy="32" r="30"></circle></clipPath>
+        <radialGradient id="pa-glow-2026-04-DEN-SF" cx="32" cy="17" r="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d4a73a" stop-opacity="0.55"></stop>
+            <stop offset="1" stop-color="#d4a73a" stop-opacity="0"></stop></radialGradient></defs>
+    <circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
+    <g clip-path="url(#pa-disc-2026-04-DEN-SF)"><circle cx="32" cy="17" r="20" fill="url(#pa-glow-2026-04-DEN-SF)"></circle>
+        <g transform="rotate(-12 32 13)"><ellipse cx="32" cy="13" rx="13" ry="7" fill="#7a4a24" stroke="#d4a73a" stroke-width="1.2"></ellipse>
+            <path d="M26 13 L38 13" stroke="#ece7dc" stroke-width="1.1" stroke-linecap="round"></path>
+            <path d="M28 11.6 L28 14.4 M30.7 11.6 L30.7 14.4 M33.3 11.6 L33.3 14.4 M36 11.6 L36 14.4" stroke="#ece7dc" stroke-width="0.9" stroke-linecap="round"></path></g>
+        <path d="M16 30 C15 20 22 16 32 16 C42 16 49 20 48 30 L50 52 C46 56 42 56 40 50 L24 50 C22 56 18 56 14 52 Z" fill="#0a0b0d"></path>
+        <path d="M10 64 C12 54 20 50 32 50 C44 50 52 54 54 64 Z" fill="#ece7dc"></path>
+        <path d="M22 51 C28 56 36 58 46 53" fill="none" stroke="#9c968a" stroke-width="1.1"></path>
+        <path d="M26 52 C31 58 38 61 50 58" fill="none" stroke="#9c968a" stroke-width="1"></path>
+        <circle cx="22.5" cy="52.5" r="2" fill="#d4a73a"></circle>
+        <rect x="28.5" y="42" width="7" height="9" fill="#e2dccf"></rect>
+        <ellipse cx="32" cy="33" rx="12" ry="14" fill="#ece7dc"></ellipse>
+        <path d="M20 29 C20 21 25 18.5 32 18.5 C39 18.5 44 21 44 29 C41 24 37 22.5 32 23.5 C27 22.5 23 24 20 29 Z" fill="#0a0b0d"></path>
+        <g fill="#2fa82f"><ellipse cx="21.5" cy="25" rx="2.6" ry="1.2" transform="rotate(-50 21.5 25)"></ellipse>
+            <ellipse cx="24" cy="22" rx="2.6" ry="1.2" transform="rotate(-30 24 22)"></ellipse>
+            <ellipse cx="27.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(-12 27.5 20.2)"></ellipse>
+            <ellipse cx="42.5" cy="25" rx="2.6" ry="1.2" transform="rotate(50 42.5 25)"></ellipse>
+            <ellipse cx="40" cy="22" rx="2.6" ry="1.2" transform="rotate(30 40 22)"></ellipse>
+            <ellipse cx="36.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(12 36.5 20.2)"></ellipse></g>
+        <circle cx="32" cy="19.6" r="1.4" fill="#d4a73a"></circle>
+        <path d="M24 29.3 L29.5 29.6" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M34.5 29 Q37.5 26.2 41 27.6" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M24.2 32.5 L29.6 32.5 Q29.2 35 26.9 35 Q24.6 35 24.2 32.5 Z" fill="#0a0b0d"></path>
+        <path d="M34.4 32.2 L39.8 32.2 Q39.4 34.7 37.1 34.7 Q34.8 34.7 34.4 32.2 Z" fill="#0a0b0d"></path>
+        <path d="M23.6 32.3 L30.2 32.3 M33.8 32 L40.4 32" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round"></path>
+        <path d="M23.6 32.3 L22.6 31.4 M40.4 32 L41.4 31.1" stroke="#0a0b0d" stroke-width="1" stroke-linecap="round"></path>
+        <path d="M32 34 Q31 38 32.6 38.6" fill="none" stroke="#9c968a" stroke-width="1.1" stroke-linecap="round"></path>
+        <path d="M27.5 42 Q32 43.4 36.5 40.6" fill="none" stroke="#8c3b4a" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M36.5 40.6 Q37.6 40 37.9 39" fill="none" stroke="#8c3b4a" stroke-width="1.3" stroke-linecap="round"></path></g></svg>
                                             <p class="aisum__text">San Francisco leads the league in expected points per play and in yards per pass attempt, 9.5, and has not allowed a sack in three games. That is a quarterback reading the paper in a recliner. Denver has played the tougher schedule, which explains some of its 20 points a game, but nothing explains a run defense ranked last facing a run offense ranked 5th. The model has the 49ers by 7.5 against a market 2.5, and that spread is the stronger read. The under, 45.4 against 48, is weaker; it needs Denver&#x27;s defense to cooperate. Strong tier, five points off the market, and a long way from proven.</p></div>
 
                                         <div class="dig__note">
                                             Written Thu Oct 1, 4:02 PM ET against
                                             San Francisco 49ers &#x2212;2.5 &#xB7; O/U 48.0 (line captured Thu Oct 1, 11:31 AM ET).
-                                            Santiago "Santi" is an AI persona (Claude), written from the numbers on this
-                                            card and nothing else. Which read is strongest is Santi's judgement, not a
-                                            measured result.
+Charmane is an AI persona (Claude), written from the numbers on this
+                                            card and nothing else. Which read is strongest is Charmane's
+                                            judgement, not a measured result.
 Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict. </div></details><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
@@ -6326,32 +6564,49 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">
-                                            Santi says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">Charmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
-                                        <div class="aisum"><svg class="santi" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Santi"><circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
-    <g transform="rotate(-7 32 34)"><ellipse cx="32" cy="36" rx="16.5" ry="18.5" fill="#ece7dc"></ellipse>
-        <path d="M15.5 30 C14 18 24 11.5 34 12.5 C44 13.5 50.5 20 48.5 30 C46 24.5 42 22 36 21.5 C40 19.5 30 18 24 21.5 C20 23.5 17 26.5 15.5 30 Z" fill="#0a0b0d"></path>
-        <path d="M20.5 27.5 L28.5 28" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M35.5 26.5 Q40 22 45 24.5" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round" fill="none"></path>
-        <path d="M21 32 L28 32 Q27.6 35 24.5 35 Q21.4 35 21 32 Z" fill="#0a0b0d"></path>
-        <path d="M36 31.5 L43 31.5 Q42.6 34.5 39.5 34.5 Q36.4 34.5 36 31.5 Z" fill="#0a0b0d"></path>
-        <path d="M20 31.8 L29 31.8" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <path d="M35 31.3 L44 31.3" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <rect x="19.5" y="38" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <rect x="34.5" y="37.5" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <path d="M29.5 40.3 Q32 38.8 34.5 39.9" fill="none" stroke="#2fa82f" stroke-width="1.6"></path>
-        <path d="M25.5 48.5 Q32 50 38.5 46.5" fill="none" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M38.5 46.5 Q40 45.7 40.4 44.4" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path></g></svg>
+                                        <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Charmane"><defs><clipPath id="pa-disc-2026-04-DET-CAR"><circle cx="32" cy="32" r="30"></circle></clipPath>
+        <radialGradient id="pa-glow-2026-04-DET-CAR" cx="32" cy="17" r="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d4a73a" stop-opacity="0.55"></stop>
+            <stop offset="1" stop-color="#d4a73a" stop-opacity="0"></stop></radialGradient></defs>
+    <circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
+    <g clip-path="url(#pa-disc-2026-04-DET-CAR)"><circle cx="32" cy="17" r="20" fill="url(#pa-glow-2026-04-DET-CAR)"></circle>
+        <g transform="rotate(-12 32 13)"><ellipse cx="32" cy="13" rx="13" ry="7" fill="#7a4a24" stroke="#d4a73a" stroke-width="1.2"></ellipse>
+            <path d="M26 13 L38 13" stroke="#ece7dc" stroke-width="1.1" stroke-linecap="round"></path>
+            <path d="M28 11.6 L28 14.4 M30.7 11.6 L30.7 14.4 M33.3 11.6 L33.3 14.4 M36 11.6 L36 14.4" stroke="#ece7dc" stroke-width="0.9" stroke-linecap="round"></path></g>
+        <path d="M16 30 C15 20 22 16 32 16 C42 16 49 20 48 30 L50 52 C46 56 42 56 40 50 L24 50 C22 56 18 56 14 52 Z" fill="#0a0b0d"></path>
+        <path d="M10 64 C12 54 20 50 32 50 C44 50 52 54 54 64 Z" fill="#ece7dc"></path>
+        <path d="M22 51 C28 56 36 58 46 53" fill="none" stroke="#9c968a" stroke-width="1.1"></path>
+        <path d="M26 52 C31 58 38 61 50 58" fill="none" stroke="#9c968a" stroke-width="1"></path>
+        <circle cx="22.5" cy="52.5" r="2" fill="#d4a73a"></circle>
+        <rect x="28.5" y="42" width="7" height="9" fill="#e2dccf"></rect>
+        <ellipse cx="32" cy="33" rx="12" ry="14" fill="#ece7dc"></ellipse>
+        <path d="M20 29 C20 21 25 18.5 32 18.5 C39 18.5 44 21 44 29 C41 24 37 22.5 32 23.5 C27 22.5 23 24 20 29 Z" fill="#0a0b0d"></path>
+        <g fill="#2fa82f"><ellipse cx="21.5" cy="25" rx="2.6" ry="1.2" transform="rotate(-50 21.5 25)"></ellipse>
+            <ellipse cx="24" cy="22" rx="2.6" ry="1.2" transform="rotate(-30 24 22)"></ellipse>
+            <ellipse cx="27.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(-12 27.5 20.2)"></ellipse>
+            <ellipse cx="42.5" cy="25" rx="2.6" ry="1.2" transform="rotate(50 42.5 25)"></ellipse>
+            <ellipse cx="40" cy="22" rx="2.6" ry="1.2" transform="rotate(30 40 22)"></ellipse>
+            <ellipse cx="36.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(12 36.5 20.2)"></ellipse></g>
+        <circle cx="32" cy="19.6" r="1.4" fill="#d4a73a"></circle>
+        <path d="M24 29.3 L29.5 29.6" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M34.5 29 Q37.5 26.2 41 27.6" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M24.2 32.5 L29.6 32.5 Q29.2 35 26.9 35 Q24.6 35 24.2 32.5 Z" fill="#0a0b0d"></path>
+        <path d="M34.4 32.2 L39.8 32.2 Q39.4 34.7 37.1 34.7 Q34.8 34.7 34.4 32.2 Z" fill="#0a0b0d"></path>
+        <path d="M23.6 32.3 L30.2 32.3 M33.8 32 L40.4 32" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round"></path>
+        <path d="M23.6 32.3 L22.6 31.4 M40.4 32 L41.4 31.1" stroke="#0a0b0d" stroke-width="1" stroke-linecap="round"></path>
+        <path d="M32 34 Q31 38 32.6 38.6" fill="none" stroke="#9c968a" stroke-width="1.1" stroke-linecap="round"></path>
+        <path d="M27.5 42 Q32 43.4 36.5 40.6" fill="none" stroke="#8c3b4a" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M36.5 40.6 Q37.6 40 37.9 39" fill="none" stroke="#8c3b4a" stroke-width="1.3" stroke-linecap="round"></path></g></svg>
                                             <p class="aisum__text">Carolina scores 31 a game and allows 31.7, the worst defense in the league by points, which is less a game plan than a dare. Detroit is in no position to judge: the Lions gave up 59 to Chicago and allow 5.7 yards a carry, also last. The model projects 58.1 points against a market 51, and the over is the strongest read in this game. Carolina &#x2B;3.5 is the weaker one, though the model has Carolina winning outright by a point. Two Strong tiers in one game sounds impressive until you remember the model has never beaten a closing total.</p></div>
 
                                         <div class="dig__note">
                                             Written Thu Oct 1, 4:02 PM ET against
                                             Detroit Lions &#x2212;3.5 &#xB7; O/U 51.0 (line captured Thu Oct 1, 11:31 AM ET).
-                                            Santiago "Santi" is an AI persona (Claude), written from the numbers on this
-                                            card and nothing else. Which read is strongest is Santi's judgement, not a
-                                            measured result.
+Charmane is an AI persona (Claude), written from the numbers on this
+                                            card and nothing else. Which read is strongest is Charmane's
+                                            judgement, not a measured result.
 Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict. </div></details><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
@@ -6569,32 +6824,49 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">
-                                            Santi says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">Charmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
-                                        <div class="aisum"><svg class="santi" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Santi"><circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
-    <g transform="rotate(-7 32 34)"><ellipse cx="32" cy="36" rx="16.5" ry="18.5" fill="#ece7dc"></ellipse>
-        <path d="M15.5 30 C14 18 24 11.5 34 12.5 C44 13.5 50.5 20 48.5 30 C46 24.5 42 22 36 21.5 C40 19.5 30 18 24 21.5 C20 23.5 17 26.5 15.5 30 Z" fill="#0a0b0d"></path>
-        <path d="M20.5 27.5 L28.5 28" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M35.5 26.5 Q40 22 45 24.5" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round" fill="none"></path>
-        <path d="M21 32 L28 32 Q27.6 35 24.5 35 Q21.4 35 21 32 Z" fill="#0a0b0d"></path>
-        <path d="M36 31.5 L43 31.5 Q42.6 34.5 39.5 34.5 Q36.4 34.5 36 31.5 Z" fill="#0a0b0d"></path>
-        <path d="M20 31.8 L29 31.8" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <path d="M35 31.3 L44 31.3" stroke="#0a0b0d" stroke-width="1.8" stroke-linecap="round"></path>
-        <rect x="19.5" y="38" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <rect x="34.5" y="37.5" width="10" height="5.5" rx="2.2" fill="none" stroke="#2fa82f" stroke-width="1.6"></rect>
-        <path d="M29.5 40.3 Q32 38.8 34.5 39.9" fill="none" stroke="#2fa82f" stroke-width="1.6"></path>
-        <path d="M25.5 48.5 Q32 50 38.5 46.5" fill="none" stroke="#0a0b0d" stroke-width="2.2" stroke-linecap="round"></path>
-        <path d="M38.5 46.5 Q40 45.7 40.4 44.4" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path></g></svg>
+                                        <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Charmane"><defs><clipPath id="pa-disc-2026-04-ATL-NO"><circle cx="32" cy="32" r="30"></circle></clipPath>
+        <radialGradient id="pa-glow-2026-04-ATL-NO" cx="32" cy="17" r="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d4a73a" stop-opacity="0.55"></stop>
+            <stop offset="1" stop-color="#d4a73a" stop-opacity="0"></stop></radialGradient></defs>
+    <circle cx="32" cy="32" r="31" fill="#14171b" stroke="#228b22" stroke-width="2"></circle>
+    <g clip-path="url(#pa-disc-2026-04-ATL-NO)"><circle cx="32" cy="17" r="20" fill="url(#pa-glow-2026-04-ATL-NO)"></circle>
+        <g transform="rotate(-12 32 13)"><ellipse cx="32" cy="13" rx="13" ry="7" fill="#7a4a24" stroke="#d4a73a" stroke-width="1.2"></ellipse>
+            <path d="M26 13 L38 13" stroke="#ece7dc" stroke-width="1.1" stroke-linecap="round"></path>
+            <path d="M28 11.6 L28 14.4 M30.7 11.6 L30.7 14.4 M33.3 11.6 L33.3 14.4 M36 11.6 L36 14.4" stroke="#ece7dc" stroke-width="0.9" stroke-linecap="round"></path></g>
+        <path d="M16 30 C15 20 22 16 32 16 C42 16 49 20 48 30 L50 52 C46 56 42 56 40 50 L24 50 C22 56 18 56 14 52 Z" fill="#0a0b0d"></path>
+        <path d="M10 64 C12 54 20 50 32 50 C44 50 52 54 54 64 Z" fill="#ece7dc"></path>
+        <path d="M22 51 C28 56 36 58 46 53" fill="none" stroke="#9c968a" stroke-width="1.1"></path>
+        <path d="M26 52 C31 58 38 61 50 58" fill="none" stroke="#9c968a" stroke-width="1"></path>
+        <circle cx="22.5" cy="52.5" r="2" fill="#d4a73a"></circle>
+        <rect x="28.5" y="42" width="7" height="9" fill="#e2dccf"></rect>
+        <ellipse cx="32" cy="33" rx="12" ry="14" fill="#ece7dc"></ellipse>
+        <path d="M20 29 C20 21 25 18.5 32 18.5 C39 18.5 44 21 44 29 C41 24 37 22.5 32 23.5 C27 22.5 23 24 20 29 Z" fill="#0a0b0d"></path>
+        <g fill="#2fa82f"><ellipse cx="21.5" cy="25" rx="2.6" ry="1.2" transform="rotate(-50 21.5 25)"></ellipse>
+            <ellipse cx="24" cy="22" rx="2.6" ry="1.2" transform="rotate(-30 24 22)"></ellipse>
+            <ellipse cx="27.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(-12 27.5 20.2)"></ellipse>
+            <ellipse cx="42.5" cy="25" rx="2.6" ry="1.2" transform="rotate(50 42.5 25)"></ellipse>
+            <ellipse cx="40" cy="22" rx="2.6" ry="1.2" transform="rotate(30 40 22)"></ellipse>
+            <ellipse cx="36.5" cy="20.2" rx="2.6" ry="1.2" transform="rotate(12 36.5 20.2)"></ellipse></g>
+        <circle cx="32" cy="19.6" r="1.4" fill="#d4a73a"></circle>
+        <path d="M24 29.3 L29.5 29.6" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M34.5 29 Q37.5 26.2 41 27.6" fill="none" stroke="#0a0b0d" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M24.2 32.5 L29.6 32.5 Q29.2 35 26.9 35 Q24.6 35 24.2 32.5 Z" fill="#0a0b0d"></path>
+        <path d="M34.4 32.2 L39.8 32.2 Q39.4 34.7 37.1 34.7 Q34.8 34.7 34.4 32.2 Z" fill="#0a0b0d"></path>
+        <path d="M23.6 32.3 L30.2 32.3 M33.8 32 L40.4 32" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round"></path>
+        <path d="M23.6 32.3 L22.6 31.4 M40.4 32 L41.4 31.1" stroke="#0a0b0d" stroke-width="1" stroke-linecap="round"></path>
+        <path d="M32 34 Q31 38 32.6 38.6" fill="none" stroke="#9c968a" stroke-width="1.1" stroke-linecap="round"></path>
+        <path d="M27.5 42 Q32 43.4 36.5 40.6" fill="none" stroke="#8c3b4a" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M36.5 40.6 Q37.6 40 37.9 39" fill="none" stroke="#8c3b4a" stroke-width="1.3" stroke-linecap="round"></path></g></svg>
                                             <p class="aisum__text">Atlanta has the worst turnover margin in the league, minus two a game, and New Orleans is 27th, so this will be decided by which team hands the ball over less enthusiastically. New Orleans allows 2.75 yards a carry, best in football, against an Atlanta offense that managed three points in a 34-3 loss to Carolina. The model has a total of 42 against a market 47.5, and the under is the stronger read. New Orleans -2.5 is the weaker one; the model likes the Saints by 4.8, but a team giving the ball away 1.3 times a game more than it takes it has not earned trust. Monday night, low expectations.</p></div>
 
                                         <div class="dig__note">
                                             Written Thu Oct 1, 4:02 PM ET against
                                             New Orleans Saints &#x2212;2.5 &#xB7; O/U 47.5 (line captured Thu Oct 1, 11:31 AM ET).
-                                            Santiago "Santi" is an AI persona (Claude), written from the numbers on this
-                                            card and nothing else. Which read is strongest is Santi's judgement, not a
-                                            measured result.
+Charmane is an AI persona (Claude), written from the numbers on this
+                                            card and nothing else. Which read is strongest is Charmane's
+                                            judgement, not a measured result.
 Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict. </div></details><div class="dig__note">
                                             SoS is the average net rating of opponents faced, so ratings
                                             are comparable between a team that has played contenders and
