@@ -905,6 +905,30 @@ a { color: inherit; text-decoration: none; }
 
 .tstats__modes { display: flex; gap: 6px; margin: 10px 0 2px; }
 
+/* The game summary: Santi beside his paragraph. Prose, so a reading measure rather than
+   the grid's full width. The avatar never shrinks; the text wraps beside it, and below
+   480px they stack so a phone is not left with a one-word-wide column. */
+.aisum {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin: 10px 0 6px;
+}
+
+.aisum .santi { flex: 0 0 auto; }
+
+@media (max-width: 480px) {
+    .aisum { flex-direction: column; gap: 8px; }
+}
+
+.aisum__text {
+    margin: 0;
+    min-width: 0;
+    max-width: 68ch;
+    line-height: 1.55;
+    color: var(--chalk);
+}
+
 /* Core / All. Every row is in the document; the board's one attribute hides the extras,
    so the live page and an export switch it the same way. */
 .board[data-stats="core"] .tstats [data-core="0"] { display: none; }
