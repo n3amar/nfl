@@ -1336,6 +1336,94 @@ a { color: inherit; text-decoration: none; }
     border-radius: 7px;
 }
 
+/* ── Anytime TD leaders (NFL) ─────────────────────────────────────────────────
+   Top 5 / Top 10 is two visually hidden radios and these rules, so it works in an
+   export with no script. Rows 6-10 carry .tdtop__more and are shown only while the
+   Top 10 radio is checked. */
+.tdtop {
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    background: var(--panel);
+    border: 1px solid var(--rule-soft);
+    border-radius: 7px;
+}
+
+.tdtop__r { position: absolute; opacity: 0; pointer-events: none; }
+
+.tdtop__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 12px;
+    margin-bottom: 8px;
+}
+
+.tdtop__title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--chalk);
+}
+
+.tdtop__meta { font-family: var(--mono); font-size: 10.5px; color: var(--chalk-mute); }
+.tdtop__btns { margin-left: auto; display: flex; gap: 4px; }
+
+.tdtop__btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    color: var(--chalk-dim);
+    cursor: pointer;
+}
+
+.tdtop__btn:hover { color: var(--chalk); }
+
+#tdtop5:checked ~ .tdtop__head .tdtop__btn--5,
+#tdtop10:checked ~ .tdtop__head .tdtop__btn--10 {
+    color: var(--signal);
+    border-color: var(--signal-dim);
+    background: var(--signal-wash);
+}
+
+#tdtop5:focus-visible ~ .tdtop__head .tdtop__btn--5,
+#tdtop10:focus-visible ~ .tdtop__head .tdtop__btn--10 { outline: 1px solid var(--signal); }
+
+.tdtop__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 2px 18px;
+}
+
+.tdtop__more { display: none; }
+#tdtop10:checked ~ .tdtop__list .tdtop__more { display: block; }
+
+.tdtop__link {
+    display: grid;
+    grid-template-columns: 22px 1fr auto auto;
+    align-items: baseline;
+    gap: 8px;
+    padding: 4px 2px;
+    border-bottom: 1px solid var(--rule-soft);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--chalk-dim);
+    text-decoration: none;
+}
+
+.tdtop__link:hover { color: var(--chalk); }
+.tdtop__n { color: var(--chalk-mute); }
+.tdtop__who { color: var(--chalk); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tdtop__pos, .tdtop__match { color: var(--chalk-mute); }
+.tdtop__p { color: var(--signal); font-weight: 600; }
+
 .facets__open {
     font-family: var(--mono);
     font-size: 11px;

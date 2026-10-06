@@ -1336,6 +1336,94 @@ a { color: inherit; text-decoration: none; }
     border-radius: 7px;
 }
 
+/* ── Anytime TD leaders (NFL) ─────────────────────────────────────────────────
+   Top 5 / Top 10 is two visually hidden radios and these rules, so it works in an
+   export with no script. Rows 6-10 carry .tdtop__more and are shown only while the
+   Top 10 radio is checked. */
+.tdtop {
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    background: var(--panel);
+    border: 1px solid var(--rule-soft);
+    border-radius: 7px;
+}
+
+.tdtop__r { position: absolute; opacity: 0; pointer-events: none; }
+
+.tdtop__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 12px;
+    margin-bottom: 8px;
+}
+
+.tdtop__title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--chalk);
+}
+
+.tdtop__meta { font-family: var(--mono); font-size: 10.5px; color: var(--chalk-mute); }
+.tdtop__btns { margin-left: auto; display: flex; gap: 4px; }
+
+.tdtop__btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    color: var(--chalk-dim);
+    cursor: pointer;
+}
+
+.tdtop__btn:hover { color: var(--chalk); }
+
+#tdtop5:checked ~ .tdtop__head .tdtop__btn--5,
+#tdtop10:checked ~ .tdtop__head .tdtop__btn--10 {
+    color: var(--signal);
+    border-color: var(--signal-dim);
+    background: var(--signal-wash);
+}
+
+#tdtop5:focus-visible ~ .tdtop__head .tdtop__btn--5,
+#tdtop10:focus-visible ~ .tdtop__head .tdtop__btn--10 { outline: 1px solid var(--signal); }
+
+.tdtop__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 2px 18px;
+}
+
+.tdtop__more { display: none; }
+#tdtop10:checked ~ .tdtop__list .tdtop__more { display: block; }
+
+.tdtop__link {
+    display: grid;
+    grid-template-columns: 22px 1fr auto auto;
+    align-items: baseline;
+    gap: 8px;
+    padding: 4px 2px;
+    border-bottom: 1px solid var(--rule-soft);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--chalk-dim);
+    text-decoration: none;
+}
+
+.tdtop__link:hover { color: var(--chalk); }
+.tdtop__n { color: var(--chalk-mute); }
+.tdtop__who { color: var(--chalk); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tdtop__pos, .tdtop__match { color: var(--chalk-mute); }
+.tdtop__p { color: var(--signal); font-weight: 600; }
+
 .facets__open {
     font-family: var(--mono);
     font-size: 11px;
@@ -2694,7 +2782,43 @@ a { color: inherit; text-decoration: none; }
                         it is most sure about, shown beside how sure it has earned the right to be.
                         <strong>This is not a list of bets.</strong>Ratings from <strong>64 games played, primed with 2025 ratings carried at 85%</strong>. Click a game for the numbers behind it.</p></header><div class="filter" data-filter-bar hidden><span class="filter__what"></span>
                     <span class="filter__count"></span>
-                    <button class="filter__clear" data-filter-clear>Show all</button></div><div class="facets" data-facets><details class="facets__panel"><summary class="facets__open">Filter the board</summary>
+                    <button class="filter__clear" data-filter-clear>Show all</button></div><section class="tdtop"><input type="radio" name="tdtop" id="tdtop5" class="tdtop__r" checked>
+                    <input type="radio" name="tdtop" id="tdtop10" class="tdtop__r">
+                    <div class="tdtop__head"><span class="tdtop__title">Anytime TD leaders</span>
+                        <span class="tdtop__meta">from every card's Player watch · red-zone usage + rushing/receiving TDs</span>
+                        <span class="tdtop__btns"><label for="tdtop5" class="tdtop__btn tdtop__btn--5">Top 5</label>
+                            <label for="tdtop10" class="tdtop__btn tdtop__btn--10">Top 10</label></span></div>
+                    <ol class="tdtop__list"><li class="tdtop__row "><a class="tdtop__link" href="#g-baltimore-ravens-atlanta-falcons" data-open-card="g-baltimore-ravens-atlanta-falcons" title="Derrick Henry: 7 TD in 4 game(s) with a line this season. Opens the game."><span class="tdtop__n">1.</span>
+                                    <span class="tdtop__who">Derrick Henry <span class="tdtop__pos">(RB)</span></span>
+                                    <span class="tdtop__match">BAL vs ATL</span>
+                                    <span class="tdtop__p">73%</span></a></li><li class="tdtop__row "><a class="tdtop__link" href="#g-detroit-lions-arizona-cardinals" data-open-card="g-detroit-lions-arizona-cardinals" title="Jahmyr Gibbs: 7 TD in 4 game(s) with a line this season. Opens the game."><span class="tdtop__n">2.</span>
+                                    <span class="tdtop__who">Jahmyr Gibbs <span class="tdtop__pos">(RB)</span></span>
+                                    <span class="tdtop__match">DET vs ARI</span>
+                                    <span class="tdtop__p">71%</span></a></li><li class="tdtop__row "><a class="tdtop__link" href="#g-tampa-bay-buccaneers-dallas-cowboys" data-open-card="g-tampa-bay-buccaneers-dallas-cowboys" title="Javonte Williams: 6 TD in 4 game(s) with a line this season. Opens the game."><span class="tdtop__n">3.</span>
+                                    <span class="tdtop__who">Javonte Williams <span class="tdtop__pos">(RB)</span></span>
+                                    <span class="tdtop__match">DAL vs TB</span>
+                                    <span class="tdtop__p">68%</span></a></li><li class="tdtop__row "><a class="tdtop__link" href="#g-indianapolis-colts-pittsburgh-steelers" data-open-card="g-indianapolis-colts-pittsburgh-steelers" title="Jonathan Taylor: 6 TD in 4 game(s) with a line this season. Opens the game."><span class="tdtop__n">4.</span>
+                                    <span class="tdtop__who">Jonathan Taylor <span class="tdtop__pos">(RB)</span></span>
+                                    <span class="tdtop__match">IND vs PIT</span>
+                                    <span class="tdtop__p">65%</span></a></li><li class="tdtop__row "><a class="tdtop__link" href="#g-san-francisco-49ers-seattle-seahawks" data-open-card="g-san-francisco-49ers-seattle-seahawks" title="Christian McCaffrey: 4 TD in 4 game(s) with a line this season. Opens the game."><span class="tdtop__n">5.</span>
+                                    <span class="tdtop__who">Christian McCaffrey <span class="tdtop__pos">(RB)</span></span>
+                                    <span class="tdtop__match">SF vs SEA</span>
+                                    <span class="tdtop__p">63%</span></a></li><li class="tdtop__row tdtop__more"><a class="tdtop__link" href="#g-chicago-bears-green-bay-packers" data-open-card="g-chicago-bears-green-bay-packers" title="D&#x27;Andre Swift: 3 TD in 4 game(s) with a line this season. Opens the game."><span class="tdtop__n">6.</span>
+                                    <span class="tdtop__who">D&#x27;Andre Swift <span class="tdtop__pos">(RB)</span></span>
+                                    <span class="tdtop__match">CHI vs GB</span>
+                                    <span class="tdtop__p">61%</span></a></li><li class="tdtop__row tdtop__more"><a class="tdtop__link" href="#g-buffalo-bills-los-angeles-rams" data-open-card="g-buffalo-bills-los-angeles-rams" title="Kyren Williams: 4 TD in 4 game(s) with a line this season. Opens the game."><span class="tdtop__n">7.</span>
+                                    <span class="tdtop__who">Kyren Williams <span class="tdtop__pos">(RB)</span></span>
+                                    <span class="tdtop__match">LA vs BUF</span>
+                                    <span class="tdtop__p">59%</span></a></li><li class="tdtop__row tdtop__more"><a class="tdtop__link" href="#g-baltimore-ravens-atlanta-falcons" data-open-card="g-baltimore-ravens-atlanta-falcons" title="Bijan Robinson: 5 TD in 4 game(s) with a line this season. Opens the game."><span class="tdtop__n">8.</span>
+                                    <span class="tdtop__who">Bijan Robinson <span class="tdtop__pos">(RB)</span></span>
+                                    <span class="tdtop__match">ATL vs BAL</span>
+                                    <span class="tdtop__p">58%</span></a></li><li class="tdtop__row tdtop__more"><a class="tdtop__link" href="#g-detroit-lions-arizona-cardinals" data-open-card="g-detroit-lions-arizona-cardinals" title="Amon-Ra St. Brown: 5 TD in 4 game(s) with a line this season. Opens the game."><span class="tdtop__n">9.</span>
+                                    <span class="tdtop__who">Amon-Ra St. Brown <span class="tdtop__pos">(WR)</span></span>
+                                    <span class="tdtop__match">DET vs ARI</span>
+                                    <span class="tdtop__p">57%</span></a></li><li class="tdtop__row tdtop__more"><a class="tdtop__link" href="#g-buffalo-bills-los-angeles-rams" data-open-card="g-buffalo-bills-los-angeles-rams" title="James Cook: 3 TD in 4 game(s) with a line this season. Opens the game."><span class="tdtop__n">10.</span>
+                                    <span class="tdtop__who">James Cook <span class="tdtop__pos">(RB)</span></span>
+                                    <span class="tdtop__match">BUF vs LA</span>
+                                    <span class="tdtop__p">56%</span></a></li></ol></section><div class="facets" data-facets><details class="facets__panel"><summary class="facets__open">Filter the board</summary>
 
                     <div class="facets__group"><span class="facets__k">Spread tier</span><button type="button" class="chip" data-facet="st" data-value="strong">Strong &#x2265;60%</button><button type="button" class="chip" data-facet="st" data-value="lean">Lean 55&#x2013;59%</button><button type="button" class="chip" data-facet="st" data-value="flip">Coin flip</button></div>
 
@@ -2712,7 +2836,7 @@ a { color: inherit; text-decoration: none; }
                 <p class="facets__record" data-facet-record="spread" hidden>Spread picks measured 49.6% against the close over 1,535 games. A tier is the model&#x27;s conviction, not edge &#x2014; 52.4% is break-even.</p>
                 <p class="facets__record" data-facet-record="total" hidden>Totals picks measured 48.4% against the close over 1,535 games. A tier is the model&#x27;s conviction, not edge &#x2014; 52.4% is break-even.</p>
                 <p class="facets__record" data-facet-record="ml" hidden>Moneyline, measured: Moneyline vs close over 1,011 &#x2014; Backed 1,011 of 1,535 games at 3% minimum edge, flat stake. Returns -11.6% at the prices actually posted. A price band narrows what you are reading; no band has ever cleared the vig.</p>
-                <p class="facets__record" data-facet-record="sc" hidden>Scoring watch is a raw rank comparison of season-to-date points, with no minimum games, and has never been measured against a total. It says what the numbers so far look like, not which side of a total to take.</p></div><div class="board" data-stats="core"><article class="game " data-game="Tampa Bay Buccaneers@Dallas Cowboys" data-f-mkt="1" data-f-st="strong" data-f-tt="strong" data-f-ml="heavy" data-f-mlp="-450" data-f-gap="3-7" data-f-day="thu" data-f-slot="night" style="animation-delay:0ms"><div class="game__hit" data-toggle><div class="game__when"><span>Thu 8 Oct &#xB7; 17:15</span>
+                <p class="facets__record" data-facet-record="sc" hidden>Scoring watch is a raw rank comparison of season-to-date points, with no minimum games, and has never been measured against a total. It says what the numbers so far look like, not which side of a total to take.</p></div><div class="board" data-stats="core"><article class="game " id="g-tampa-bay-buccaneers-dallas-cowboys" data-game="Tampa Bay Buccaneers@Dallas Cowboys" data-f-mkt="1" data-f-st="strong" data-f-tt="strong" data-f-ml="heavy" data-f-mlp="-450" data-f-gap="3-7" data-f-day="thu" data-f-slot="night" style="animation-delay:0ms"><div class="game__hit" data-toggle><div class="game__when"><span>Thu 8 Oct &#xB7; 17:15</span>
                                 <span></span></div>
 
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/TB.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Tampa Bay Buccaneers</span></span>
@@ -2933,7 +3057,63 @@ a { color: inherit; text-decoration: none; }
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
+                                            Player watch
+                                            <span class="tstats__meta">
+                                                top 5 by chance of a rushing or receiving TD
+                                            </span></summary>
+
+                                        <div class="tstats__cols"><table class="grid tstats__grid pwatch"><thead><tr><th>Tampa Bay Buccaneers</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Sean Tucker (RB)</td>
+                                                                <td>1</td>
+                                                                <td>1</td>
+                                                                <td>35%</td></tr><tr><td class="tstats__k">Bucky Irving (RB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>32%</td></tr><tr><td class="tstats__k">Kenny Gainwell (RB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>31%</td></tr><tr><td class="tstats__k">Emeka Egbuka (WR)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>27%</td></tr><tr><td class="tstats__k">Tez Johnson (WR)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>16%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>Dallas Cowboys</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Javonte Williams (RB)</td>
+                                                                <td>4</td>
+                                                                <td>6</td>
+                                                                <td>68%</td></tr><tr><td class="tstats__k">CeeDee Lamb (WR)</td>
+                                                                <td>4</td>
+                                                                <td>4</td>
+                                                                <td>42%</td></tr><tr><td class="tstats__k">Jake Ferguson (TE)</td>
+                                                                <td>4</td>
+                                                                <td>3</td>
+                                                                <td>35%</td></tr><tr><td class="tstats__k">George Pickens (WR)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>31%</td></tr><tr><td class="tstats__k">Ryan Flournoy (WR)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>22%</td></tr></tbody></table></div>
+
+                                        <div class="dig__note">
+                                            Not market-tested, no prices. Lineups: Tampa Bay Buccaneers from week
+                                            4, Dallas Cowboys from week
+                                            4, players with a stat line only; an injury is not
+                                            seen until a game is missed. GP is games with a line, so a player with one or two
+                                            leans mostly on last season. Built from touchdown opportunity as well as
+                                            touchdowns: carries and targets inside the 10 and the 20, each worth what that
+                                            touch scored last season, blended with rushing + receiving touchdowns, season to
+                                            date, shrunk toward last season, through a Poisson.
+                                            Quarterbacks count only for touchdowns they run in. Measured walk-forward:
+                                            <span class="pwatch__verdict" title="Panel players (top 5 per team per game by P(1&#x2B; TD), QB/RB/WR/TE with a line), regular season, rushing &#x2B; receiving TDs, shrunk Poisson rate vs the player&#x27;s own raw rate on identical player-games. Brier skill &#x2B;5.3%, calibration error 2.4%, 1 of 8 reliability bins past 2 SE. k 6, No recalibration. Red-zone usage blended in (w 0.625, k 1). From 8 games on: z &#x2B;2.3 on 1,171 panel player-games. Unpriced: no TD prop line is captured.">anytime TD beats the player&#x27;s own raw rate (z &#x2B;9.6, 2,720 player-games, 2025); hover for calibration and how it holds up from eight games on.</span></div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
                                         <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Sharmane"><defs><clipPath id="pa-disc-2026-05-TB-DAL"><circle cx="32" cy="32" r="30"></circle></clipPath>
@@ -2981,7 +3161,7 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Philadelphia Eagles@Jacksonville Jaguars" data-f-mkt="1" data-f-st="strong" data-f-tt="lean" data-f-ml="heavy" data-f-mlp="-310" data-f-gap="3-7" data-f-day="sun" data-f-slot="early" style="animation-delay:22ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 06:30</span>
+                                </div></div></article><article class="game " id="g-philadelphia-eagles-jacksonville-jaguars" data-game="Philadelphia Eagles@Jacksonville Jaguars" data-f-mkt="1" data-f-st="strong" data-f-tt="lean" data-f-ml="heavy" data-f-mlp="-310" data-f-gap="3-7" data-f-day="sun" data-f-slot="early" style="animation-delay:22ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 06:30</span>
                                 <span></span></div>
 
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/PHI.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Philadelphia Eagles</span></span>
@@ -3205,7 +3385,63 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
+                                            Player watch
+                                            <span class="tstats__meta">
+                                                top 5 by chance of a rushing or receiving TD
+                                            </span></summary>
+
+                                        <div class="tstats__cols"><table class="grid tstats__grid pwatch"><thead><tr><th>Philadelphia Eagles</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Jalen Hurts (QB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>30%</td></tr><tr><td class="tstats__k">Saquon Barkley (RB)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>29%</td></tr><tr><td class="tstats__k">Darius Cooper (WR)</td>
+                                                                <td>4</td>
+                                                                <td>3</td>
+                                                                <td>25%</td></tr><tr><td class="tstats__k">Dontayvion Wicks (WR)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>25%</td></tr><tr><td class="tstats__k">Tank Bigsby (RB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>22%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>Jacksonville Jaguars</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Bhayshul Tuten (RB)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>37%</td></tr><tr><td class="tstats__k">Chris Rodriguez Jr. (RB)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>33%</td></tr><tr><td class="tstats__k">Parker Washington (WR)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>32%</td></tr><tr><td class="tstats__k">Jakobi Meyers (WR)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>26%</td></tr><tr><td class="tstats__k">Brenton Strange (TE)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>20%</td></tr></tbody></table></div>
+
+                                        <div class="dig__note">
+                                            Not market-tested, no prices. Lineups: Philadelphia Eagles from week
+                                            4, Jacksonville Jaguars from week
+                                            4, players with a stat line only; an injury is not
+                                            seen until a game is missed. GP is games with a line, so a player with one or two
+                                            leans mostly on last season. Built from touchdown opportunity as well as
+                                            touchdowns: carries and targets inside the 10 and the 20, each worth what that
+                                            touch scored last season, blended with rushing + receiving touchdowns, season to
+                                            date, shrunk toward last season, through a Poisson.
+                                            Quarterbacks count only for touchdowns they run in. Measured walk-forward:
+                                            <span class="pwatch__verdict" title="Panel players (top 5 per team per game by P(1&#x2B; TD), QB/RB/WR/TE with a line), regular season, rushing &#x2B; receiving TDs, shrunk Poisson rate vs the player&#x27;s own raw rate on identical player-games. Brier skill &#x2B;5.3%, calibration error 2.4%, 1 of 8 reliability bins past 2 SE. k 6, No recalibration. Red-zone usage blended in (w 0.625, k 1). From 8 games on: z &#x2B;2.3 on 1,171 panel player-games. Unpriced: no TD prop line is captured.">anytime TD beats the player&#x27;s own raw rate (z &#x2B;9.6, 2,720 player-games, 2025); hover for calibration and how it holds up from eight games on.</span></div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
                                         <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Sharmane"><defs><clipPath id="pa-disc-2026-05-PHI-JAX"><circle cx="32" cy="32" r="30"></circle></clipPath>
@@ -3253,7 +3489,7 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Chicago Bears@Green Bay Packers" data-f-mkt="1" data-f-st="strong" data-f-tt="lean" data-f-ml="fav" data-f-mlp="-148" data-f-gap="3-7" data-f-day="sun" data-f-slot="early" style="animation-delay:44ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " id="g-chicago-bears-green-bay-packers" data-game="Chicago Bears@Green Bay Packers" data-f-mkt="1" data-f-st="strong" data-f-tt="lean" data-f-ml="fav" data-f-mlp="-148" data-f-gap="3-7" data-f-day="sun" data-f-slot="early" style="animation-delay:44ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/CHI.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Chicago Bears</span></span>
@@ -3475,7 +3711,63 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
+                                            Player watch
+                                            <span class="tstats__meta">
+                                                top 5 by chance of a rushing or receiving TD
+                                            </span></summary>
+
+                                        <div class="tstats__cols"><table class="grid tstats__grid pwatch"><thead><tr><th>Chicago Bears</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">D&#x27;Andre Swift (RB)</td>
+                                                                <td>4</td>
+                                                                <td>3</td>
+                                                                <td>61%</td></tr><tr><td class="tstats__k">Kyle Monangai (RB)</td>
+                                                                <td>4</td>
+                                                                <td>3</td>
+                                                                <td>51%</td></tr><tr><td class="tstats__k">Colston Loveland (TE)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>27%</td></tr><tr><td class="tstats__k">Luther Burden III (WR)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>26%</td></tr><tr><td class="tstats__k">Rome Odunze (WR)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>23%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>Green Bay Packers</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Christian Watson (WR)</td>
+                                                                <td>4</td>
+                                                                <td>4</td>
+                                                                <td>46%</td></tr><tr><td class="tstats__k">MarShawn Lloyd (RB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>39%</td></tr><tr><td class="tstats__k">Tucker Kraft (TE)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>37%</td></tr><tr><td class="tstats__k">Matthew Golden (WR)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>26%</td></tr><tr><td class="tstats__k">Chris Brooks (RB)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>17%</td></tr></tbody></table></div>
+
+                                        <div class="dig__note">
+                                            Not market-tested, no prices. Lineups: Chicago Bears from week
+                                            4, Green Bay Packers from week
+                                            4, players with a stat line only; an injury is not
+                                            seen until a game is missed. GP is games with a line, so a player with one or two
+                                            leans mostly on last season. Built from touchdown opportunity as well as
+                                            touchdowns: carries and targets inside the 10 and the 20, each worth what that
+                                            touch scored last season, blended with rushing + receiving touchdowns, season to
+                                            date, shrunk toward last season, through a Poisson.
+                                            Quarterbacks count only for touchdowns they run in. Measured walk-forward:
+                                            <span class="pwatch__verdict" title="Panel players (top 5 per team per game by P(1&#x2B; TD), QB/RB/WR/TE with a line), regular season, rushing &#x2B; receiving TDs, shrunk Poisson rate vs the player&#x27;s own raw rate on identical player-games. Brier skill &#x2B;5.3%, calibration error 2.4%, 1 of 8 reliability bins past 2 SE. k 6, No recalibration. Red-zone usage blended in (w 0.625, k 1). From 8 games on: z &#x2B;2.3 on 1,171 panel player-games. Unpriced: no TD prop line is captured.">anytime TD beats the player&#x27;s own raw rate (z &#x2B;9.6, 2,720 player-games, 2025); hover for calibration and how it holds up from eight games on.</span></div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
                                         <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Sharmane"><defs><clipPath id="pa-disc-2026-05-CHI-GB"><circle cx="32" cy="32" r="30"></circle></clipPath>
@@ -3523,7 +3815,7 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Cincinnati Bengals@Miami Dolphins" data-f-mkt="1" data-f-st="strong" data-f-tt="lean" data-f-ml="heavy" data-f-mlp="-380" data-f-gap="0-3" data-f-day="sun" data-f-slot="early" style="animation-delay:66ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " id="g-cincinnati-bengals-miami-dolphins" data-game="Cincinnati Bengals@Miami Dolphins" data-f-mkt="1" data-f-st="strong" data-f-tt="lean" data-f-ml="heavy" data-f-mlp="-380" data-f-gap="0-3" data-f-day="sun" data-f-slot="early" style="animation-delay:66ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/CIN.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Cincinnati Bengals</span></span>
@@ -3746,7 +4038,63 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
+                                            Player watch
+                                            <span class="tstats__meta">
+                                                top 5 by chance of a rushing or receiving TD
+                                            </span></summary>
+
+                                        <div class="tstats__cols"><table class="grid tstats__grid pwatch"><thead><tr><th>Cincinnati Bengals</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Chase Brown (RB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>40%</td></tr><tr><td class="tstats__k">Mitchell Tinsley (WR)</td>
+                                                                <td>1</td>
+                                                                <td>0</td>
+                                                                <td>36%</td></tr><tr><td class="tstats__k">Ja&#x27;Marr Chase (WR)</td>
+                                                                <td>4</td>
+                                                                <td>3</td>
+                                                                <td>36%</td></tr><tr><td class="tstats__k">Mike Gesicki (TE)</td>
+                                                                <td>3</td>
+                                                                <td>3</td>
+                                                                <td>31%</td></tr><tr><td class="tstats__k">Tee Higgins (WR)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>30%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>Miami Dolphins</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Ollie Gordon II (RB)</td>
+                                                                <td>3</td>
+                                                                <td>2</td>
+                                                                <td>26%</td></tr><tr><td class="tstats__k">Malik Washington (WR)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>19%</td></tr><tr><td class="tstats__k">Malik Willis (QB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>18%</td></tr><tr><td class="tstats__k">Kevin Coleman Jr. (WR)</td>
+                                                                <td>3</td>
+                                                                <td>0</td>
+                                                                <td>15%</td></tr><tr><td class="tstats__k">Jaylen Wright (RB)</td>
+                                                                <td>3</td>
+                                                                <td>0</td>
+                                                                <td>15%</td></tr></tbody></table></div>
+
+                                        <div class="dig__note">
+                                            Not market-tested, no prices. Lineups: Cincinnati Bengals from week
+                                            4, Miami Dolphins from week
+                                            4, players with a stat line only; an injury is not
+                                            seen until a game is missed. GP is games with a line, so a player with one or two
+                                            leans mostly on last season. Built from touchdown opportunity as well as
+                                            touchdowns: carries and targets inside the 10 and the 20, each worth what that
+                                            touch scored last season, blended with rushing + receiving touchdowns, season to
+                                            date, shrunk toward last season, through a Poisson.
+                                            Quarterbacks count only for touchdowns they run in. Measured walk-forward:
+                                            <span class="pwatch__verdict" title="Panel players (top 5 per team per game by P(1&#x2B; TD), QB/RB/WR/TE with a line), regular season, rushing &#x2B; receiving TDs, shrunk Poisson rate vs the player&#x27;s own raw rate on identical player-games. Brier skill &#x2B;5.3%, calibration error 2.4%, 1 of 8 reliability bins past 2 SE. k 6, No recalibration. Red-zone usage blended in (w 0.625, k 1). From 8 games on: z &#x2B;2.3 on 1,171 panel player-games. Unpriced: no TD prop line is captured.">anytime TD beats the player&#x27;s own raw rate (z &#x2B;9.6, 2,720 player-games, 2025); hover for calibration and how it holds up from eight games on.</span></div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
                                         <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Sharmane"><defs><clipPath id="pa-disc-2026-05-CIN-MIA"><circle cx="32" cy="32" r="30"></circle></clipPath>
@@ -3794,7 +4142,7 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Las Vegas Raiders@New England Patriots" data-f-mkt="1" data-f-st="lean" data-f-tt="strong" data-f-ml="fav" data-f-mlp="-195" data-f-gap="3-7" data-f-day="sun" data-f-slot="early" style="animation-delay:88ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " id="g-las-vegas-raiders-new-england-patriots" data-game="Las Vegas Raiders@New England Patriots" data-f-mkt="1" data-f-st="lean" data-f-tt="strong" data-f-ml="fav" data-f-mlp="-195" data-f-gap="3-7" data-f-day="sun" data-f-slot="early" style="animation-delay:88ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/LV.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Las Vegas Raiders</span></span>
@@ -4017,7 +4365,63 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
+                                            Player watch
+                                            <span class="tstats__meta">
+                                                top 5 by chance of a rushing or receiving TD
+                                            </span></summary>
+
+                                        <div class="tstats__cols"><table class="grid tstats__grid pwatch"><thead><tr><th>Las Vegas Raiders</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Ashton Jeanty (RB)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>54%</td></tr><tr><td class="tstats__k">Brock Bowers (TE)</td>
+                                                                <td>2</td>
+                                                                <td>2</td>
+                                                                <td>48%</td></tr><tr><td class="tstats__k">Cody White (WR)</td>
+                                                                <td>4</td>
+                                                                <td>3</td>
+                                                                <td>23%</td></tr><tr><td class="tstats__k">Tre Tucker (WR)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>20%</td></tr><tr><td class="tstats__k">Mike Washington Jr. (RB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>20%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>New England Patriots</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Rhamondre Stevenson (RB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>32%</td></tr><tr><td class="tstats__k">TreVeyon Henderson (RB)</td>
+                                                                <td>3</td>
+                                                                <td>1</td>
+                                                                <td>31%</td></tr><tr><td class="tstats__k">Romeo Doubs (WR)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>29%</td></tr><tr><td class="tstats__k">Eli Raridon (TE)</td>
+                                                                <td>3</td>
+                                                                <td>1</td>
+                                                                <td>22%</td></tr><tr><td class="tstats__k">Hunter Henry (TE)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>17%</td></tr></tbody></table></div>
+
+                                        <div class="dig__note">
+                                            Not market-tested, no prices. Lineups: Las Vegas Raiders from week
+                                            4, New England Patriots from week
+                                            4, players with a stat line only; an injury is not
+                                            seen until a game is missed. GP is games with a line, so a player with one or two
+                                            leans mostly on last season. Built from touchdown opportunity as well as
+                                            touchdowns: carries and targets inside the 10 and the 20, each worth what that
+                                            touch scored last season, blended with rushing + receiving touchdowns, season to
+                                            date, shrunk toward last season, through a Poisson.
+                                            Quarterbacks count only for touchdowns they run in. Measured walk-forward:
+                                            <span class="pwatch__verdict" title="Panel players (top 5 per team per game by P(1&#x2B; TD), QB/RB/WR/TE with a line), regular season, rushing &#x2B; receiving TDs, shrunk Poisson rate vs the player&#x27;s own raw rate on identical player-games. Brier skill &#x2B;5.3%, calibration error 2.4%, 1 of 8 reliability bins past 2 SE. k 6, No recalibration. Red-zone usage blended in (w 0.625, k 1). From 8 games on: z &#x2B;2.3 on 1,171 panel player-games. Unpriced: no TD prop line is captured.">anytime TD beats the player&#x27;s own raw rate (z &#x2B;9.6, 2,720 player-games, 2025); hover for calibration and how it holds up from eight games on.</span></div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
                                         <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Sharmane"><defs><clipPath id="pa-disc-2026-05-LV-NE"><circle cx="32" cy="32" r="30"></circle></clipPath>
@@ -4065,7 +4469,7 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Minnesota Vikings@New Orleans Saints" data-f-mkt="1" data-f-st="strong" data-f-tt="flip" data-f-ml="fav" data-f-mlp="-130" data-f-gap="3-7" data-f-day="sun" data-f-slot="early" style="animation-delay:110ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " id="g-minnesota-vikings-new-orleans-saints" data-game="Minnesota Vikings@New Orleans Saints" data-f-mkt="1" data-f-st="strong" data-f-tt="flip" data-f-ml="fav" data-f-mlp="-130" data-f-gap="3-7" data-f-day="sun" data-f-slot="early" style="animation-delay:110ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/MIN.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Minnesota Vikings</span></span>
@@ -4289,7 +4693,63 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
+                                            Player watch
+                                            <span class="tstats__meta">
+                                                top 5 by chance of a rushing or receiving TD
+                                            </span></summary>
+
+                                        <div class="tstats__cols"><table class="grid tstats__grid pwatch"><thead><tr><th>Minnesota Vikings</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Aaron Jones (RB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>27%</td></tr><tr><td class="tstats__k">T.J. Hockenson (TE)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>24%</td></tr><tr><td class="tstats__k">Jauan Jennings (WR)</td>
+                                                                <td>3</td>
+                                                                <td>0</td>
+                                                                <td>20%</td></tr><tr><td class="tstats__k">Jordan Addison (WR)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>18%</td></tr><tr><td class="tstats__k">Demond Claiborne (RB)</td>
+                                                                <td>3</td>
+                                                                <td>0</td>
+                                                                <td>13%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>New Orleans Saints</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Juwan Johnson (TE)</td>
+                                                                <td>4</td>
+                                                                <td>3</td>
+                                                                <td>39%</td></tr><tr><td class="tstats__k">Chris Olave (WR)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>36%</td></tr><tr><td class="tstats__k">Devaughn Vele (WR)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>35%</td></tr><tr><td class="tstats__k">Alvin Kamara (RB)</td>
+                                                                <td>3</td>
+                                                                <td>2</td>
+                                                                <td>30%</td></tr><tr><td class="tstats__k">Kendre Miller (RB)</td>
+                                                                <td>3</td>
+                                                                <td>1</td>
+                                                                <td>22%</td></tr></tbody></table></div>
+
+                                        <div class="dig__note">
+                                            Not market-tested, no prices. Lineups: Minnesota Vikings from week
+                                            4, New Orleans Saints from week
+                                            4, players with a stat line only; an injury is not
+                                            seen until a game is missed. GP is games with a line, so a player with one or two
+                                            leans mostly on last season. Built from touchdown opportunity as well as
+                                            touchdowns: carries and targets inside the 10 and the 20, each worth what that
+                                            touch scored last season, blended with rushing + receiving touchdowns, season to
+                                            date, shrunk toward last season, through a Poisson.
+                                            Quarterbacks count only for touchdowns they run in. Measured walk-forward:
+                                            <span class="pwatch__verdict" title="Panel players (top 5 per team per game by P(1&#x2B; TD), QB/RB/WR/TE with a line), regular season, rushing &#x2B; receiving TDs, shrunk Poisson rate vs the player&#x27;s own raw rate on identical player-games. Brier skill &#x2B;5.3%, calibration error 2.4%, 1 of 8 reliability bins past 2 SE. k 6, No recalibration. Red-zone usage blended in (w 0.625, k 1). From 8 games on: z &#x2B;2.3 on 1,171 panel player-games. Unpriced: no TD prop line is captured.">anytime TD beats the player&#x27;s own raw rate (z &#x2B;9.6, 2,720 player-games, 2025); hover for calibration and how it holds up from eight games on.</span></div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
                                         <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Sharmane"><defs><clipPath id="pa-disc-2026-05-MIN-NO"><circle cx="32" cy="32" r="30"></circle></clipPath>
@@ -4337,7 +4797,7 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Cleveland Browns@New York Jets" data-f-mkt="1" data-f-st="flip" data-f-tt="flip" data-f-ml="fav" data-f-mlp="-130" data-f-gap="0-3" data-f-day="sun" data-f-slot="early" style="animation-delay:132ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " id="g-cleveland-browns-new-york-jets" data-game="Cleveland Browns@New York Jets" data-f-mkt="1" data-f-st="flip" data-f-tt="flip" data-f-ml="fav" data-f-mlp="-130" data-f-gap="0-3" data-f-day="sun" data-f-slot="early" style="animation-delay:132ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/CLE.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Cleveland Browns</span></span>
@@ -4559,7 +5019,63 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
+                                            Player watch
+                                            <span class="tstats__meta">
+                                                top 5 by chance of a rushing or receiving TD
+                                            </span></summary>
+
+                                        <div class="tstats__cols"><table class="grid tstats__grid pwatch"><thead><tr><th>Cleveland Browns</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Quinshon Judkins (RB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>44%</td></tr><tr><td class="tstats__k">Harold Fannin Jr. (TE)</td>
+                                                                <td>4</td>
+                                                                <td>3</td>
+                                                                <td>33%</td></tr><tr><td class="tstats__k">Denzel Boston (WR)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>23%</td></tr><tr><td class="tstats__k">KC Concepcion (WR)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>16%</td></tr><tr><td class="tstats__k">Deshaun Watson (QB)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>15%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>New York Jets</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Garrett Wilson (WR)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>29%</td></tr><tr><td class="tstats__k">Braelon Allen (RB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>26%</td></tr><tr><td class="tstats__k">Kenyon Sadiq (TE)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>19%</td></tr><tr><td class="tstats__k">Sterling Shepard (WR)</td>
+                                                                <td>2</td>
+                                                                <td>0</td>
+                                                                <td>13%</td></tr><tr><td class="tstats__k">Jelani Woods (TE)</td>
+                                                                <td>2</td>
+                                                                <td>0</td>
+                                                                <td>9%</td></tr></tbody></table></div>
+
+                                        <div class="dig__note">
+                                            Not market-tested, no prices. Lineups: Cleveland Browns from week
+                                            4, New York Jets from week
+                                            4, players with a stat line only; an injury is not
+                                            seen until a game is missed. GP is games with a line, so a player with one or two
+                                            leans mostly on last season. Built from touchdown opportunity as well as
+                                            touchdowns: carries and targets inside the 10 and the 20, each worth what that
+                                            touch scored last season, blended with rushing + receiving touchdowns, season to
+                                            date, shrunk toward last season, through a Poisson.
+                                            Quarterbacks count only for touchdowns they run in. Measured walk-forward:
+                                            <span class="pwatch__verdict" title="Panel players (top 5 per team per game by P(1&#x2B; TD), QB/RB/WR/TE with a line), regular season, rushing &#x2B; receiving TDs, shrunk Poisson rate vs the player&#x27;s own raw rate on identical player-games. Brier skill &#x2B;5.3%, calibration error 2.4%, 1 of 8 reliability bins past 2 SE. k 6, No recalibration. Red-zone usage blended in (w 0.625, k 1). From 8 games on: z &#x2B;2.3 on 1,171 panel player-games. Unpriced: no TD prop line is captured.">anytime TD beats the player&#x27;s own raw rate (z &#x2B;9.6, 2,720 player-games, 2025); hover for calibration and how it holds up from eight games on.</span></div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
                                         <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Sharmane"><defs><clipPath id="pa-disc-2026-05-CLE-NYJ"><circle cx="32" cy="32" r="30"></circle></clipPath>
@@ -4607,7 +5123,7 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Indianapolis Colts@Pittsburgh Steelers" data-f-mkt="1" data-f-st="lean" data-f-tt="strong" data-f-ml="close" data-f-mlp="120" data-f-gap="0-3" data-f-day="sun" data-f-slot="early" style="animation-delay:154ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " id="g-indianapolis-colts-pittsburgh-steelers" data-game="Indianapolis Colts@Pittsburgh Steelers" data-f-mkt="1" data-f-st="lean" data-f-tt="strong" data-f-ml="close" data-f-mlp="120" data-f-gap="0-3" data-f-day="sun" data-f-slot="early" style="animation-delay:154ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/IND.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Indianapolis Colts</span></span>
@@ -4830,7 +5346,63 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
+                                            Player watch
+                                            <span class="tstats__meta">
+                                                top 5 by chance of a rushing or receiving TD
+                                            </span></summary>
+
+                                        <div class="tstats__cols"><table class="grid tstats__grid pwatch"><thead><tr><th>Indianapolis Colts</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Jonathan Taylor (RB)</td>
+                                                                <td>4</td>
+                                                                <td>6</td>
+                                                                <td>65%</td></tr><tr><td class="tstats__k">Tyler Warren (TE)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>31%</td></tr><tr><td class="tstats__k">Josh Downs (WR)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>19%</td></tr><tr><td class="tstats__k">Daniel Jones (QB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>19%</td></tr><tr><td class="tstats__k">Seth McGowan (RB)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>18%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>Pittsburgh Steelers</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Jaylen Warren (RB)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>32%</td></tr><tr><td class="tstats__k">Pat Freiermuth (TE)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>27%</td></tr><tr><td class="tstats__k">DK Metcalf (WR)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>26%</td></tr><tr><td class="tstats__k">Roman Wilson (WR)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>19%</td></tr><tr><td class="tstats__k">Lew Nichols III (RB)</td>
+                                                                <td>2</td>
+                                                                <td>0</td>
+                                                                <td>19%</td></tr></tbody></table></div>
+
+                                        <div class="dig__note">
+                                            Not market-tested, no prices. Lineups: Indianapolis Colts from week
+                                            4, Pittsburgh Steelers from week
+                                            4, players with a stat line only; an injury is not
+                                            seen until a game is missed. GP is games with a line, so a player with one or two
+                                            leans mostly on last season. Built from touchdown opportunity as well as
+                                            touchdowns: carries and targets inside the 10 and the 20, each worth what that
+                                            touch scored last season, blended with rushing + receiving touchdowns, season to
+                                            date, shrunk toward last season, through a Poisson.
+                                            Quarterbacks count only for touchdowns they run in. Measured walk-forward:
+                                            <span class="pwatch__verdict" title="Panel players (top 5 per team per game by P(1&#x2B; TD), QB/RB/WR/TE with a line), regular season, rushing &#x2B; receiving TDs, shrunk Poisson rate vs the player&#x27;s own raw rate on identical player-games. Brier skill &#x2B;5.3%, calibration error 2.4%, 1 of 8 reliability bins past 2 SE. k 6, No recalibration. Red-zone usage blended in (w 0.625, k 1). From 8 games on: z &#x2B;2.3 on 1,171 panel player-games. Unpriced: no TD prop line is captured.">anytime TD beats the player&#x27;s own raw rate (z &#x2B;9.6, 2,720 player-games, 2025); hover for calibration and how it holds up from eight games on.</span></div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
                                         <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Sharmane"><defs><clipPath id="pa-disc-2026-05-IND-PIT"><circle cx="32" cy="32" r="30"></circle></clipPath>
@@ -4878,7 +5450,7 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Houston Texans@Tennessee Titans" data-f-mkt="1" data-f-st="lean" data-f-tt="flip" data-f-ml="heavy" data-f-mlp="-310" data-f-gap="0-3" data-f-day="sun" data-f-slot="early" style="animation-delay:176ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " id="g-houston-texans-tennessee-titans" data-game="Houston Texans@Tennessee Titans" data-f-mkt="1" data-f-st="lean" data-f-tt="flip" data-f-ml="heavy" data-f-mlp="-310" data-f-gap="0-3" data-f-day="sun" data-f-slot="early" style="animation-delay:176ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/HOU.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Houston Texans</span></span>
@@ -5098,7 +5670,63 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
+                                            Player watch
+                                            <span class="tstats__meta">
+                                                top 5 by chance of a rushing or receiving TD
+                                            </span></summary>
+
+                                        <div class="tstats__cols"><table class="grid tstats__grid pwatch"><thead><tr><th>Houston Texans</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">David Montgomery (RB)</td>
+                                                                <td>4</td>
+                                                                <td>3</td>
+                                                                <td>44%</td></tr><tr><td class="tstats__k">Nico Collins (WR)</td>
+                                                                <td>2</td>
+                                                                <td>3</td>
+                                                                <td>43%</td></tr><tr><td class="tstats__k">Woody Marks (RB)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>33%</td></tr><tr><td class="tstats__k">Kayshon Boutte (WR)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>16%</td></tr><tr><td class="tstats__k">Dalton Schultz (TE)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>15%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>Tennessee Titans</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Tony Pollard (RB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>50%</td></tr><tr><td class="tstats__k">Wan&#x27;Dale Robinson (WR)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>31%</td></tr><tr><td class="tstats__k">Elic Ayomanor (WR)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>25%</td></tr><tr><td class="tstats__k">Cam Ward (QB)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>24%</td></tr><tr><td class="tstats__k">Nicholas Singleton (RB)</td>
+                                                                <td>2</td>
+                                                                <td>0</td>
+                                                                <td>16%</td></tr></tbody></table></div>
+
+                                        <div class="dig__note">
+                                            Not market-tested, no prices. Lineups: Houston Texans from week
+                                            4, Tennessee Titans from week
+                                            4, players with a stat line only; an injury is not
+                                            seen until a game is missed. GP is games with a line, so a player with one or two
+                                            leans mostly on last season. Built from touchdown opportunity as well as
+                                            touchdowns: carries and targets inside the 10 and the 20, each worth what that
+                                            touch scored last season, blended with rushing + receiving touchdowns, season to
+                                            date, shrunk toward last season, through a Poisson.
+                                            Quarterbacks count only for touchdowns they run in. Measured walk-forward:
+                                            <span class="pwatch__verdict" title="Panel players (top 5 per team per game by P(1&#x2B; TD), QB/RB/WR/TE with a line), regular season, rushing &#x2B; receiving TDs, shrunk Poisson rate vs the player&#x27;s own raw rate on identical player-games. Brier skill &#x2B;5.3%, calibration error 2.4%, 1 of 8 reliability bins past 2 SE. k 6, No recalibration. Red-zone usage blended in (w 0.625, k 1). From 8 games on: z &#x2B;2.3 on 1,171 panel player-games. Unpriced: no TD prop line is captured.">anytime TD beats the player&#x27;s own raw rate (z &#x2B;9.6, 2,720 player-games, 2025); hover for calibration and how it holds up from eight games on.</span></div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
                                         <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Sharmane"><defs><clipPath id="pa-disc-2026-05-HOU-TEN"><circle cx="32" cy="32" r="30"></circle></clipPath>
@@ -5146,7 +5774,7 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="New York Giants@Washington Commanders" data-f-mkt="1" data-f-st="strong" data-f-tt="flip" data-f-ml="dog" data-f-mlp="159" data-f-gap="3-7" data-f-day="sun" data-f-slot="early" style="animation-delay:198ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " id="g-new-york-giants-washington-commanders" data-game="New York Giants@Washington Commanders" data-f-mkt="1" data-f-st="strong" data-f-tt="flip" data-f-ml="dog" data-f-mlp="159" data-f-gap="3-7" data-f-day="sun" data-f-slot="early" style="animation-delay:198ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/NYG.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">New York Giants</span></span>
@@ -5366,7 +5994,63 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
+                                            Player watch
+                                            <span class="tstats__meta">
+                                                top 5 by chance of a rushing or receiving TD
+                                            </span></summary>
+
+                                        <div class="tstats__cols"><table class="grid tstats__grid pwatch"><thead><tr><th>New York Giants</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Cam Skattebo (RB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>45%</td></tr><tr><td class="tstats__k">Malik Nabers (WR)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>29%</td></tr><tr><td class="tstats__k">Isaiah Likely (TE)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>27%</td></tr><tr><td class="tstats__k">Najee Harris (RB)</td>
+                                                                <td>3</td>
+                                                                <td>0</td>
+                                                                <td>23%</td></tr><tr><td class="tstats__k">Theo Johnson (TE)</td>
+                                                                <td>3</td>
+                                                                <td>1</td>
+                                                                <td>19%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>Washington Commanders</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Jacory Croskey-Merritt (RB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>33%</td></tr><tr><td class="tstats__k">Stefon Diggs (WR)</td>
+                                                                <td>4</td>
+                                                                <td>3</td>
+                                                                <td>32%</td></tr><tr><td class="tstats__k">Kaytron Allen (RB)</td>
+                                                                <td>3</td>
+                                                                <td>0</td>
+                                                                <td>21%</td></tr><tr><td class="tstats__k">Austin Ekeler (RB)</td>
+                                                                <td>1</td>
+                                                                <td>0</td>
+                                                                <td>20%</td></tr><tr><td class="tstats__k">Antonio Williams (WR)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>19%</td></tr></tbody></table></div>
+
+                                        <div class="dig__note">
+                                            Not market-tested, no prices. Lineups: New York Giants from week
+                                            4, Washington Commanders from week
+                                            4, players with a stat line only; an injury is not
+                                            seen until a game is missed. GP is games with a line, so a player with one or two
+                                            leans mostly on last season. Built from touchdown opportunity as well as
+                                            touchdowns: carries and targets inside the 10 and the 20, each worth what that
+                                            touch scored last season, blended with rushing + receiving touchdowns, season to
+                                            date, shrunk toward last season, through a Poisson.
+                                            Quarterbacks count only for touchdowns they run in. Measured walk-forward:
+                                            <span class="pwatch__verdict" title="Panel players (top 5 per team per game by P(1&#x2B; TD), QB/RB/WR/TE with a line), regular season, rushing &#x2B; receiving TDs, shrunk Poisson rate vs the player&#x27;s own raw rate on identical player-games. Brier skill &#x2B;5.3%, calibration error 2.4%, 1 of 8 reliability bins past 2 SE. k 6, No recalibration. Red-zone usage blended in (w 0.625, k 1). From 8 games on: z &#x2B;2.3 on 1,171 panel player-games. Unpriced: no TD prop line is captured.">anytime TD beats the player&#x27;s own raw rate (z &#x2B;9.6, 2,720 player-games, 2025); hover for calibration and how it holds up from eight games on.</span></div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
                                         <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Sharmane"><defs><clipPath id="pa-disc-2026-05-NYG-WAS"><circle cx="32" cy="32" r="30"></circle></clipPath>
@@ -5414,7 +6098,7 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Denver Broncos@Los Angeles Chargers" data-f-mkt="1" data-f-st="flip" data-f-tt="lean" data-f-ml="fav" data-f-mlp="-185" data-f-gap="0-3" data-f-day="sun" data-f-slot="afternoon" style="animation-delay:220ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 13:05</span>
+                                </div></div></article><article class="game " id="g-denver-broncos-los-angeles-chargers" data-game="Denver Broncos@Los Angeles Chargers" data-f-mkt="1" data-f-st="flip" data-f-tt="lean" data-f-ml="fav" data-f-mlp="-185" data-f-gap="0-3" data-f-day="sun" data-f-slot="afternoon" style="animation-delay:220ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 13:05</span>
                                 <span></span></div>
 
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/DEN.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Denver Broncos</span></span>
@@ -5635,7 +6319,63 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
+                                            Player watch
+                                            <span class="tstats__meta">
+                                                top 5 by chance of a rushing or receiving TD
+                                            </span></summary>
+
+                                        <div class="tstats__cols"><table class="grid tstats__grid pwatch"><thead><tr><th>Denver Broncos</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">RJ Harvey (RB)</td>
+                                                                <td>3</td>
+                                                                <td>0</td>
+                                                                <td>33%</td></tr><tr><td class="tstats__k">J.K. Dobbins (RB)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>31%</td></tr><tr><td class="tstats__k">Courtland Sutton (WR)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>30%</td></tr><tr><td class="tstats__k">Jaylen Waddle (WR)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>21%</td></tr><tr><td class="tstats__k">Bo Nix (QB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>19%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>Los Angeles Chargers</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Omarion Hampton (RB)</td>
+                                                                <td>4</td>
+                                                                <td>3</td>
+                                                                <td>48%</td></tr><tr><td class="tstats__k">Ladd McConkey (WR)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>25%</td></tr><tr><td class="tstats__k">Kimani Vidal (RB)</td>
+                                                                <td>3</td>
+                                                                <td>1</td>
+                                                                <td>25%</td></tr><tr><td class="tstats__k">Justin Herbert (QB)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>23%</td></tr><tr><td class="tstats__k">Oronde Gadsden II (TE)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>20%</td></tr></tbody></table></div>
+
+                                        <div class="dig__note">
+                                            Not market-tested, no prices. Lineups: Denver Broncos from week
+                                            4, Los Angeles Chargers from week
+                                            4, players with a stat line only; an injury is not
+                                            seen until a game is missed. GP is games with a line, so a player with one or two
+                                            leans mostly on last season. Built from touchdown opportunity as well as
+                                            touchdowns: carries and targets inside the 10 and the 20, each worth what that
+                                            touch scored last season, blended with rushing + receiving touchdowns, season to
+                                            date, shrunk toward last season, through a Poisson.
+                                            Quarterbacks count only for touchdowns they run in. Measured walk-forward:
+                                            <span class="pwatch__verdict" title="Panel players (top 5 per team per game by P(1&#x2B; TD), QB/RB/WR/TE with a line), regular season, rushing &#x2B; receiving TDs, shrunk Poisson rate vs the player&#x27;s own raw rate on identical player-games. Brier skill &#x2B;5.3%, calibration error 2.4%, 1 of 8 reliability bins past 2 SE. k 6, No recalibration. Red-zone usage blended in (w 0.625, k 1). From 8 games on: z &#x2B;2.3 on 1,171 panel player-games. Unpriced: no TD prop line is captured.">anytime TD beats the player&#x27;s own raw rate (z &#x2B;9.6, 2,720 player-games, 2025); hover for calibration and how it holds up from eight games on.</span></div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
                                         <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Sharmane"><defs><clipPath id="pa-disc-2026-05-DEN-LAC"><circle cx="32" cy="32" r="30"></circle></clipPath>
@@ -5683,7 +6423,7 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Detroit Lions@Arizona Cardinals" data-f-mkt="1" data-f-st="strong" data-f-tt="strong" data-f-ml="fav" data-f-mlp="-235" data-f-gap="3-7" data-f-day="sun" data-f-slot="afternoon" data-f-sc="shootout" style="animation-delay:242ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 13:25</span>
+                                </div></div></article><article class="game " id="g-detroit-lions-arizona-cardinals" data-game="Detroit Lions@Arizona Cardinals" data-f-mkt="1" data-f-st="strong" data-f-tt="strong" data-f-ml="fav" data-f-mlp="-235" data-f-gap="3-7" data-f-day="sun" data-f-slot="afternoon" data-f-sc="shootout" style="animation-delay:242ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 13:25</span>
                                 <span></span></div>
 
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/DET.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Detroit Lions</span></span>
@@ -5907,7 +6647,63 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
+                                            Player watch
+                                            <span class="tstats__meta">
+                                                top 5 by chance of a rushing or receiving TD
+                                            </span></summary>
+
+                                        <div class="tstats__cols"><table class="grid tstats__grid pwatch"><thead><tr><th>Detroit Lions</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Jahmyr Gibbs (RB)</td>
+                                                                <td>4</td>
+                                                                <td>7</td>
+                                                                <td>71%</td></tr><tr><td class="tstats__k">Amon-Ra St. Brown (WR)</td>
+                                                                <td>4</td>
+                                                                <td>5</td>
+                                                                <td>57%</td></tr><tr><td class="tstats__k">Sam LaPorta (TE)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>46%</td></tr><tr><td class="tstats__k">Isaac TeSlaa (WR)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>21%</td></tr><tr><td class="tstats__k">Jameson Williams (WR)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>19%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>Arizona Cardinals</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Trey McBride (TE)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>53%</td></tr><tr><td class="tstats__k">Michael Wilson (WR)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>43%</td></tr><tr><td class="tstats__k">Jeremiyah Love (RB)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>40%</td></tr><tr><td class="tstats__k">Tyler Allgeier (RB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>33%</td></tr><tr><td class="tstats__k">Marvin Harrison Jr. (WR)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>21%</td></tr></tbody></table></div>
+
+                                        <div class="dig__note">
+                                            Not market-tested, no prices. Lineups: Detroit Lions from week
+                                            4, Arizona Cardinals from week
+                                            4, players with a stat line only; an injury is not
+                                            seen until a game is missed. GP is games with a line, so a player with one or two
+                                            leans mostly on last season. Built from touchdown opportunity as well as
+                                            touchdowns: carries and targets inside the 10 and the 20, each worth what that
+                                            touch scored last season, blended with rushing + receiving touchdowns, season to
+                                            date, shrunk toward last season, through a Poisson.
+                                            Quarterbacks count only for touchdowns they run in. Measured walk-forward:
+                                            <span class="pwatch__verdict" title="Panel players (top 5 per team per game by P(1&#x2B; TD), QB/RB/WR/TE with a line), regular season, rushing &#x2B; receiving TDs, shrunk Poisson rate vs the player&#x27;s own raw rate on identical player-games. Brier skill &#x2B;5.3%, calibration error 2.4%, 1 of 8 reliability bins past 2 SE. k 6, No recalibration. Red-zone usage blended in (w 0.625, k 1). From 8 games on: z &#x2B;2.3 on 1,171 panel player-games. Unpriced: no TD prop line is captured.">anytime TD beats the player&#x27;s own raw rate (z &#x2B;9.6, 2,720 player-games, 2025); hover for calibration and how it holds up from eight games on.</span></div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
                                         <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Sharmane"><defs><clipPath id="pa-disc-2026-05-DET-ARI"><circle cx="32" cy="32" r="30"></circle></clipPath>
@@ -5955,7 +6751,7 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="San Francisco 49ers@Seattle Seahawks" data-f-mkt="1" data-f-st="lean" data-f-tt="flip" data-f-ml="fav" data-f-mlp="-152" data-f-gap="0-3" data-f-day="sun" data-f-slot="afternoon" style="animation-delay:264ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 13:25</span>
+                                </div></div></article><article class="game " id="g-san-francisco-49ers-seattle-seahawks" data-game="San Francisco 49ers@Seattle Seahawks" data-f-mkt="1" data-f-st="lean" data-f-tt="flip" data-f-ml="fav" data-f-mlp="-152" data-f-gap="0-3" data-f-day="sun" data-f-slot="afternoon" style="animation-delay:264ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 13:25</span>
                                 <span></span></div>
 
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/SF.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">San Francisco 49ers</span></span>
@@ -6175,7 +6971,63 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
+                                            Player watch
+                                            <span class="tstats__meta">
+                                                top 5 by chance of a rushing or receiving TD
+                                            </span></summary>
+
+                                        <div class="tstats__cols"><table class="grid tstats__grid pwatch"><thead><tr><th>San Francisco 49ers</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Christian McCaffrey (RB)</td>
+                                                                <td>4</td>
+                                                                <td>4</td>
+                                                                <td>63%</td></tr><tr><td class="tstats__k">George Kittle (TE)</td>
+                                                                <td>4</td>
+                                                                <td>4</td>
+                                                                <td>43%</td></tr><tr><td class="tstats__k">Deebo Samuel Sr. (WR)</td>
+                                                                <td>4</td>
+                                                                <td>3</td>
+                                                                <td>38%</td></tr><tr><td class="tstats__k">Mike Evans (WR)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>32%</td></tr><tr><td class="tstats__k">Brock Purdy (QB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>20%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>Seattle Seahawks</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Jaxon Smith-Njigba (WR)</td>
+                                                                <td>4</td>
+                                                                <td>6</td>
+                                                                <td>55%</td></tr><tr><td class="tstats__k">Emanuel Wilson (RB)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>42%</td></tr><tr><td class="tstats__k">AJ Barner (TE)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>31%</td></tr><tr><td class="tstats__k">Tory Horton (WR)</td>
+                                                                <td>2</td>
+                                                                <td>1</td>
+                                                                <td>30%</td></tr><tr><td class="tstats__k">George Holani (RB)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>18%</td></tr></tbody></table></div>
+
+                                        <div class="dig__note">
+                                            Not market-tested, no prices. Lineups: San Francisco 49ers from week
+                                            4, Seattle Seahawks from week
+                                            4, players with a stat line only; an injury is not
+                                            seen until a game is missed. GP is games with a line, so a player with one or two
+                                            leans mostly on last season. Built from touchdown opportunity as well as
+                                            touchdowns: carries and targets inside the 10 and the 20, each worth what that
+                                            touch scored last season, blended with rushing + receiving touchdowns, season to
+                                            date, shrunk toward last season, through a Poisson.
+                                            Quarterbacks count only for touchdowns they run in. Measured walk-forward:
+                                            <span class="pwatch__verdict" title="Panel players (top 5 per team per game by P(1&#x2B; TD), QB/RB/WR/TE with a line), regular season, rushing &#x2B; receiving TDs, shrunk Poisson rate vs the player&#x27;s own raw rate on identical player-games. Brier skill &#x2B;5.3%, calibration error 2.4%, 1 of 8 reliability bins past 2 SE. k 6, No recalibration. Red-zone usage blended in (w 0.625, k 1). From 8 games on: z &#x2B;2.3 on 1,171 panel player-games. Unpriced: no TD prop line is captured.">anytime TD beats the player&#x27;s own raw rate (z &#x2B;9.6, 2,720 player-games, 2025); hover for calibration and how it holds up from eight games on.</span></div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
                                         <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Sharmane"><defs><clipPath id="pa-disc-2026-05-SF-SEA"><circle cx="32" cy="32" r="30"></circle></clipPath>
@@ -6223,7 +7075,7 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Baltimore Ravens@Atlanta Falcons" data-f-mkt="1" data-f-st="lean" data-f-tt="strong" data-f-ml="close" data-f-mlp="130" data-f-gap="3-7" data-f-day="sun" data-f-slot="night" style="animation-delay:286ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 17:20</span>
+                                </div></div></article><article class="game " id="g-baltimore-ravens-atlanta-falcons" data-game="Baltimore Ravens@Atlanta Falcons" data-f-mkt="1" data-f-st="lean" data-f-tt="strong" data-f-ml="close" data-f-mlp="130" data-f-gap="3-7" data-f-day="sun" data-f-slot="night" style="animation-delay:286ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 17:20</span>
                                 <span></span></div>
 
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/BAL.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Baltimore Ravens</span></span>
@@ -6445,7 +7297,63 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
+                                            Player watch
+                                            <span class="tstats__meta">
+                                                top 5 by chance of a rushing or receiving TD
+                                            </span></summary>
+
+                                        <div class="tstats__cols"><table class="grid tstats__grid pwatch"><thead><tr><th>Baltimore Ravens</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Derrick Henry (RB)</td>
+                                                                <td>4</td>
+                                                                <td>7</td>
+                                                                <td>73%</td></tr><tr><td class="tstats__k">Zay Flowers (WR)</td>
+                                                                <td>3</td>
+                                                                <td>2</td>
+                                                                <td>32%</td></tr><tr><td class="tstats__k">Mark Andrews (TE)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>25%</td></tr><tr><td class="tstats__k">Lamar Jackson (QB)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>18%</td></tr><tr><td class="tstats__k">Rashod Bateman (WR)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>17%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>Atlanta Falcons</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Bijan Robinson (RB)</td>
+                                                                <td>4</td>
+                                                                <td>5</td>
+                                                                <td>58%</td></tr><tr><td class="tstats__k">Brian Robinson (RB)</td>
+                                                                <td>4</td>
+                                                                <td>4</td>
+                                                                <td>33%</td></tr><tr><td class="tstats__k">Drake London (WR)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>22%</td></tr><tr><td class="tstats__k">Austin Hooper (TE)</td>
+                                                                <td>3</td>
+                                                                <td>1</td>
+                                                                <td>16%</td></tr><tr><td class="tstats__k">Kyle Pitts (TE)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>11%</td></tr></tbody></table></div>
+
+                                        <div class="dig__note">
+                                            Not market-tested, no prices. Lineups: Baltimore Ravens from week
+                                            4, Atlanta Falcons from week
+                                            4, players with a stat line only; an injury is not
+                                            seen until a game is missed. GP is games with a line, so a player with one or two
+                                            leans mostly on last season. Built from touchdown opportunity as well as
+                                            touchdowns: carries and targets inside the 10 and the 20, each worth what that
+                                            touch scored last season, blended with rushing + receiving touchdowns, season to
+                                            date, shrunk toward last season, through a Poisson.
+                                            Quarterbacks count only for touchdowns they run in. Measured walk-forward:
+                                            <span class="pwatch__verdict" title="Panel players (top 5 per team per game by P(1&#x2B; TD), QB/RB/WR/TE with a line), regular season, rushing &#x2B; receiving TDs, shrunk Poisson rate vs the player&#x27;s own raw rate on identical player-games. Brier skill &#x2B;5.3%, calibration error 2.4%, 1 of 8 reliability bins past 2 SE. k 6, No recalibration. Red-zone usage blended in (w 0.625, k 1). From 8 games on: z &#x2B;2.3 on 1,171 panel player-games. Unpriced: no TD prop line is captured.">anytime TD beats the player&#x27;s own raw rate (z &#x2B;9.6, 2,720 player-games, 2025); hover for calibration and how it holds up from eight games on.</span></div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
                                         <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Sharmane"><defs><clipPath id="pa-disc-2026-05-BAL-ATL"><circle cx="32" cy="32" r="30"></circle></clipPath>
@@ -6493,7 +7401,7 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Buffalo Bills@Los Angeles Rams" data-f-mkt="1" data-f-st="flip" data-f-tt="flip" data-f-ml="fav" data-f-mlp="-156" data-f-gap="0-3" data-f-day="mon" data-f-slot="night" style="animation-delay:308ms"><div class="game__hit" data-toggle><div class="game__when"><span>Mon 12 Oct &#xB7; 17:15</span>
+                                </div></div></article><article class="game " id="g-buffalo-bills-los-angeles-rams" data-game="Buffalo Bills@Los Angeles Rams" data-f-mkt="1" data-f-st="flip" data-f-tt="flip" data-f-ml="fav" data-f-mlp="-156" data-f-gap="0-3" data-f-day="mon" data-f-slot="night" style="animation-delay:308ms"><div class="game__hit" data-toggle><div class="game__when"><span>Mon 12 Oct &#xB7; 17:15</span>
                                 <span></span></div>
 
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/BUF.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Buffalo Bills</span></span>
@@ -6714,7 +7622,63 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
                                             Context for reading the matchup, not model inputs — the
                                             projection rates teams from opponent-adjusted scores above.
                                             Highlighted is the better rank of the two.
-                                        </div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
+                                        </div></details><details class="tstats"><summary class="tstats__sum">
+                                            Player watch
+                                            <span class="tstats__meta">
+                                                top 5 by chance of a rushing or receiving TD
+                                            </span></summary>
+
+                                        <div class="tstats__cols"><table class="grid tstats__grid pwatch"><thead><tr><th>Buffalo Bills</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">James Cook (RB)</td>
+                                                                <td>4</td>
+                                                                <td>3</td>
+                                                                <td>56%</td></tr><tr><td class="tstats__k">Josh Allen (QB)</td>
+                                                                <td>4</td>
+                                                                <td>7</td>
+                                                                <td>54%</td></tr><tr><td class="tstats__k">DJ Moore (WR)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>25%</td></tr><tr><td class="tstats__k">Khalil Shakir (WR)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>24%</td></tr><tr><td class="tstats__k">Keon Coleman (WR)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>22%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>Los Angeles Rams</th>
+                                                            <th title="Games with a stat line this season">GP</th>
+                                                            <th title="Rushing + receiving touchdowns this season">TD</th>
+                                                            <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
+                                                    <tbody><tr><td class="tstats__k">Kyren Williams (RB)</td>
+                                                                <td>4</td>
+                                                                <td>4</td>
+                                                                <td>59%</td></tr><tr><td class="tstats__k">Puka Nacua (WR)</td>
+                                                                <td>2</td>
+                                                                <td>1</td>
+                                                                <td>42%</td></tr><tr><td class="tstats__k">Davante Adams (WR)</td>
+                                                                <td>4</td>
+                                                                <td>2</td>
+                                                                <td>42%</td></tr><tr><td class="tstats__k">Tyler Higbee (TE)</td>
+                                                                <td>3</td>
+                                                                <td>1</td>
+                                                                <td>25%</td></tr><tr><td class="tstats__k">Blake Corum (RB)</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>17%</td></tr></tbody></table></div>
+
+                                        <div class="dig__note">
+                                            Not market-tested, no prices. Lineups: Buffalo Bills from week
+                                            4, Los Angeles Rams from week
+                                            4, players with a stat line only; an injury is not
+                                            seen until a game is missed. GP is games with a line, so a player with one or two
+                                            leans mostly on last season. Built from touchdown opportunity as well as
+                                            touchdowns: carries and targets inside the 10 and the 20, each worth what that
+                                            touch scored last season, blended with rushing + receiving touchdowns, season to
+                                            date, shrunk toward last season, through a Poisson.
+                                            Quarterbacks count only for touchdowns they run in. Measured walk-forward:
+                                            <span class="pwatch__verdict" title="Panel players (top 5 per team per game by P(1&#x2B; TD), QB/RB/WR/TE with a line), regular season, rushing &#x2B; receiving TDs, shrunk Poisson rate vs the player&#x27;s own raw rate on identical player-games. Brier skill &#x2B;5.3%, calibration error 2.4%, 1 of 8 reliability bins past 2 SE. k 6, No recalibration. Red-zone usage blended in (w 0.625, k 1). From 8 games on: z &#x2B;2.3 on 1,171 panel player-games. Unpriced: no TD prop line is captured.">anytime TD beats the player&#x27;s own raw rate (z &#x2B;9.6, 2,720 player-games, 2025); hover for calibration and how it holds up from eight games on.</span></div></details><details class="tstats"><summary class="tstats__sum">Sharmane says
                                             <span class="tstats__meta">AI read · unmeasured</span></summary>
 
                                         <div class="aisum"><svg class="persona" viewBox="0 0 64 64" width="52" height="52" role="img" aria-label="Sharmane"><defs><clipPath id="pa-disc-2026-05-BUF-LA"><circle cx="32" cy="32" r="30"></circle></clipPath>
@@ -7302,6 +8266,30 @@ Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict. Total vs cl
             }, 0);
         });
     }).observe(document.body, { attributes: true, attributeFilter: ['class'], attributeOldValue: true, subtree: true });
+
+    // The NFL Anytime TD leaders: a row opens its game's card. The link is NOT followed —
+    // live, <base href="/"> would resolve its #anchor against the site root — so the card's
+    // own [data-toggle] is clicked instead, which Blazor handles live and static-site.js in
+    // an export. The observer above then scrolls to it. Registered in the CAPTURE phase. A card already open is only
+    // scrolled to: clicking its toggle would close it.
+    document.addEventListener('click', function (e) {
+        var link = e.target.closest && e.target.closest('[data-open-card]');
+        if (!link) return;
+
+        var card = document.getElementById(link.getAttribute('data-open-card'));
+        if (!card) return;
+
+        e.preventDefault();
+
+        if (card.classList.contains('game--open')) {
+            card.scrollIntoView({ block: 'start' });
+            return;
+        }
+
+        var toggle = card.querySelector('[data-toggle]');
+        if (toggle) toggle.click();
+    }, true); // capture: Blazor's document-level link handler runs first otherwise and
+              // navigates; it skips a click whose default is already prevented.
 })();
 
 </script>
