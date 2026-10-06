@@ -740,7 +740,7 @@ a { color: inherit; text-decoration: none; }
     flex: 1 1 auto;
     min-width: 0;
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: auto auto auto auto;
     justify-content: start;
     column-gap: 14px;
     row-gap: 3px;
@@ -759,6 +759,31 @@ a { color: inherit; text-decoration: none; }
     text-transform: uppercase;
     white-space: nowrap;
 }
+
+/* The confidence board's pointer into edge mode: a small box next to a pick whose
+   side edge mode also sized. It sits after the tier, so it never displaces it.
+   line-height 1 and 1px padding keep the box shorter than the 11.5px text it sits in.
+   The .tag defaults (2px padding, normal line-height) made the row taller and
+   misaligned cards that sat side by side. */
+.edge-badge {
+    font-size: 9px;
+    line-height: 1;
+    padding: 1px 4px;
+    margin-left: 4px;
+    text-decoration: none;
+    white-space: nowrap;
+    vertical-align: 1px;
+}
+.pick__edge .edge-badge { margin-left: 0; }
+
+/* Market blue, the colour of edge mode's own switch, because the badge opens that mode.
+   In green it was lost among the tiers and win chances, which all use --signal.
+   An against-evidence play keeps the same hue but drops the wash and goes dashed.
+   That is the board's "weaker claim" convention (.tag--hint), and with the ⚠ it keeps
+   a measured loser from looking like an actionable play. */
+.edge-badge { color: var(--market); border-color: var(--market); background: var(--market-wash); }
+.edge-badge--against { border-style: dashed; background: none; }
+.edge-badge:hover { filter: brightness(1.2); }
 
 /* Three steps, from the tier cutoffs (cover) or 75/60 (win). Colour never carries the
    meaning alone — the tier word or "to win" is always beside it. */
