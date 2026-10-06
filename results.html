@@ -166,20 +166,19 @@ a { color: inherit; text-decoration: none; }
     gap: 8px;
     padding: 7px 10px;
     border-radius: 5px;
-    border-left: 2px solid transparent;
     color: var(--chalk-dim);
     font-size: 13.5px;
     font-weight: 500;
     cursor: pointer;
-    transition: color .16s ease, background .16s ease, border-color .16s ease;
+    transition: color .16s ease, background .16s ease;
 }
 
 .nav__item:hover { color: var(--chalk); background: var(--panel); }
 
+/* Selected reads by the wash and the brighter text alone — no left accent bar. */
 .nav__item--on {
     color: var(--chalk);
     background: var(--signal-wash);
-    border-left-color: var(--signal);
 }
 
 .nav__count { font-family: var(--mono); font-size: 11.5px; color: var(--chalk-mute); }
@@ -576,16 +575,6 @@ a { color: inherit; text-decoration: none; }
 
 .game:hover { border-color: var(--rule); transform: translateY(-1px); }
 
-/* Confidence bleeds in from the left edge — readable at a glance across the board. */
-.game::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 2px;
-    background: var(--signal);
-    opacity: var(--conf, 0.2);
-}
-
 @keyframes rise {
     from { opacity: 0; transform: translateY(7px); }
     to   { opacity: 1; transform: none; }
@@ -688,7 +677,7 @@ a { color: inherit; text-decoration: none; }
    stray tags. */
 .game__plays {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     flex-wrap: wrap;
     gap: 6px;
     margin-top: 9px;
@@ -735,19 +724,47 @@ a { color: inherit; text-decoration: none; }
     color: var(--chalk-mute);
 }
 
-.play-chip--strong {
-    color: var(--signal);
-    border-color: var(--signal-dim);
-    background: var(--signal-wash);
+/* The foot reads "Troy by 10.7 | Total 50.6" on line one and "74% to win" on line two.
+   The break is a zero-height full-width flex item, so the tags and chevron stay on line
+   one however long the team name is. */
+.foot__sep { color: var(--rule); }
+.foot__break { flex-basis: 100%; height: 0; }
+.foot__win { margin-top: -4px; }
+
+/* Plays as plain aligned rows rather than bordered chips: selection, chance, tier. One
+   grid across both rows (each .pick is display:contents) so the columns line up. The
+   selection column may wrap on a phone; the other two never do. */
+/* Named .picks/.pick, not .plays/.play: those are edge mode's sizing block further down,
+   and sharing them gridded both layouts into overlapping columns. */
+.picks {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-content: start;
+    column-gap: 14px;
+    row-gap: 3px;
+    align-items: baseline;
+    font-family: var(--mono);
+    font-size: 11.5px;
 }
 
-.play-chip--strong .play-chip__tier { color: var(--signal); }
+.pick { display: contents; }
+.pick__sel { color: var(--chalk); }
+.pick__p { color: var(--chalk-mute); white-space: nowrap; }
 
-.play-chip--lean { border-color: var(--rule); }
+.pick__tier {
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
 
-/* A coin flip is shown rather than hidden — the rail drops it, but a card that has a line
-   and says nothing about it reads as broken. Faded is the honest rendering. */
-.play-chip--flip { color: var(--chalk-mute); border-color: var(--rule-soft); }
+/* Three steps, from the tier cutoffs (cover) or 75/60 (win). Colour never carries the
+   meaning alone — the tier word or "to win" is always beside it. */
+.prob--hi  { color: var(--signal); font-weight: 600; }
+.prob--mid { color: var(--signal-dim); font-weight: 500; }
+.prob--lo  { color: var(--chalk-mute); }
 
 /* A line exists and the model is withholding. Dashed, like .tag--hint, because the
    distinction that matters is "no opinion yet" against "a weak opinion". */
@@ -769,20 +786,6 @@ a { color: inherit; text-decoration: none; }
 
 .tag--key  { color: var(--signal); border-color: var(--signal-dim); background: var(--signal-wash); }
 .tag--thin { color: var(--chalk-mute); border-color: var(--rule); }
-
-.meter {
-    height: 3px;
-    background: var(--rule-soft);
-    border-radius: 2px;
-    overflow: hidden;
-    margin-top: 9px;
-}
-
-.meter__fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--signal-dim), var(--signal));
-    transition: width .5s cubic-bezier(.2, .7, .3, 1);
-}
 
 /* ── Expandable breakdown ────────────────────────────────────────────────── */
 

@@ -166,20 +166,19 @@ a { color: inherit; text-decoration: none; }
     gap: 8px;
     padding: 7px 10px;
     border-radius: 5px;
-    border-left: 2px solid transparent;
     color: var(--chalk-dim);
     font-size: 13.5px;
     font-weight: 500;
     cursor: pointer;
-    transition: color .16s ease, background .16s ease, border-color .16s ease;
+    transition: color .16s ease, background .16s ease;
 }
 
 .nav__item:hover { color: var(--chalk); background: var(--panel); }
 
+/* Selected reads by the wash and the brighter text alone — no left accent bar. */
 .nav__item--on {
     color: var(--chalk);
     background: var(--signal-wash);
-    border-left-color: var(--signal);
 }
 
 .nav__count { font-family: var(--mono); font-size: 11.5px; color: var(--chalk-mute); }
@@ -576,16 +575,6 @@ a { color: inherit; text-decoration: none; }
 
 .game:hover { border-color: var(--rule); transform: translateY(-1px); }
 
-/* Confidence bleeds in from the left edge — readable at a glance across the board. */
-.game::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 2px;
-    background: var(--signal);
-    opacity: var(--conf, 0.2);
-}
-
 @keyframes rise {
     from { opacity: 0; transform: translateY(7px); }
     to   { opacity: 1; transform: none; }
@@ -688,7 +677,7 @@ a { color: inherit; text-decoration: none; }
    stray tags. */
 .game__plays {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     flex-wrap: wrap;
     gap: 6px;
     margin-top: 9px;
@@ -735,19 +724,47 @@ a { color: inherit; text-decoration: none; }
     color: var(--chalk-mute);
 }
 
-.play-chip--strong {
-    color: var(--signal);
-    border-color: var(--signal-dim);
-    background: var(--signal-wash);
+/* The foot reads "Troy by 10.7 | Total 50.6" on line one and "74% to win" on line two.
+   The break is a zero-height full-width flex item, so the tags and chevron stay on line
+   one however long the team name is. */
+.foot__sep { color: var(--rule); }
+.foot__break { flex-basis: 100%; height: 0; }
+.foot__win { margin-top: -4px; }
+
+/* Plays as plain aligned rows rather than bordered chips: selection, chance, tier. One
+   grid across both rows (each .pick is display:contents) so the columns line up. The
+   selection column may wrap on a phone; the other two never do. */
+/* Named .picks/.pick, not .plays/.play: those are edge mode's sizing block further down,
+   and sharing them gridded both layouts into overlapping columns. */
+.picks {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-content: start;
+    column-gap: 14px;
+    row-gap: 3px;
+    align-items: baseline;
+    font-family: var(--mono);
+    font-size: 11.5px;
 }
 
-.play-chip--strong .play-chip__tier { color: var(--signal); }
+.pick { display: contents; }
+.pick__sel { color: var(--chalk); }
+.pick__p { color: var(--chalk-mute); white-space: nowrap; }
 
-.play-chip--lean { border-color: var(--rule); }
+.pick__tier {
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
 
-/* A coin flip is shown rather than hidden — the rail drops it, but a card that has a line
-   and says nothing about it reads as broken. Faded is the honest rendering. */
-.play-chip--flip { color: var(--chalk-mute); border-color: var(--rule-soft); }
+/* Three steps, from the tier cutoffs (cover) or 75/60 (win). Colour never carries the
+   meaning alone — the tier word or "to win" is always beside it. */
+.prob--hi  { color: var(--signal); font-weight: 600; }
+.prob--mid { color: var(--signal-dim); font-weight: 500; }
+.prob--lo  { color: var(--chalk-mute); }
 
 /* A line exists and the model is withholding. Dashed, like .tag--hint, because the
    distinction that matters is "no opinion yet" against "a weak opinion". */
@@ -769,20 +786,6 @@ a { color: inherit; text-decoration: none; }
 
 .tag--key  { color: var(--signal); border-color: var(--signal-dim); background: var(--signal-wash); }
 .tag--thin { color: var(--chalk-mute); border-color: var(--rule); }
-
-.meter {
-    height: 3px;
-    background: var(--rule-soft);
-    border-radius: 2px;
-    overflow: hidden;
-    margin-top: 9px;
-}
-
-.meter__fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--signal-dim), var(--signal));
-    transition: width .5s cubic-bezier(.2, .7, .3, 1);
-}
 
 /* ── Expandable breakdown ────────────────────────────────────────────────── */
 
@@ -2684,7 +2687,7 @@ a { color: inherit; text-decoration: none; }
                 <p class="facets__record" data-facet-record="spread" hidden>Spread picks measured 49.6% against the close over 1,535 games. A tier is the model&#x27;s conviction, not edge &#x2014; 52.4% is break-even.</p>
                 <p class="facets__record" data-facet-record="total" hidden>Totals picks measured 48.4% against the close over 1,535 games. A tier is the model&#x27;s conviction, not edge &#x2014; 52.4% is break-even.</p>
                 <p class="facets__record" data-facet-record="ml" hidden>Moneyline, measured: Moneyline vs close over 1,011 &#x2014; Backed 1,011 of 1,535 games at 3% minimum edge, flat stake. Returns -11.6% at the prices actually posted. A price band narrows what you are reading; no band has ever cleared the vig.</p>
-                <p class="facets__record" data-facet-record="sc" hidden>Scoring watch is a raw rank comparison of season-to-date points, with no minimum games, and has never been measured against a total. It says what the numbers so far look like, not which side of a total to take.</p></div><div class="board" data-stats="core"><article class="game " data-game="Tampa Bay Buccaneers@Dallas Cowboys" data-f-mkt="1" data-f-st="strong" data-f-tt="strong" data-f-ml="heavy" data-f-mlp="-528" data-f-gap="3-7" data-f-day="thu" data-f-slot="night" style="--conf:0.41; animation-delay:0ms"><div class="game__hit" data-toggle><div class="game__when"><span>Thu 8 Oct &#xB7; 17:15</span>
+                <p class="facets__record" data-facet-record="sc" hidden>Scoring watch is a raw rank comparison of season-to-date points, with no minimum games, and has never been measured against a total. It says what the numbers so far look like, not which side of a total to take.</p></div><div class="board" data-stats="core"><article class="game " data-game="Tampa Bay Buccaneers@Dallas Cowboys" data-f-mkt="1" data-f-st="strong" data-f-tt="strong" data-f-ml="heavy" data-f-mlp="-528" data-f-gap="3-7" data-f-day="thu" data-f-slot="night" style="animation-delay:0ms"><div class="game__hit" data-toggle><div class="game__when"><span>Thu 8 Oct &#xB7; 17:15</span>
                                 <span></span></div>
 
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/TB.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Tampa Bay Buccaneers</span></span>
@@ -2693,11 +2696,16 @@ a { color: inherit; text-decoration: none; }
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/DAL.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Dallas Cowboys</span></span>
                                 <span class="side__score">31.2</span></div>
 
-                            <div class="meter"><div class="meter__fill" style="width:63.744469579098165%"></div></div>
-
                             <div class="game__foot"><span class="spread">Dallas Cowboys by 5.3</span>
-                                <span>64%
-                                    · O/U 57.2</span><span class="chev">&#x2B;</span></div><div class="game__plays"><span class="game__plays-k">Play</span><span class="play-chip play-chip--strong" title="Tampa Bay Buccaneers &#x2B;9.5 &#x2014; 63% cover probability, strong. The model&#x27;s spread picks measured 49.6% against the close over 1,535 games, so read this as conviction, never as edge.">Tampa Bay Buccaneers &#x2B;9.5<span class="play-chip__tier">strong</span></span><span class="play-chip play-chip--strong" title="Over 47.0 &#x2014; 77% cover probability, strong. The model&#x27;s totals picks measured 48.4% against the close over 1,535 games, so read this as conviction, never as edge.">Over 47.0<span class="play-chip__tier">strong</span></span></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                <span class="foot__sep">|</span>
+                                <span>Total 57.2</span><span class="chev">&#x2B;</span>
+                                <span class="foot__break"></span>
+                                <span class="foot__win" title="Chance Dallas Cowboys wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--mid">64%</span> to win</span></div><div class="game__plays"><span class="game__plays-k">Play</span>
+                                    <div class="picks"><div class="pick" title="Tampa Bay Buccaneers &#x2B;9.5 &#x2014; the model is 4.2 past the line, 63% chance to cover, strong. The model&#x27;s spread picks measured 49.6% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Tampa Bay Buccaneers &#x2B;9.5</span>
+                                                <span class="pick__p"><span class="prob prob--hi">63%</span> chance to cover</span>
+                                                <span class="pick__tier prob--hi">strong</span></div><div class="pick" title="Over 47.0 &#x2014; the model is 10.2 past the line, 77% chance of over, strong. The model&#x27;s totals picks measured 48.4% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Over 47.0</span>
+                                                <span class="pick__p"><span class="prob prob--hi">77%</span> chance of over</span>
+                                                <span class="pick__tier prob--hi">strong</span></div></div></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
                                         <span class="mkt__src">consensus · pulled 2 Oct 21:01 MST</span></div>
 
                                     <table class="mkt__grid"><thead><tr><th></th>
@@ -2902,7 +2910,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Philadelphia Eagles@Jacksonville Jaguars" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="--conf:0.69; animation-delay:22ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 06:30</span>
+                                </div></div></article><article class="game " data-game="Philadelphia Eagles@Jacksonville Jaguars" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="animation-delay:22ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 06:30</span>
                                 <span></span></div>
 
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/PHI.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Philadelphia Eagles</span></span>
@@ -2911,11 +2919,11 @@ a { color: inherit; text-decoration: none; }
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/JAX.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Jacksonville Jaguars</span></span>
                                 <span class="side__score">26.8</span></div>
 
-                            <div class="meter"><div class="meter__fill" style="width:81.21085566318708%"></div></div>
-
                             <div class="game__foot"><span class="spread">Jacksonville Jaguars by 13.3</span>
-                                <span>81%
-                                    · O/U 40.3</span><span class="chev">&#x2B;</span></div><div class="mkt mkt--none">
+                                <span class="foot__sep">|</span>
+                                <span>Total 40.3</span><span class="chev">&#x2B;</span>
+                                <span class="foot__break"></span>
+                                <span class="foot__win" title="Chance Jacksonville Jaguars wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--hi">81%</span> to win</span></div><div class="mkt mkt--none">
                                     No market captured — this game cannot be evaluated against a price.
                                 </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
@@ -3111,7 +3119,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Chicago Bears@Green Bay Packers" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="--conf:0.47; animation-delay:44ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " data-game="Chicago Bears@Green Bay Packers" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="animation-delay:44ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/CHI.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Chicago Bears</span></span>
@@ -3120,11 +3128,11 @@ a { color: inherit; text-decoration: none; }
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/GB.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Green Bay Packers</span></span>
                                 <span class="side__score">20.7</span></div>
 
-                            <div class="meter"><div class="meter__fill" style="width:67.69931011241653%"></div></div>
-
                             <div class="game__foot"><span class="spread">Chicago Bears by 6.9</span>
-                                <span>68%
-                                    · O/U 48.3</span><span class="chev">&#x2B;</span></div><div class="mkt mkt--none">
+                                <span class="foot__sep">|</span>
+                                <span>Total 48.3</span><span class="chev">&#x2B;</span>
+                                <span class="foot__break"></span>
+                                <span class="foot__win" title="Chance Chicago Bears wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--mid">68%</span> to win</span></div><div class="mkt mkt--none">
                                     No market captured — this game cannot be evaluated against a price.
                                 </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
@@ -3318,7 +3326,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Cincinnati Bengals@Miami Dolphins" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="--conf:0.37; animation-delay:66ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " data-game="Cincinnati Bengals@Miami Dolphins" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="animation-delay:66ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/CIN.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Cincinnati Bengals</span></span>
@@ -3327,11 +3335,11 @@ a { color: inherit; text-decoration: none; }
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/MIA.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Miami Dolphins</span></span>
                                 <span class="side__score">20.4</span></div>
 
-                            <div class="meter"><div class="meter__fill" style="width:61.659272648852%"></div></div>
-
                             <div class="game__foot"><span class="spread">Cincinnati Bengals by 4.4</span>
-                                <span>62%
-                                    · O/U 45.2</span><span class="chev">&#x2B;</span></div><div class="mkt mkt--none">
+                                <span class="foot__sep">|</span>
+                                <span>Total 45.2</span><span class="chev">&#x2B;</span>
+                                <span class="foot__break"></span>
+                                <span class="foot__win" title="Chance Cincinnati Bengals wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--mid">62%</span> to win</span></div><div class="mkt mkt--none">
                                     No market captured — this game cannot be evaluated against a price.
                                 </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
@@ -3526,7 +3534,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Las Vegas Raiders@New England Patriots" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="--conf:0.47; animation-delay:88ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " data-game="Las Vegas Raiders@New England Patriots" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="animation-delay:88ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/LV.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Las Vegas Raiders</span></span>
@@ -3535,11 +3543,11 @@ a { color: inherit; text-decoration: none; }
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/NE.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">New England Patriots</span></span>
                                 <span class="side__score">24.2</span></div>
 
-                            <div class="meter"><div class="meter__fill" style="width:67.48587652003175%"></div></div>
-
                             <div class="game__foot"><span class="spread">New England Patriots by 6.8</span>
-                                <span>67%
-                                    · O/U 41.5</span><span class="chev">&#x2B;</span></div><div class="mkt mkt--none">
+                                <span class="foot__sep">|</span>
+                                <span>Total 41.5</span><span class="chev">&#x2B;</span>
+                                <span class="foot__break"></span>
+                                <span class="foot__win" title="Chance New England Patriots wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--mid">67%</span> to win</span></div><div class="mkt mkt--none">
                                     No market captured — this game cannot be evaluated against a price.
                                 </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
@@ -3734,7 +3742,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Minnesota Vikings@New Orleans Saints" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="--conf:0.44; animation-delay:110ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " data-game="Minnesota Vikings@New Orleans Saints" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="animation-delay:110ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/MIN.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Minnesota Vikings</span></span>
@@ -3743,11 +3751,11 @@ a { color: inherit; text-decoration: none; }
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/NO.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">New Orleans Saints</span></span>
                                 <span class="side__score">17.3</span></div>
 
-                            <div class="meter"><div class="meter__fill" style="width:65.67519169216325%"></div></div>
-
                             <div class="game__foot"><span class="spread">Minnesota Vikings by 6.1</span>
-                                <span>66%
-                                    · O/U 40.6</span><span class="chev">&#x2B;</span></div><div class="mkt mkt--none">
+                                <span class="foot__sep">|</span>
+                                <span>Total 40.6</span><span class="chev">&#x2B;</span>
+                                <span class="foot__break"></span>
+                                <span class="foot__win" title="Chance Minnesota Vikings wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--mid">66%</span> to win</span></div><div class="mkt mkt--none">
                                     No market captured — this game cannot be evaluated against a price.
                                 </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
@@ -3943,7 +3951,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Cleveland Browns@New York Jets" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="--conf:0.19; animation-delay:132ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " data-game="Cleveland Browns@New York Jets" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="animation-delay:132ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/CLE.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Cleveland Browns</span></span>
@@ -3952,11 +3960,11 @@ a { color: inherit; text-decoration: none; }
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/NYJ.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">New York Jets</span></span>
                                 <span class="side__score">19.5</span></div>
 
-                            <div class="meter"><div class="meter__fill" style="width:50.74096991687125%"></div></div>
-
                             <div class="game__foot"><span class="spread">New York Jets by 0.3</span>
-                                <span>51%
-                                    · O/U 38.8</span><span class="chev">&#x2B;</span></div><div class="mkt mkt--none">
+                                <span class="foot__sep">|</span>
+                                <span>Total 38.8</span><span class="chev">&#x2B;</span>
+                                <span class="foot__break"></span>
+                                <span class="foot__win" title="Chance New York Jets wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--lo">51%</span> to win</span></div><div class="mkt mkt--none">
                                     No market captured — this game cannot be evaluated against a price.
                                 </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
@@ -4150,7 +4158,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Indianapolis Colts@Pittsburgh Steelers" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="--conf:0.20; animation-delay:154ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " data-game="Indianapolis Colts@Pittsburgh Steelers" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="animation-delay:154ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/IND.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Indianapolis Colts</span></span>
@@ -4159,11 +4167,11 @@ a { color: inherit; text-decoration: none; }
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/PIT.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Pittsburgh Steelers</span></span>
                                 <span class="side__score">24.4</span></div>
 
-                            <div class="meter"><div class="meter__fill" style="width:51.0212769952104%"></div></div>
-
                             <div class="game__foot"><span class="spread">Indianapolis Colts by 0.4</span>
-                                <span>51%
-                                    · O/U 49.1</span><span class="chev">&#x2B;</span></div><div class="mkt mkt--none">
+                                <span class="foot__sep">|</span>
+                                <span>Total 49.1</span><span class="chev">&#x2B;</span>
+                                <span class="foot__break"></span>
+                                <span class="foot__win" title="Chance Indianapolis Colts wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--lo">51%</span> to win</span></div><div class="mkt mkt--none">
                                     No market captured — this game cannot be evaluated against a price.
                                 </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
@@ -4358,7 +4366,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Houston Texans@Tennessee Titans" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="--conf:0.39; animation-delay:176ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " data-game="Houston Texans@Tennessee Titans" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="animation-delay:176ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/HOU.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Houston Texans</span></span>
@@ -4367,11 +4375,11 @@ a { color: inherit; text-decoration: none; }
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/TEN.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Tennessee Titans</span></span>
                                 <span class="side__score">16.0</span></div>
 
-                            <div class="meter"><div class="meter__fill" style="width:62.843850074150254%"></div></div>
-
                             <div class="game__foot"><span class="spread">Houston Texans by 4.9</span>
-                                <span>63%
-                                    · O/U 37.0</span><span class="chev">&#x2B;</span></div><div class="mkt mkt--none">
+                                <span class="foot__sep">|</span>
+                                <span>Total 37.0</span><span class="chev">&#x2B;</span>
+                                <span class="foot__break"></span>
+                                <span class="foot__win" title="Chance Houston Texans wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--mid">63%</span> to win</span></div><div class="mkt mkt--none">
                                     No market captured — this game cannot be evaluated against a price.
                                 </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
@@ -4563,7 +4571,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="New York Giants@Washington Commanders" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="--conf:0.22; animation-delay:198ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " data-game="New York Giants@Washington Commanders" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="animation-delay:198ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/NYG.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">New York Giants</span></span>
@@ -4572,11 +4580,11 @@ a { color: inherit; text-decoration: none; }
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/WAS.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Washington Commanders</span></span>
                                 <span class="side__score">22.0</span></div>
 
-                            <div class="meter"><div class="meter__fill" style="width:52.60916456058424%"></div></div>
-
                             <div class="game__foot"><span class="spread">New York Giants by 1.0</span>
-                                <span>53%
-                                    · O/U 44.9</span><span class="chev">&#x2B;</span></div><div class="mkt mkt--none">
+                                <span class="foot__sep">|</span>
+                                <span>Total 44.9</span><span class="chev">&#x2B;</span>
+                                <span class="foot__break"></span>
+                                <span class="foot__win" title="Chance New York Giants wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--lo">53%</span> to win</span></div><div class="mkt mkt--none">
                                     No market captured — this game cannot be evaluated against a price.
                                 </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
@@ -4768,7 +4776,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Denver Broncos@Los Angeles Chargers" data-f-mkt="0" data-f-day="sun" data-f-slot="afternoon" style="--conf:0.35; animation-delay:220ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 13:05</span>
+                                </div></div></article><article class="game " data-game="Denver Broncos@Los Angeles Chargers" data-f-mkt="0" data-f-day="sun" data-f-slot="afternoon" style="animation-delay:220ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 13:05</span>
                                 <span></span></div>
 
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/DEN.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Denver Broncos</span></span>
@@ -4777,11 +4785,11 @@ a { color: inherit; text-decoration: none; }
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/LAC.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Los Angeles Chargers</span></span>
                                 <span class="side__score">17.4</span></div>
 
-                            <div class="meter"><div class="meter__fill" style="width:60.43264997964462%"></div></div>
-
                             <div class="game__foot"><span class="spread">Denver Broncos by 4.0</span>
-                                <span>60%
-                                    · O/U 38.7</span><span class="chev">&#x2B;</span></div><div class="mkt mkt--none">
+                                <span class="foot__sep">|</span>
+                                <span>Total 38.7</span><span class="chev">&#x2B;</span>
+                                <span class="foot__break"></span>
+                                <span class="foot__win" title="Chance Denver Broncos wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--mid">60%</span> to win</span></div><div class="mkt mkt--none">
                                     No market captured — this game cannot be evaluated against a price.
                                 </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
@@ -4974,7 +4982,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Detroit Lions@Arizona Cardinals" data-f-mkt="0" data-f-day="sun" data-f-slot="afternoon" data-f-sc="shootout" style="--conf:0.24; animation-delay:242ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 13:25</span>
+                                </div></div></article><article class="game " data-game="Detroit Lions@Arizona Cardinals" data-f-mkt="0" data-f-day="sun" data-f-slot="afternoon" data-f-sc="shootout" style="animation-delay:242ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 13:25</span>
                                 <span></span></div>
 
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/DET.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Detroit Lions</span></span>
@@ -4983,11 +4991,11 @@ a { color: inherit; text-decoration: none; }
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/ARI.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Arizona Cardinals</span></span>
                                 <span class="side__score">28.9</span></div>
 
-                            <div class="meter"><div class="meter__fill" style="width:53.48645262111894%"></div></div>
-
                             <div class="game__foot"><span class="spread">Detroit Lions by 1.3</span>
-                                <span>53%
-                                    · O/U 59.0</span><span class="tag tag--hint" title="Shootout watch: both offenses outrank the defense they face in points scored against points allowed. Raw season-to-date ranks, never measured against a total. Details under Matchup edges.">Shootout</span><span class="chev">&#x2B;</span></div><div class="mkt mkt--none">
+                                <span class="foot__sep">|</span>
+                                <span>Total 59.0</span><span class="tag tag--hint" title="Shootout watch: both offenses outrank the defense they face in points scored against points allowed. Raw season-to-date ranks, never measured against a total. Details under Matchup edges.">Shootout</span><span class="chev">&#x2B;</span>
+                                <span class="foot__break"></span>
+                                <span class="foot__win" title="Chance Detroit Lions wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--lo">53%</span> to win</span></div><div class="mkt mkt--none">
                                     No market captured — this game cannot be evaluated against a price.
                                 </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
@@ -5183,7 +5191,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="San Francisco 49ers@Seattle Seahawks" data-f-mkt="0" data-f-day="sun" data-f-slot="afternoon" style="--conf:0.23; animation-delay:264ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 13:25</span>
+                                </div></div></article><article class="game " data-game="San Francisco 49ers@Seattle Seahawks" data-f-mkt="0" data-f-day="sun" data-f-slot="afternoon" style="animation-delay:264ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 13:25</span>
                                 <span></span></div>
 
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/SF.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">San Francisco 49ers</span></span>
@@ -5192,11 +5200,11 @@ a { color: inherit; text-decoration: none; }
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/SEA.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Seattle Seahawks</span></span>
                                 <span class="side__score">23.7</span></div>
 
-                            <div class="meter"><div class="meter__fill" style="width:52.745164704836725%"></div></div>
-
                             <div class="game__foot"><span class="spread">Seattle Seahawks by 1.0</span>
-                                <span>53%
-                                    · O/U 46.5</span><span class="chev">&#x2B;</span></div><div class="mkt mkt--none">
+                                <span class="foot__sep">|</span>
+                                <span>Total 46.5</span><span class="chev">&#x2B;</span>
+                                <span class="foot__break"></span>
+                                <span class="foot__win" title="Chance Seattle Seahawks wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--lo">53%</span> to win</span></div><div class="mkt mkt--none">
                                     No market captured — this game cannot be evaluated against a price.
                                 </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
@@ -5388,7 +5396,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Baltimore Ravens@Atlanta Falcons" data-f-mkt="0" data-f-day="sun" data-f-slot="night" style="--conf:0.20; animation-delay:286ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 17:20</span>
+                                </div></div></article><article class="game " data-game="Baltimore Ravens@Atlanta Falcons" data-f-mkt="0" data-f-day="sun" data-f-slot="night" style="animation-delay:286ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 11 Oct &#xB7; 17:20</span>
                                 <span></span></div>
 
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/BAL.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Baltimore Ravens</span></span>
@@ -5397,11 +5405,11 @@ a { color: inherit; text-decoration: none; }
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/ATL.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Atlanta Falcons</span></span>
                                 <span class="side__score">23.9</span></div>
 
-                            <div class="meter"><div class="meter__fill" style="width:51.12282775562298%"></div></div>
-
                             <div class="game__foot"><span class="spread">Baltimore Ravens by 0.4</span>
-                                <span>51%
-                                    · O/U 48.3</span><span class="chev">&#x2B;</span></div><div class="mkt mkt--none">
+                                <span class="foot__sep">|</span>
+                                <span>Total 48.3</span><span class="chev">&#x2B;</span>
+                                <span class="foot__break"></span>
+                                <span class="foot__win" title="Chance Baltimore Ravens wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--lo">51%</span> to win</span></div><div class="mkt mkt--none">
                                     No market captured — this game cannot be evaluated against a price.
                                 </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
@@ -5595,7 +5603,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " data-game="Buffalo Bills@Los Angeles Rams" data-f-mkt="0" data-f-day="mon" data-f-slot="night" style="--conf:0.34; animation-delay:308ms"><div class="game__hit" data-toggle><div class="game__when"><span>Mon 12 Oct &#xB7; 17:15</span>
+                                </div></div></article><article class="game " data-game="Buffalo Bills@Los Angeles Rams" data-f-mkt="0" data-f-day="mon" data-f-slot="night" style="animation-delay:308ms"><div class="game__hit" data-toggle><div class="game__when"><span>Mon 12 Oct &#xB7; 17:15</span>
                                 <span></span></div>
 
                             <div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/BUF.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Buffalo Bills</span></span>
@@ -5604,11 +5612,11 @@ a { color: inherit; text-decoration: none; }
                             <div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/LA.png" alt="" width="32" height="32" loading="lazy" /><span class="side__team">Los Angeles Rams</span></span>
                                 <span class="side__score">29.6</span></div>
 
-                            <div class="meter"><div class="meter__fill" style="width:59.83983366616763%"></div></div>
-
                             <div class="game__foot"><span class="spread">Los Angeles Rams by 3.7</span>
-                                <span>60%
-                                    · O/U 55.5</span><span class="chev">&#x2B;</span></div><div class="mkt mkt--none">
+                                <span class="foot__sep">|</span>
+                                <span>Total 55.5</span><span class="chev">&#x2B;</span>
+                                <span class="foot__break"></span>
+                                <span class="foot__win" title="Chance Los Angeles Rams wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--lo">60%</span> to win</span></div><div class="mkt mkt--none">
                                     No market captured — this game cannot be evaluated against a price.
                                 </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
