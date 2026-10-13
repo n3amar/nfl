@@ -657,11 +657,13 @@ a { color: inherit; text-decoration: none; }
     min-width: 0;
 }
 
-/* Drawn at 32px from a 64px file, so it stays sharp on a high-density screen. */
+/* Drawn at 48px. Football marks are 64px files, so on a 2x screen they are stretched
+   from 64 to 96 device pixels and look soft; re-fetch them larger before going past
+   this. Hockey marks are SVG and do not care. */
 .mark-logo {
     flex: none;
-    width: 32px;
-    height: 32px;
+    width: 48px;
+    height: 48px;
     object-fit: contain;
 }
 
@@ -675,7 +677,7 @@ a { color: inherit; text-decoration: none; }
     background: var(--rule-soft);
     color: var(--chalk-mute);
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: 14px;
     letter-spacing: 0.04em;
 }
 
@@ -690,6 +692,21 @@ a { color: inherit; text-decoration: none; }
 }
 
 .side--fav .side__score { color: var(--signal); }
+
+/* A card at its narrowest (330px, or a phone) has about 134px a side. At full size the
+   logo and the score would leave the name a dozen pixels, so all three step down
+   together. The header is the container, so this follows the CARD's width — an open
+   card on a small screen and a closed one on a wide screen each get the right size. */
+.game__hit { container-type: inline-size; }
+
+@container (max-width: 400px) {
+    .scoreline { gap: 10px; }
+    .side, .side__id { gap: 7px; }
+    .mark-logo { width: 34px; height: 34px; }
+    .mark-logo--init { font-size: 11px; }
+    .side__team { font-size: 18px; }
+    .side__score { font-size: 30px; }
+}
 
 /* Wraps so a long favourite ("Middle Tennessee State by 24.5") drops cleanly instead of
    crowding the chevron. The chevron's margin-left:auto absorbs the free space before
@@ -1462,6 +1479,66 @@ a { color: inherit; text-decoration: none; }
 .tdtop__who { color: var(--chalk); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tdtop__pos, .tdtop__match { color: var(--chalk-mute); }
 .tdtop__p { color: var(--signal); font-weight: 600; }
+
+/* ── Tonight's top 5 (NHL) ────────────────────────────────────────────────────
+   Five short lists side by side, wrapping to one column on a phone. No toggle and no
+   script: every row is always shown, so the export needs nothing. */
+.ntop {
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    background: var(--panel);
+    border: 1px solid var(--rule-soft);
+    border-radius: 7px;
+}
+
+.ntop__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 12px;
+    margin-bottom: 8px;
+}
+
+.ntop__title, .ntop__k {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--chalk);
+}
+
+.ntop__all { text-decoration: none; }
+.ntop__all:hover { color: var(--signal); }
+
+.ntop__k { font-size: 10px; color: var(--chalk-dim); margin-bottom: 2px; }
+.ntop__meta, .ntop__note { font-family: var(--mono); font-size: 10.5px; color: var(--chalk-mute); }
+.ntop__note { margin-top: 8px; }
+
+.ntop__cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px 18px;
+}
+
+.ntop__list { list-style: none; margin: 0; padding: 0; }
+
+.ntop__link {
+    display: grid;
+    grid-template-columns: 22px 1fr auto auto;
+    align-items: baseline;
+    gap: 8px;
+    padding: 4px 2px;
+    border-bottom: 1px solid var(--rule-soft);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--chalk-dim);
+    text-decoration: none;
+}
+
+.ntop__link:hover { color: var(--chalk); }
+.ntop__n, .ntop__sub { color: var(--chalk-mute); }
+.ntop__who { color: var(--chalk); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ntop__p { color: var(--signal); font-weight: 600; }
 
 .facets__open {
     font-family: var(--mono);
@@ -2824,19 +2901,19 @@ a { color: inherit; text-decoration: none; }
                 said. Walk-forward, so each week was projected from the weeks before it and
                 nothing here has seen the result it is being judged on.
             </p></header><div class="stats stats--wide" b-dkv3jdcz3w><div class="stat" b-dkv3jdcz3w><div class="stat__k" b-dkv3jdcz3w>Games graded</div>
-                    <div class="stat__v" b-dkv3jdcz3w>78</div></div>
+                    <div class="stat__v" b-dkv3jdcz3w>79</div></div>
                 <div class="stat" b-dkv3jdcz3w><div class="stat__k" b-dkv3jdcz3w>Margin error</div>
-                    <div class="stat__v stat__v--signal" b-dkv3jdcz3w>10.47</div>
-                    <div class="stat__sub" b-dkv3jdcz3w><span class="cool" b-dkv3jdcz3w>market 9.82</span></div></div>
+                    <div class="stat__v stat__v--signal" b-dkv3jdcz3w>10.43</div>
+                    <div class="stat__sub" b-dkv3jdcz3w><span class="cool" b-dkv3jdcz3w>market 9.78</span></div></div>
                 <div class="stat" b-dkv3jdcz3w><div class="stat__k" b-dkv3jdcz3w>Straight up</div>
-                    <div class="stat__v stat__v--signal" b-dkv3jdcz3w>48-29-1</div>
-                    <div class="stat__sub" b-dkv3jdcz3w>62.3%<span class="cool" b-dkv3jdcz3w> · market 50-27-1</span></div></div>
+                    <div class="stat__v stat__v--signal" b-dkv3jdcz3w>48-30-1</div>
+                    <div class="stat__sub" b-dkv3jdcz3w>61.5%<span class="cool" b-dkv3jdcz3w> · market 50-28-1</span></div></div>
                 <div class="stat" b-dkv3jdcz3w><div class="stat__k" b-dkv3jdcz3w>Against the spread</div>
-                    <div class="stat__v" b-dkv3jdcz3w>36-36-6</div>
-                    <div class="stat__sub" b-dkv3jdcz3w>50.0%<span b-dkv3jdcz3w> · break-even 52.4%</span></div></div></div><div class="warn" b-dkv3jdcz3w><strong b-dkv3jdcz3w>Read the ATS column as variance, not as edge.</strong><span b-dkv3jdcz3w>
+                    <div class="stat__v" b-dkv3jdcz3w>36-37-6</div>
+                    <div class="stat__sub" b-dkv3jdcz3w>49.3%<span b-dkv3jdcz3w> · break-even 52.4%</span></div></div></div><div class="warn" b-dkv3jdcz3w><strong b-dkv3jdcz3w>Read the ATS column as variance, not as edge.</strong><span b-dkv3jdcz3w>
                             The same measurement over 1,535 games
                             recorded 49.6% — Model error 10.44 against the market&#x27;s 9.87. Betting every game returns -5.2% at -110.</span><span b-dkv3jdcz3w>
-                        A season is 78 games. It takes several hundred
+                        A season is 79 games. It takes several hundred
                         before a spread record separates from a coin flip at all.
                     </span></div><div class="tiers" b-dkv3jdcz3w><div class="tiers__k" b-dkv3jdcz3w>Spread record by the model's own conviction</div>
                     <div class="tiers__grid" b-dkv3jdcz3w><div class="tier" b-dkv3jdcz3w><div class="tier__k" b-dkv3jdcz3w>Strong</div>
@@ -2844,8 +2921,8 @@ a { color: inherit; text-decoration: none; }
                                 <div class="tier__sub" b-dkv3jdcz3w>66.7%</div></div><div class="tier" b-dkv3jdcz3w><div class="tier__k" b-dkv3jdcz3w>Lean</div>
                                 <div class="tier__v" b-dkv3jdcz3w>9-14-1</div>
                                 <div class="tier__sub" b-dkv3jdcz3w>39.1%</div></div><div class="tier" b-dkv3jdcz3w><div class="tier__k" b-dkv3jdcz3w>Coinflip</div>
-                                <div class="tier__v" b-dkv3jdcz3w>13-15-2</div>
-                                <div class="tier__sub" b-dkv3jdcz3w>46.4%</div></div></div>
+                                <div class="tier__v" b-dkv3jdcz3w>13-16-2</div>
+                                <div class="tier__sub" b-dkv3jdcz3w>44.8%</div></div></div>
                     <p class="tiers__note" b-dkv3jdcz3w>
                         Fixed cutoffs, the same ones the board uses:
                         <strong b-dkv3jdcz3w>Strong</strong> is a 60%
@@ -2858,11 +2935,11 @@ a { color: inherit; text-decoration: none; }
                 The same treatment for the total: how far off the model and the market ran,
                 and — where a line was captured — whether the model's Over/Under call beat it.
             </p><div class="stats stats--wide" b-dkv3jdcz3w><div class="stat" b-dkv3jdcz3w><div class="stat__k" b-dkv3jdcz3w>Total error</div>
-                    <div class="stat__v stat__v--signal" b-dkv3jdcz3w>11.90</div>
-                    <div class="stat__sub" b-dkv3jdcz3w><span class="cool" b-dkv3jdcz3w>market 10.56</span></div></div>
+                    <div class="stat__v stat__v--signal" b-dkv3jdcz3w>11.95</div>
+                    <div class="stat__sub" b-dkv3jdcz3w><span class="cool" b-dkv3jdcz3w>market 10.63</span></div></div>
                 <div class="stat" b-dkv3jdcz3w><div class="stat__k" b-dkv3jdcz3w>Over/Under</div>
-                    <div class="stat__v" b-dkv3jdcz3w>33-45</div>
-                    <div class="stat__sub" b-dkv3jdcz3w>42.3%<span b-dkv3jdcz3w> · break-even 52.4%</span></div></div></div><div class="warn" b-dkv3jdcz3w><strong b-dkv3jdcz3w>This is the weakest column on the page — read it as such.</strong><span b-dkv3jdcz3w>
+                    <div class="stat__v" b-dkv3jdcz3w>34-45</div>
+                    <div class="stat__sub" b-dkv3jdcz3w>43.0%<span b-dkv3jdcz3w> · break-even 52.4%</span></div></div></div><div class="warn" b-dkv3jdcz3w><strong b-dkv3jdcz3w>This is the weakest column on the page — read it as such.</strong><span b-dkv3jdcz3w>
                             The same measurement over 1,535 games
                             recorded 48.4% — Model error 10.95 against the market&#x27;s 10.38. Betting every game returns -7.5% at -110.</span></div><div class="grid grid--totals" b-dkv3jdcz3w><div class="grid__head" b-dkv3jdcz3w><span b-dkv3jdcz3w>Wk</span>
                     <span class="num" b-dkv3jdcz3w>Games</span>
@@ -2890,11 +2967,11 @@ a { color: inherit; text-decoration: none; }
                         <span class="num cool" b-dkv3jdcz3w>9.63</span>
                         <span class="num " b-dkv3jdcz3w>-2.17</span>
                         <span class="num" b-dkv3jdcz3w>5-11</span></button><button class="grid__row grid__row--on" b-dkv3jdcz3w><span class="grid__wk" b-dkv3jdcz3w>5</span>
-                        <span class="num" b-dkv3jdcz3w>14</span>
-                        <span class="num hot" b-dkv3jdcz3w>9.13</span>
-                        <span class="num cool" b-dkv3jdcz3w>9.79</span>
-                        <span class="num hot" b-dkv3jdcz3w>&#x2B;0.66</span>
-                        <span class="num" b-dkv3jdcz3w>9-5</span></button></div><h2 class="section" b-dkv3jdcz3w>Week by week</h2>
+                        <span class="num" b-dkv3jdcz3w>15</span>
+                        <span class="num hot" b-dkv3jdcz3w>9.55</span>
+                        <span class="num cool" b-dkv3jdcz3w>10.17</span>
+                        <span class="num hot" b-dkv3jdcz3w>&#x2B;0.62</span>
+                        <span class="num" b-dkv3jdcz3w>10-5</span></button></div><h2 class="section" b-dkv3jdcz3w>Week by week</h2>
             <p class="section__note" b-dkv3jdcz3w>
                 Margin, the totals table above, and every per-game detail all open from
                 whichever row you click below. Each game carries three verdicts:
@@ -2934,12 +3011,12 @@ a { color: inherit; text-decoration: none; }
                         <span class="num hot" b-dkv3jdcz3w>&#x2B;0.26</span>
                         <span class="num" b-dkv3jdcz3w>11-5</span>
                         <span class="num" b-dkv3jdcz3w>9-5-2</span></button><button class="grid__row grid__row--on" b-dkv3jdcz3w><span class="grid__wk" b-dkv3jdcz3w>5</span>
-                        <span class="num" b-dkv3jdcz3w>14</span>
-                        <span class="num hot" b-dkv3jdcz3w>10.92</span>
-                        <span class="num cool" b-dkv3jdcz3w>10.68</span>
-                        <span class="num " b-dkv3jdcz3w>-0.24</span>
-                        <span class="num" b-dkv3jdcz3w>9-4-1</span>
-                        <span class="num" b-dkv3jdcz3w>7-6-1</span></button><div class="detail" b-dkv3jdcz3w><div class="row" b-dkv3jdcz3w><div class="row__head" b-dkv3jdcz3w><span class="row__match" b-dkv3jdcz3w>Tampa Bay Buccaneers @ Dallas Cowboys</span>
+                        <span class="num" b-dkv3jdcz3w>15</span>
+                        <span class="num hot" b-dkv3jdcz3w>10.65</span>
+                        <span class="num cool" b-dkv3jdcz3w>10.40</span>
+                        <span class="num " b-dkv3jdcz3w>-0.25</span>
+                        <span class="num" b-dkv3jdcz3w>9-5-1</span>
+                        <span class="num" b-dkv3jdcz3w>7-7-1</span></button><div class="detail" b-dkv3jdcz3w><div class="row" b-dkv3jdcz3w><div class="row__head" b-dkv3jdcz3w><span class="row__match" b-dkv3jdcz3w>Tampa Bay Buccaneers @ Dallas Cowboys</span>
                                         <span class="row__final" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>final</span>
                                             <span class="row__score" b-dkv3jdcz3w>24–16</span></span></div>
 
@@ -3219,6 +3296,26 @@ a { color: inherit; text-decoration: none; }
                                             <span class="row__marked" b-dkv3jdcz3w><span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span><span class="row__pick" b-dkv3jdcz3w>Baltimore Ravens &#x2B;3.5 &#xB7; Strong</span></span></span>
 
                                         <span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>O/U</span>
+                                            <span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span></span></div></div><div class="row" b-dkv3jdcz3w><div class="row__head" b-dkv3jdcz3w><span class="row__match" b-dkv3jdcz3w>Buffalo Bills @ Los Angeles Rams</span>
+                                        <span class="row__final" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>final</span>
+                                            <span class="row__score" b-dkv3jdcz3w>37–34</span></span></div>
+
+                                    <div class="row__band row__band--nums" b-dkv3jdcz3w><span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>model</span>
+                                            <span class="row__v hot" b-dkv3jdcz3w>Los Angeles Rams 3.9</span></span>
+
+                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>market</span>
+                                            <span class="row__v cool" b-dkv3jdcz3w>Los Angeles Rams 3.5</span></span>
+
+                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>total</span>
+                                            <span class="row__v" b-dkv3jdcz3w><span class="hot" b-dkv3jdcz3w>55.5</span><span class="cool" b-dkv3jdcz3w> / 55.5</span><span b-dkv3jdcz3w> → 71</span></span></span></div>
+
+                                    <div class="row__band row__band--marks" b-dkv3jdcz3w><span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>winner</span>
+                                            <span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span></span>
+
+                                        <span class="row__cell row__cell--mark row__cell--spread" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>vs spread</span>
+                                            <span class="row__marked" b-dkv3jdcz3w><span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span><span class="row__pick" b-dkv3jdcz3w>Los Angeles Rams -3.5 &#xB7; Coinflip</span></span></span>
+
+                                        <span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>O/U</span>
                                             <span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span></span></div></div></div></div><div class="caveats" b-dkv3jdcz3w><h2 class="read__head" b-dkv3jdcz3w>How to read these</h2>
                 <ul class="caveats__list" b-dkv3jdcz3w><li b-dkv3jdcz3w><strong b-dkv3jdcz3w>Straight up is the honest headline.</strong> It needs no price,
                         grades every game, and answers the question the model was built for:
@@ -3232,9 +3329,9 @@ a { color: inherit; text-decoration: none; }
                     </li>
                     <li b-dkv3jdcz3w><strong b-dkv3jdcz3w>Model and market errors are measured on the same games.</strong>
                         Where a game carried no price, it counts toward the model's error but
-                        not the comparison — 78 of
-                        78 games are directly comparable on margin,
-                        78 on the total.
+                        not the comparison — 79 of
+                        79 games are directly comparable on margin,
+                        79 on the total.
                     </li>
                     <li b-dkv3jdcz3w><strong b-dkv3jdcz3w>Early weeks are rated on priors.</strong> Weeks 1–3 are included
                         because the board really did show those projections, but the ratings
@@ -3243,7 +3340,7 @@ a { color: inherit; text-decoration: none; }
                         backtests exclude them; this page does not.
                     </li>
                     <li b-dkv3jdcz3w>
-                        Market numbers: nflverse closing lines, 78 of 78 fixtures joined. Ratings: 64 games played, primed with 2025 ratings carried at 85%.
+                        Market numbers: nflverse closing lines, 79 of 79 fixtures joined. Ratings: 64 games played, primed with 2025 ratings carried at 85%.
                     </li></ul></div></main></div>
 </body>
 </html>
