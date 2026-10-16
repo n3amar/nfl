@@ -1087,6 +1087,20 @@ a { color: inherit; text-decoration: none; }
 .tstats__rk { color: var(--chalk-mute); font-size: 10.5px; opacity: .85; }
 .pwatch__guess { margin-left: 6px; padding: 0 5px; border: 1px solid var(--chalk-mute); border-radius: 3px; font-size: 10px; font-weight: 600; letter-spacing: .02em; color: var(--chalk-mute); white-space: nowrap; }
 .pwatch__verdict { display: block; }
+/* Opponent shots factor (2026-10-15): the arrow says the direction in words-free text, the
+   colour repeats it, so neither carries it alone. */
+.pwatch__opp { margin-left: 6px; padding: 0 5px; border: 1px solid var(--chalk-mute); border-radius: 3px; font-size: 10px; font-weight: 600; letter-spacing: .02em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+/* Green / red at the user's request (2026-10-15). Both clear 4.5:1 text contrast on the
+   panel (#14171b): #4ade80 ~10:1, #f87171 ~6.4:1. The arrow keeps the direction readable
+   for red-green colour blindness, which these two alone would not. */
+.pwatch__opp { color: var(--chalk-dim); }
+.pwatch__opp--up { color: #4ade80; }
+.pwatch__opp--down { color: #f87171; }
+/* Matchup fit (2026-10-14): the wash marks the row, the cell that qualified carries the
+   signal color, and the tag says it in words so it does not rest on colour alone. */
+.pwatch__fit > td { background: var(--signal-wash); }
+.pwatch__fitcell { color: var(--signal); font-weight: 700; }
+.pwatch__fittag { margin-left: 6px; padding: 0 5px; border: 1px solid var(--signal-dim); border-radius: 3px; font-size: 10px; font-weight: 600; letter-spacing: .02em; color: var(--signal); white-space: nowrap; }
 .tstats__grid td.tstats__win { color: var(--signal); }
 
 /* ── Matchup edges: one line per mismatch, area label left ───────────────── */
@@ -1259,6 +1273,10 @@ a { color: inherit; text-decoration: none; }
 
 .chip:hover { color: var(--chalk); border-color: var(--rule); }
 .chip--on { background: var(--signal); color: var(--ink); font-weight: 600; }
+/* The rankings tabs are chips that are links. Listed after the hover rule so the active
+   tab keeps its ink-on-signal text under the pointer. */
+a.chip { text-decoration: none; }
+a.chip--on:hover { color: var(--ink); }
 
 .ladder {
     width: 100%;
@@ -1287,6 +1305,8 @@ a { color: inherit; text-decoration: none; }
 .ladder th.ladder__num { cursor: pointer; user-select: none; transition: color .15s ease; }
 .ladder th.ladder__num:hover { color: var(--chalk); }
 .ladder th.ladder__num--on { color: var(--signal); }
+/* A right-aligned header that does not sort, so it must not offer the pointer. */
+.ladder th.ladder__plain { text-align: right; }
 
 .ladder tbody td {
     padding: 7px 0 7px 12px;
@@ -1321,6 +1341,27 @@ a { color: inherit; text-decoration: none; }
 
 .ladder__net { color: var(--signal); font-weight: 500; }
 .ladder__dim { color: var(--chalk-mute); }
+
+/* Matchup fit: eight or nine columns where the other tabs have four, so a wider gutter,
+   no wrapping in a figure ("#6 vs #27" must not break), and a text column whose header
+   aligns with its cells. The player column keeps the slack, as on every ladder. */
+.ladder--fit thead th,
+.ladder--fit tbody td { padding-left: 18px; }
+.ladder--fit .ladder__num,
+.ladder--fit .ladder__txt { white-space: nowrap; }
+.ladder--fit .ladder__rank { padding-left: 0; }
+.ladder th.ladder__txt,
+.ladder td.ladder__txt { text-align: left; }
+.ladder--fit .ladder__team .ladder__conf { white-space: nowrap; }
+/* A phone cannot hold nine unbroken columns: give the gutter back and let figures wrap
+   rather than push the page sideways. */
+@media (max-width: 720px) {
+    .ladder--fit thead th,
+    .ladder--fit tbody td { padding-left: 10px; }
+    .ladder--fit .ladder__num,
+    .ladder--fit .ladder__txt,
+    .ladder--fit .ladder__team .ladder__conf { white-space: normal; }
+}
 
 /* ── Right rail panels ───────────────────────────────────────────────────── */
 
@@ -2362,6 +2403,19 @@ a { color: inherit; text-decoration: none; }
 .export__said--ok  { border-left-color: var(--signal-dim); }
 .export__said--bad { border-left-color: var(--warn, #c8552b); }
 
+
+/* Results: the three conviction tables stack with air between them. */
+.ladder.conv { margin-bottom: 20px; }
+
+/* ── By band: one week's picks under each band, result in words and glyph ─── */
+.band { margin: 0 0 12px; }
+.band__head { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0 4px; border-bottom: 1px solid var(--rule-soft); font-family: var(--mono); font-size: 11px; letter-spacing: .06em; }
+.band__k { color: var(--chalk); text-transform: uppercase; }
+.band__v { color: var(--chalk-mute); font-variant-numeric: tabular-nums; }
+.band__res--hit { color: var(--signal); }
+.band__res--miss { color: var(--warn, #c8552b); }
+.band__res--push { color: var(--chalk-mute); }
+
 /* /Components/Layout/MainLayout.razor.rz.scp.css */
 #blazor-error-ui[b-yok0k17bsi] {
     color-scheme: light only;
@@ -2900,14 +2954,13 @@ a { color: inherit; text-decoration: none; }
                     <span class="filter__count"></span>
                     <button class="filter__clear" data-filter-clear>Show all</button></div><section class="tdtop"><input type="radio" name="tdtop" id="tdtop5" class="tdtop__r" checked>
                     <input type="radio" name="tdtop" id="tdtop10" class="tdtop__r">
-                    <div class="tdtop__head"><span class="tdtop__title">Anytime TD leaders</span>
-                        <span class="tdtop__meta">from every card's Player watch · red-zone usage + rushing/receiving TDs</span>
+                    <div class="tdtop__head"><span class="tdtop__title">Anytime TD leaders</span><span class="tdtop__meta">from every card's Player watch · red-zone usage + rushing/receiving TDs</span>
                         <span class="tdtop__btns"><label for="tdtop5" class="tdtop__btn tdtop__btn--5">Top 5</label>
                             <label for="tdtop10" class="tdtop__btn tdtop__btn--10">Top 10</label></span></div>
-                    <ol class="tdtop__list"><li class="tdtop__row "><a class="tdtop__link" href="#g-baltimore-ravens-cleveland-browns" data-open-card="g-baltimore-ravens-cleveland-browns" title="Derrick Henry: 7 TD in 4 game(s) with a line this season. Opens the game."><span class="tdtop__n">1.</span>
+                    <ol class="tdtop__list"><li class="tdtop__row "><a class="tdtop__link" href="#g-baltimore-ravens-cleveland-browns" data-open-card="g-baltimore-ravens-cleveland-browns" title="Derrick Henry: 8 TD in 5 game(s) with a line this season. Opens the game."><span class="tdtop__n">1.</span>
                                     <span class="tdtop__who">Derrick Henry <span class="tdtop__pos">(RB)</span></span>
                                     <span class="tdtop__match">BAL vs CLE</span>
-                                    <span class="tdtop__p">73%</span></a></li><li class="tdtop__row "><a class="tdtop__link" href="#g-los-angeles-chargers-kansas-city-chiefs" data-open-card="g-los-angeles-chargers-kansas-city-chiefs" title="Kenneth Walker III: 6 TD in 4 game(s) with a line this season. Opens the game."><span class="tdtop__n">2.</span>
+                                    <span class="tdtop__p">69%</span></a></li><li class="tdtop__row "><a class="tdtop__link" href="#g-los-angeles-chargers-kansas-city-chiefs" data-open-card="g-los-angeles-chargers-kansas-city-chiefs" title="Kenneth Walker III: 6 TD in 4 game(s) with a line this season. Opens the game."><span class="tdtop__n">2.</span>
                                     <span class="tdtop__who">Kenneth Walker III <span class="tdtop__pos">(RB)</span></span>
                                     <span class="tdtop__match">KC vs LAC</span>
                                     <span class="tdtop__p">65%</span></a></li><li class="tdtop__row "><a class="tdtop__link" href="#g-dallas-cowboys-green-bay-packers" data-open-card="g-dallas-cowboys-green-bay-packers" title="Javonte Williams: 7 TD in 5 game(s) with a line this season. Opens the game."><span class="tdtop__n">3.</span>
@@ -2919,22 +2972,22 @@ a { color: inherit; text-decoration: none; }
                                     <span class="tdtop__p">60%</span></a></li><li class="tdtop__row "><a class="tdtop__link" href="#g-washington-commanders-san-francisco-49ers" data-open-card="g-washington-commanders-san-francisco-49ers" title="Christian McCaffrey: 5 TD in 5 game(s) with a line this season. Opens the game."><span class="tdtop__n">5.</span>
                                     <span class="tdtop__who">Christian McCaffrey <span class="tdtop__pos">(RB)</span></span>
                                     <span class="tdtop__match">SF vs WAS</span>
-                                    <span class="tdtop__p">60%</span></a></li><li class="tdtop__row tdtop__more"><a class="tdtop__link" href="#g-arizona-cardinals-los-angeles-rams" data-open-card="g-arizona-cardinals-los-angeles-rams" title="Kyren Williams: 4 TD in 4 game(s) with a line this season. Opens the game."><span class="tdtop__n">6.</span>
-                                    <span class="tdtop__who">Kyren Williams <span class="tdtop__pos">(RB)</span></span>
-                                    <span class="tdtop__match">LA vs ARI</span>
-                                    <span class="tdtop__p">59%</span></a></li><li class="tdtop__row tdtop__more"><a class="tdtop__link" href="#g-chicago-bears-atlanta-falcons" data-open-card="g-chicago-bears-atlanta-falcons" title="Bijan Robinson: 5 TD in 4 game(s) with a line this season. Opens the game."><span class="tdtop__n">7.</span>
-                                    <span class="tdtop__who">Bijan Robinson <span class="tdtop__pos">(RB)</span></span>
-                                    <span class="tdtop__match">ATL vs CHI</span>
-                                    <span class="tdtop__p">58%</span></a></li><li class="tdtop__row tdtop__more"><a class="tdtop__link" href="#g-chicago-bears-atlanta-falcons" data-open-card="g-chicago-bears-atlanta-falcons" title="D&#x27;Andre Swift: 4 TD in 5 game(s) with a line this season. Opens the game."><span class="tdtop__n">8.</span>
+                                    <span class="tdtop__p">60%</span></a></li><li class="tdtop__row tdtop__more"><a class="tdtop__link" href="#g-chicago-bears-atlanta-falcons" data-open-card="g-chicago-bears-atlanta-falcons" title="D&#x27;Andre Swift: 4 TD in 5 game(s) with a line this season. Opens the game."><span class="tdtop__n">6.</span>
                                     <span class="tdtop__who">D&#x27;Andre Swift <span class="tdtop__pos">(RB)</span></span>
                                     <span class="tdtop__match">CHI vs ATL</span>
-                                    <span class="tdtop__p">57%</span></a></li><li class="tdtop__row tdtop__more"><a class="tdtop__link" href="#g-buffalo-bills-las-vegas-raiders" data-open-card="g-buffalo-bills-las-vegas-raiders" title="James Cook: 3 TD in 4 game(s) with a line this season. Opens the game."><span class="tdtop__n">9.</span>
+                                    <span class="tdtop__p">57%</span></a></li><li class="tdtop__row tdtop__more"><a class="tdtop__link" href="#g-arizona-cardinals-los-angeles-rams" data-open-card="g-arizona-cardinals-los-angeles-rams" title="Kyren Williams: 5 TD in 5 game(s) with a line this season. Opens the game."><span class="tdtop__n">7.</span>
+                                    <span class="tdtop__who">Kyren Williams <span class="tdtop__pos">(RB)</span></span>
+                                    <span class="tdtop__match">LA vs ARI</span>
+                                    <span class="tdtop__p">56%</span></a></li><li class="tdtop__row tdtop__more"><a class="tdtop__link" href="#g-buffalo-bills-las-vegas-raiders" data-open-card="g-buffalo-bills-las-vegas-raiders" title="James Cook: 5 TD in 5 game(s) with a line this season. Opens the game."><span class="tdtop__n">8.</span>
                                     <span class="tdtop__who">James Cook <span class="tdtop__pos">(RB)</span></span>
                                     <span class="tdtop__match">BUF vs LV</span>
-                                    <span class="tdtop__p">56%</span></a></li><li class="tdtop__row tdtop__more"><a class="tdtop__link" href="#g-buffalo-bills-las-vegas-raiders" data-open-card="g-buffalo-bills-las-vegas-raiders" title="Josh Allen: 7 TD in 4 game(s) with a line this season. Opens the game."><span class="tdtop__n">10.</span>
-                                    <span class="tdtop__who">Josh Allen <span class="tdtop__pos">(QB)</span></span>
-                                    <span class="tdtop__match">BUF vs LV</span>
-                                    <span class="tdtop__p">54%</span></a></li></ol></section><div class="facets" data-facets><details class="facets__panel"><summary class="facets__open">Filter the board</summary>
+                                    <span class="tdtop__p">55%</span></a></li><li class="tdtop__row tdtop__more"><a class="tdtop__link" href="#g-chicago-bears-atlanta-falcons" data-open-card="g-chicago-bears-atlanta-falcons" title="Bijan Robinson: 5 TD in 5 game(s) with a line this season. Opens the game."><span class="tdtop__n">9.</span>
+                                    <span class="tdtop__who">Bijan Robinson <span class="tdtop__pos">(RB)</span></span>
+                                    <span class="tdtop__match">ATL vs CHI</span>
+                                    <span class="tdtop__p">54%</span></a></li><li class="tdtop__row tdtop__more"><a class="tdtop__link" href="#g-seattle-seahawks-denver-broncos" data-open-card="g-seattle-seahawks-denver-broncos" title="Jaxon Smith-Njigba: 7 TD in 5 game(s) with a line this season. Opens the game."><span class="tdtop__n">10.</span>
+                                    <span class="tdtop__who">Jaxon Smith-Njigba <span class="tdtop__pos">(WR)</span></span>
+                                    <span class="tdtop__match">SEA vs DEN</span>
+                                    <span class="tdtop__p">53%</span></a></li></ol></section><div class="facets" data-facets><details class="facets__panel"><summary class="facets__open">Filter the board</summary>
 
                     <div class="facets__group"><span class="facets__k">Spread tier</span><button type="button" class="chip" data-facet="st" data-value="strong">Strong &#x2265;60%</button><button type="button" class="chip" data-facet="st" data-value="lean">Lean 55&#x2013;59%</button><button type="button" class="chip" data-facet="st" data-value="flip">Coin flip</button></div>
 
@@ -2952,7 +3005,7 @@ a { color: inherit; text-decoration: none; }
                 <p class="facets__record" data-facet-record="spread" hidden>Spread picks measured 49.6% against the close over 1,535 games. A tier is the model&#x27;s conviction, not edge &#x2014; 52.4% is break-even.</p>
                 <p class="facets__record" data-facet-record="total" hidden>Totals picks measured 48.4% against the close over 1,535 games. A tier is the model&#x27;s conviction, not edge &#x2014; 52.4% is break-even.</p>
                 <p class="facets__record" data-facet-record="ml" hidden>Moneyline, measured: Moneyline vs close over 1,011 &#x2014; Backed 1,011 of 1,535 games at 3% minimum edge, flat stake. Returns -11.6% at the prices actually posted. A price band narrows what you are reading; no band has ever cleared the vig.</p>
-                <p class="facets__record" data-facet-record="sc" hidden>Scoring watch is a raw rank comparison of season-to-date points, with no minimum games, and has never been measured against a total. It says what the numbers so far look like, not which side of a total to take.</p></div><div class="board" data-stats="core"><article class="game " id="g-seattle-seahawks-denver-broncos" data-game="Seattle Seahawks@Denver Broncos" data-f-mkt="1" data-f-st="flip" data-f-tt="flip" data-f-ml="fav" data-f-mlp="-138" data-f-gap="0-3" data-f-day="thu" data-f-slot="night" style="animation-delay:0ms"><div class="game__hit" data-toggle><div class="game__when"><span>Thu 15 Oct &#xB7; 17:15</span>
+                <p class="facets__record" data-facet-record="sc" hidden>Scoring watch is a raw rank comparison of season-to-date points, with no minimum games, and has never been measured against a total. It says what the numbers so far look like, not which side of a total to take.</p></div><div class="board" data-stats="core"><article class="game " id="g-seattle-seahawks-denver-broncos" data-game="Seattle Seahawks@Denver Broncos" data-f-mkt="1" data-f-st="flip" data-f-tt="lean" data-f-ml="fav" data-f-mlp="-142" data-f-gap="0-3" data-f-day="thu" data-f-slot="night" style="animation-delay:0ms"><div class="game__hit" data-toggle><div class="game__when"><span>Thu 15 Oct &#xB7; 17:15</span>
                                 <span></span></div>
 
                             <div class="scoreline"><div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/SEA.png" alt="" width="48" height="48" loading="lazy" /><span class="side__team">Seattle Seahawks</span></span>
@@ -2965,31 +3018,31 @@ a { color: inherit; text-decoration: none; }
 
                             <div class="game__foot"><span class="spread">Seattle Seahawks by 2.0</span>
                                 <span class="foot__sep">|</span>
-                                <span>Total 43.5</span><span class="tag tag--key" title="Market &#x2B;2.0 teases to &#x2B;8.0 &#x2014; a qualifying leg">3 &amp; 7</span><span class="chev">&#x2B;</span>
+                                <span>Total 43.5</span><span class="tag tag--key" title="Market &#x2B;2.5 teases to &#x2B;8.5 &#x2014; a qualifying leg">3 &amp; 7</span><span class="chev">&#x2B;</span>
                                 <span class="foot__break"></span>
                                 <span class="foot__win" title="Chance Seattle Seahawks wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--lo">55%</span> to win
                                     </span></div><div class="game__plays"><span class="game__plays-k">Play</span>
-                                    <div class="picks"><div class="pick" title="Seattle Seahawks -2.0 &#x2014; the model is 0.0 past the line, 52% chance to cover, coin flip. The model&#x27;s spread picks measured 49.6% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Seattle Seahawks -2.0</span>
-                                                <span class="pick__p"><span class="prob prob--lo">52%</span> chance to cover</span>
+                                    <div class="picks"><div class="pick" title="Denver Broncos &#x2B;2.5 &#x2014; the model is 0.5 past the line, 49% chance to cover, coin flip. The model&#x27;s spread picks measured 49.6% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Denver Broncos &#x2B;2.5</span>
+                                                <span class="pick__p"><span class="prob prob--lo">49%</span> chance to cover</span>
                                                 <span class="pick__tier prob--lo">coin flip</span>
-                                                <span class="pick__edge"></span></div><div class="pick" title="Over 42.0 &#x2014; the model is 1.5 past the line, 55% chance of over, coin flip. The model&#x27;s totals picks measured 48.4% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Over 42.0</span>
-                                                <span class="pick__p"><span class="prob prob--lo">55%</span> chance of over</span>
-                                                <span class="pick__tier prob--lo">coin flip</span>
+                                                <span class="pick__edge"></span></div><div class="pick" title="Over 40.5 &#x2014; the model is 3.0 past the line, 59% chance of over, lean. The model&#x27;s totals picks measured 48.4% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Over 40.5</span>
+                                                <span class="pick__p"><span class="prob prob--mid">59%</span> chance of over</span>
+                                                <span class="pick__tier prob--mid">lean</span>
                                                 <span class="pick__edge"></span></div></div></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
-                                        <span class="mkt__src">consensus · pulled 9 Oct 21:01 MST</span></div>
+                                        <span class="mkt__src">consensus · pulled 14 Oct 21:01 MST</span></div>
 
                                     <table class="mkt__grid"><thead><tr><th></th>
                                                 <th>Spread</th>
                                                 <th>Money</th></tr></thead>
                                         <tbody><tr><td class="mkt__team">Seattle Seahawks</td>
-                                                <td>-2.0  -110</td>
-                                                <td>-138</td></tr>
+                                                <td>-2.5  -112</td>
+                                                <td>-142</td></tr>
                                             <tr><td class="mkt__team">Denver Broncos</td>
-                                                <td>&#x2B;2.0  -110</td>
-                                                <td>&#x2B;112</td></tr>
-                                            <tr class="mkt__tot"><td class="mkt__team">Total 42.0</td>
+                                                <td>&#x2B;2.5  -108</td>
+                                                <td>&#x2B;120</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 40.5</td>
                                                 <td>over -110</td>
-                                                <td>under -110</td></tr></tbody></table><div class="mkt__drift">Opened Denver Broncos &#x2B;1.5, now &#x2B;2.0 &#x2014; 0.5 toward Seattle Seahawks</div></div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
+                                                <td>under -110</td></tr></tbody></table><div class="mkt__drift">Opened Denver Broncos &#x2B;1.5, now &#x2B;2.5 &#x2014; 1.0 toward Seattle Seahawks</div></div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
                                     <tbody><tr><td class="grid__team">Seattle Seahawks</td>
                                             <td>&#x2B;3.4</td>
@@ -3239,7 +3292,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " id="g-houston-texans-jacksonville-jaguars" data-game="Houston Texans@Jacksonville Jaguars" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="animation-delay:22ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 06:30</span>
+                                </div></div></article><article class="game " id="g-houston-texans-jacksonville-jaguars" data-game="Houston Texans@Jacksonville Jaguars" data-f-mkt="1" data-f-st="strong" data-f-tt="strong" data-f-ml="fav" data-f-mlp="-145" data-f-gap="3-7" data-f-day="sun" data-f-slot="early" style="animation-delay:22ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 06:30</span>
                                 <span></span></div>
 
                             <div class="scoreline"><div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/HOU.png" alt="" width="48" height="48" loading="lazy" /><span class="side__team">Houston Texans</span></span>
@@ -3252,12 +3305,31 @@ a { color: inherit; text-decoration: none; }
 
                             <div class="game__foot"><span class="spread">Jacksonville Jaguars by 7.6</span>
                                 <span class="foot__sep">|</span>
-                                <span>Total 38.6</span><span class="tag tag--hint" title="Model line -7.6. No price captured, so this is not a teaser leg yet.">3 &amp; 7 model</span><span class="chev">&#x2B;</span>
+                                <span>Total 38.6</span><span class="tag tag--key" title="Market &#x2B;2.5 teases to &#x2B;8.5 &#x2014; a qualifying leg">3 &amp; 7</span><span class="chev">&#x2B;</span>
                                 <span class="foot__break"></span>
                                 <span class="foot__win" title="Chance Jacksonville Jaguars wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--mid">69%</span> to win
-                                    </span></div><div class="mkt mkt--none">
-                                    No market captured — this game cannot be evaluated against a price.
-                                </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
+                                    <span class="tag edge-badge edge-badge--against" title="Sized against the captured price: Jacksonville Jaguars at -145, 68.4% vs 59.2% break-even, &#x2B;9.2%. Against evidence: Moneyline vs close measured 31.9% over 1,011 &#x2014; a losing verdict.">edge &#x26A0;</span></span></div><div class="game__plays"><span class="game__plays-k">Play</span>
+                                    <div class="picks"><div class="pick" title="Jacksonville Jaguars -2.5 &#x2014; the model is 5.1 past the line, 65% chance to cover, strong. The model&#x27;s spread picks measured 49.6% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Jacksonville Jaguars -2.5</span>
+                                                <span class="pick__p"><span class="prob prob--hi">65%</span> chance to cover</span>
+                                                <span class="pick__tier prob--hi">strong</span>
+                                                <span class="pick__edge"><span class="tag edge-badge edge-badge--against" title="Sized against the captured price: Jacksonville Jaguars -2.5 at -113, 64.6% vs 53.1% break-even, &#x2B;11.6%. Against evidence: Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict.">edge &#x26A0;</span></span></div><div class="pick" title="Under 42.5 &#x2014; the model is 3.9 past the line, 61% chance of under, strong. The model&#x27;s totals picks measured 48.4% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Under 42.5</span>
+                                                <span class="pick__p"><span class="prob prob--hi">61%</span> chance of under</span>
+                                                <span class="pick__tier prob--hi">strong</span>
+                                                <span class="pick__edge"><span class="tag edge-badge edge-badge--against" title="Sized against the captured price: Under 42.5 at -110, 61.0% vs 52.4% break-even, &#x2B;8.6%. Against evidence: Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict.">edge &#x26A0;</span></span></div></div></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · pulled 14 Oct 21:01 MST</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Houston Texans</td>
+                                                <td>&#x2B;2.5  -105</td>
+                                                <td>&#x2B;120</td></tr>
+                                            <tr><td class="mkt__team">Jacksonville Jaguars</td>
+                                                <td>-2.5  -113</td>
+                                                <td>-145</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 42.5</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
                                     <tbody><tr><td class="grid__team">Houston Texans</td>
                                             <td>-2.0</td>
@@ -3504,7 +3576,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " id="g-chicago-bears-atlanta-falcons" data-game="Chicago Bears@Atlanta Falcons" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="animation-delay:44ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " id="g-chicago-bears-atlanta-falcons" data-game="Chicago Bears@Atlanta Falcons" data-f-mkt="1" data-f-st="flip" data-f-tt="lean" data-f-ml="fav" data-f-mlp="-116" data-f-gap="0-3" data-f-day="sun" data-f-slot="early" style="animation-delay:44ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="scoreline"><div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/CHI.png" alt="" width="48" height="48" loading="lazy" /><span class="side__team">Chicago Bears</span></span>
@@ -3517,12 +3589,31 @@ a { color: inherit; text-decoration: none; }
 
                             <div class="game__foot"><span class="spread">Chicago Bears by 1.5</span>
                                 <span class="foot__sep">|</span>
-                                <span>Total 47.8</span><span class="tag tag--hint" title="Model line &#x2B;1.5. No price captured, so this is not a teaser leg yet.">3 &amp; 7 model</span><span class="chev">&#x2B;</span>
+                                <span>Total 47.8</span><span class="chev">&#x2B;</span>
                                 <span class="foot__break"></span>
                                 <span class="foot__win" title="Chance Chicago Bears wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--lo">54%</span> to win
-                                    </span></div><div class="mkt mkt--none">
-                                    No market captured — this game cannot be evaluated against a price.
-                                </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
+                                    </span></div><div class="game__plays"><span class="game__plays-k">Play</span>
+                                    <div class="picks"><div class="pick" title="Chicago Bears -1.0 &#x2014; the model is 0.5 past the line, 53% chance to cover, coin flip. The model&#x27;s spread picks measured 49.6% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Chicago Bears -1.0</span>
+                                                <span class="pick__p"><span class="prob prob--lo">53%</span> chance to cover</span>
+                                                <span class="pick__tier prob--lo">coin flip</span>
+                                                <span class="pick__edge"></span></div><div class="pick" title="Under 51.0 &#x2014; the model is 3.2 past the line, 59% chance of under, lean. The model&#x27;s totals picks measured 48.4% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Under 51.0</span>
+                                                <span class="pick__p"><span class="prob prob--mid">59%</span> chance of under</span>
+                                                <span class="pick__tier prob--mid">lean</span>
+                                                <span class="pick__edge"></span></div></div></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · pulled 14 Oct 21:01 MST</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Chicago Bears</td>
+                                                <td>-1.0  -108</td>
+                                                <td>-116</td></tr>
+                                            <tr><td class="mkt__team">Atlanta Falcons</td>
+                                                <td>&#x2B;1.0  -110</td>
+                                                <td>-105</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 51.0</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
                                     <tbody><tr><td class="grid__team">Chicago Bears</td>
                                             <td>&#x2B;1.8</td>
@@ -3737,26 +3828,26 @@ a { color: inherit; text-decoration: none; }
                                                             <th title="Rushing + receiving touchdowns this season">TD</th>
                                                             <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
                                                     <tbody><tr><td class="tstats__k">Bijan Robinson (RB)</td>
-                                                                <td>4</td>
                                                                 <td>5</td>
-                                                                <td>58%</td></tr><tr><td class="tstats__k">Brian Robinson (RB)</td>
+                                                                <td>5</td>
+                                                                <td>54%</td></tr><tr><td class="tstats__k">Brian Robinson (RB)</td>
+                                                                <td>5</td>
                                                                 <td>4</td>
-                                                                <td>4</td>
-                                                                <td>33%</td></tr><tr><td class="tstats__k">Drake London (WR)</td>
-                                                                <td>4</td>
+                                                                <td>30%</td></tr><tr><td class="tstats__k">Drake London (WR)</td>
+                                                                <td>5</td>
                                                                 <td>0</td>
-                                                                <td>22%</td></tr><tr><td class="tstats__k">Austin Hooper (TE)</td>
-                                                                <td>3</td>
+                                                                <td>21%</td></tr><tr><td class="tstats__k">Kyle Pitts (TE)</td>
+                                                                <td>5</td>
                                                                 <td>1</td>
-                                                                <td>16%</td></tr><tr><td class="tstats__k">Kyle Pitts (TE)</td>
-                                                                <td>4</td>
-                                                                <td>0</td>
-                                                                <td>11%</td></tr></tbody></table></div>
+                                                                <td>14%</td></tr><tr><td class="tstats__k">Jahan Dotson (WR)</td>
+                                                                <td>5</td>
+                                                                <td>1</td>
+                                                                <td>8%</td></tr></tbody></table></div>
 
                                         <div class="dig__note">
                                             Not market-tested, no prices. Lineups: Chicago Bears from week
                                             5, Atlanta Falcons from week
-                                            4, players with a stat line only; an injury is not
+                                            5, players with a stat line only; an injury is not
                                             seen until a game is missed. GP is games with a line, so a player with one or two
                                             leans mostly on last season. Built from touchdown opportunity as well as
                                             touchdowns: carries and targets inside the 10 and the 20, each worth what that
@@ -3768,7 +3859,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " id="g-baltimore-ravens-cleveland-browns" data-game="Baltimore Ravens@Cleveland Browns" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="animation-delay:66ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " id="g-baltimore-ravens-cleveland-browns" data-game="Baltimore Ravens@Cleveland Browns" data-f-mkt="1" data-f-st="lean" data-f-tt="lean" data-f-ml="fav" data-f-mlp="-245" data-f-gap="0-3" data-f-day="sun" data-f-slot="early" style="animation-delay:66ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="scoreline"><div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/BAL.png" alt="" width="48" height="48" loading="lazy" /><span class="side__team">Baltimore Ravens</span></span>
@@ -3784,9 +3875,28 @@ a { color: inherit; text-decoration: none; }
                                 <span>Total 45.0</span><span class="chev">&#x2B;</span>
                                 <span class="foot__break"></span>
                                 <span class="foot__win" title="Chance Baltimore Ravens wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--lo">58%</span> to win
-                                    </span></div><div class="mkt mkt--none">
-                                    No market captured — this game cannot be evaluated against a price.
-                                </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
+                                    </span></div><div class="game__plays"><span class="game__plays-k">Play</span>
+                                    <div class="picks"><div class="pick" title="Cleveland Browns &#x2B;5.0 &#x2014; the model is 2.0 past the line, 57% chance to cover, lean. The model&#x27;s spread picks measured 49.6% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Cleveland Browns &#x2B;5.0</span>
+                                                <span class="pick__p"><span class="prob prob--mid">57%</span> chance to cover</span>
+                                                <span class="pick__tier prob--mid">lean</span>
+                                                <span class="pick__edge"></span></div><div class="pick" title="Over 42.5 &#x2014; the model is 2.5 past the line, 57% chance of over, lean. The model&#x27;s totals picks measured 48.4% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Over 42.5</span>
+                                                <span class="pick__p"><span class="prob prob--mid">57%</span> chance of over</span>
+                                                <span class="pick__tier prob--mid">lean</span>
+                                                <span class="pick__edge"></span></div></div></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · pulled 14 Oct 21:01 MST</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Baltimore Ravens</td>
+                                                <td>-5.0  -110</td>
+                                                <td>-245</td></tr>
+                                            <tr><td class="mkt__team">Cleveland Browns</td>
+                                                <td>&#x2B;5.0  -110</td>
+                                                <td>&#x2B;203</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 42.5</td>
+                                                <td>over -110</td>
+                                                <td>under -108</td></tr></tbody></table></div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
                                     <tbody><tr><td class="grid__team">Baltimore Ravens</td>
                                             <td>&#x2B;2.3</td>
@@ -3844,7 +3954,7 @@ a { color: inherit; text-decoration: none; }
                                                                 <td class="tstats__win">29.2<span class="tstats__rk"> #6</span></td>
                                                                 <td class="">18.6<span class="tstats__rk"> #27</span></td></tr><tr class="tstats__group" data-core="1"><td colspan="3">Total</td></tr><tr data-core="0"><td class="tstats__k">Yards/g</td>
                                                                 <td class="tstats__win">394.2<span class="tstats__rk"> #5</span></td>
-                                                                <td class="">273.4<span class="tstats__rk"> #29</span></td></tr><tr data-core="1"><td class="tstats__k">Yards/play</td>
+                                                                <td class="">273.6<span class="tstats__rk"> #29</span></td></tr><tr data-core="1"><td class="tstats__k">Yards/play</td>
                                                                 <td class="tstats__win">6.36<span class="tstats__rk"> #4</span></td>
                                                                 <td class="">4.65<span class="tstats__rk"> #27</span></td></tr><tr data-core="0"><td class="tstats__k">Plays/g</td>
                                                                 <td class="">62.0<span class="tstats__rk"> #15</span></td>
@@ -3852,11 +3962,11 @@ a { color: inherit; text-decoration: none; }
                                                                 <td class="tstats__win">20.8<span class="tstats__rk"> #4</span></td>
                                                                 <td class="">14.2<span class="tstats__rk"> #28</span></td></tr><tr class="tstats__group" data-core="1"><td colspan="3">Passing</td></tr><tr data-core="0"><td class="tstats__k">Pass yds/g</td>
                                                                 <td class="tstats__win">229.8<span class="tstats__rk"> #14</span></td>
-                                                                <td class="">179.2<span class="tstats__rk"> #26</span></td></tr><tr data-core="0"><td class="tstats__k">Comp %</td>
+                                                                <td class="">179.4<span class="tstats__rk"> #26</span></td></tr><tr data-core="0"><td class="tstats__k">Comp %</td>
                                                                 <td class="tstats__win">73.0%<span class="tstats__rk"> #1</span></td>
                                                                 <td class="">64.4%<span class="tstats__rk"> #17</span></td></tr><tr data-core="1"><td class="tstats__k">Yds/att</td>
                                                                 <td class="tstats__win">8.39<span class="tstats__rk"> #2</span></td>
-                                                                <td class="">6.01<span class="tstats__rk"> #19</span></td></tr><tr data-core="0"><td class="tstats__k">Pass TD/g</td>
+                                                                <td class="">6.02<span class="tstats__rk"> #19</span></td></tr><tr data-core="0"><td class="tstats__k">Pass TD/g</td>
                                                                 <td class="tstats__win">1.60<span class="tstats__rk"> #16</span></td>
                                                                 <td class="">1.40<span class="tstats__rk"> #20</span></td></tr><tr data-core="0"><td class="tstats__k">INT thrown/g</td>
                                                                 <td class="tstats__win">0.20<span class="tstats__rk"> #4</span></td>
@@ -3898,9 +4008,9 @@ a { color: inherit; text-decoration: none; }
                                                                 <td class="tstats__win">&#x2B;0.60<span class="tstats__rk"> #7</span></td>
                                                                 <td class="">&#x2212;0.20<span class="tstats__rk"> #19</span></td></tr><tr class="tstats__group" data-core="0"><td colspan="3">Pressure</td></tr><tr data-core="0"><td class="tstats__k">TFL allowed/g</td>
                                                                 <td class="tstats__win">3.40<span class="tstats__rk"> #4</span></td>
-                                                                <td class="">6.20<span class="tstats__rk"> #29</span></td></tr><tr data-core="0"><td class="tstats__k">QB hits allowed/g</td>
+                                                                <td class="">6.00<span class="tstats__rk"> #27</span></td></tr><tr data-core="0"><td class="tstats__k">QB hits allowed/g</td>
                                                                 <td class="tstats__win">4.80<span class="tstats__rk"> #5</span></td>
-                                                                <td class="">7.00<span class="tstats__rk"> #24</span></td></tr><tr class="tstats__group" data-core="1"><td colspan="3">Discipline</td></tr><tr data-core="0"><td class="tstats__k">Penalties/g</td>
+                                                                <td class="">7.20<span class="tstats__rk"> #25</span></td></tr><tr class="tstats__group" data-core="1"><td colspan="3">Discipline</td></tr><tr data-core="0"><td class="tstats__k">Penalties/g</td>
                                                                 <td class="tstats__win">8.8<span class="tstats__rk"> #28</span></td>
                                                                 <td class="">9.8<span class="tstats__rk"> #32</span></td></tr><tr data-core="1"><td class="tstats__k">Penalty yds/g</td>
                                                                 <td class="">73.8<span class="tstats__rk"> #27</span></td>
@@ -3984,21 +4094,21 @@ a { color: inherit; text-decoration: none; }
                                                             <th title="Rushing + receiving touchdowns this season">TD</th>
                                                             <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
                                                     <tbody><tr><td class="tstats__k">Derrick Henry (RB)</td>
+                                                                <td>5</td>
+                                                                <td>8</td>
+                                                                <td>69%</td></tr><tr><td class="tstats__k">Zay Flowers (WR)</td>
                                                                 <td>4</td>
-                                                                <td>7</td>
-                                                                <td>73%</td></tr><tr><td class="tstats__k">Zay Flowers (WR)</td>
-                                                                <td>3</td>
                                                                 <td>2</td>
-                                                                <td>32%</td></tr><tr><td class="tstats__k">Mark Andrews (TE)</td>
+                                                                <td>30%</td></tr><tr><td class="tstats__k">Mark Andrews (TE)</td>
+                                                                <td>5</td>
+                                                                <td>1</td>
+                                                                <td>23%</td></tr><tr><td class="tstats__k">Rashod Bateman (WR)</td>
+                                                                <td>5</td>
+                                                                <td>1</td>
+                                                                <td>16%</td></tr><tr><td class="tstats__k">Devontez Walker (WR)</td>
                                                                 <td>4</td>
                                                                 <td>1</td>
-                                                                <td>25%</td></tr><tr><td class="tstats__k">Lamar Jackson (QB)</td>
-                                                                <td>4</td>
-                                                                <td>1</td>
-                                                                <td>18%</td></tr><tr><td class="tstats__k">Rashod Bateman (WR)</td>
-                                                                <td>4</td>
-                                                                <td>1</td>
-                                                                <td>17%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>Cleveland Browns</th>
+                                                                <td>13%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>Cleveland Browns</th>
                                                             <th title="Games with a stat line this season">GP</th>
                                                             <th title="Rushing + receiving touchdowns this season">TD</th>
                                                             <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
@@ -4021,7 +4131,7 @@ a { color: inherit; text-decoration: none; }
 
                                         <div class="dig__note">
                                             Not market-tested, no prices. Lineups: Baltimore Ravens from week
-                                            4, Cleveland Browns from week
+                                            5, Cleveland Browns from week
                                             5, players with a stat line only; an injury is not
                                             seen until a game is missed. GP is games with a line, so a player with one or two
                                             leans mostly on last season. Built from touchdown opportunity as well as
@@ -4034,7 +4144,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " id="g-tennessee-titans-indianapolis-colts" data-game="Tennessee Titans@Indianapolis Colts" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="animation-delay:88ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " id="g-tennessee-titans-indianapolis-colts" data-game="Tennessee Titans@Indianapolis Colts" data-f-mkt="1" data-f-st="lean" data-f-tt="flip" data-f-ml="heavy" data-f-mlp="-325" data-f-gap="3-7" data-f-day="sun" data-f-slot="early" style="animation-delay:88ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="scoreline"><div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/TEN.png" alt="" width="48" height="48" loading="lazy" /><span class="side__team">Tennessee Titans</span></span>
@@ -4050,9 +4160,28 @@ a { color: inherit; text-decoration: none; }
                                 <span>Total 46.2</span><span class="chev">&#x2B;</span>
                                 <span class="foot__break"></span>
                                 <span class="foot__win" title="Chance Indianapolis Colts wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--hi">78%</span> to win
-                                    </span></div><div class="mkt mkt--none">
-                                    No market captured — this game cannot be evaluated against a price.
-                                </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
+                                    </span></div><div class="game__plays"><span class="game__plays-k">Play</span>
+                                    <div class="picks"><div class="pick" title="Indianapolis Colts -7.0 &#x2014; the model is 4.6 past the line, 59% chance to cover, lean. The model&#x27;s spread picks measured 49.6% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Indianapolis Colts -7.0</span>
+                                                <span class="pick__p"><span class="prob prob--mid">59%</span> chance to cover</span>
+                                                <span class="pick__tier prob--mid">lean</span>
+                                                <span class="pick__edge"></span></div><div class="pick" title="Over 44.5 &#x2014; the model is 1.7 past the line, 55% chance of over, coin flip. The model&#x27;s totals picks measured 48.4% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Over 44.5</span>
+                                                <span class="pick__p"><span class="prob prob--lo">55%</span> chance of over</span>
+                                                <span class="pick__tier prob--lo">coin flip</span>
+                                                <span class="pick__edge"></span></div></div></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · pulled 14 Oct 21:01 MST</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Tennessee Titans</td>
+                                                <td>&#x2B;7.0  -115</td>
+                                                <td>&#x2B;260</td></tr>
+                                            <tr><td class="mkt__team">Indianapolis Colts</td>
+                                                <td>-7.0  -105</td>
+                                                <td>-325</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 44.5</td>
+                                                <td>over -112</td>
+                                                <td>under -108</td></tr></tbody></table></div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
                                     <tbody><tr><td class="grid__team">Tennessee Titans</td>
                                             <td>-7.6</td>
@@ -4298,7 +4427,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " id="g-new-york-jets-new-england-patriots" data-game="New York Jets@New England Patriots" data-f-mkt="0" data-f-day="sun" data-f-slot="early" data-f-sc="low" style="animation-delay:110ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " id="g-new-york-jets-new-england-patriots" data-game="New York Jets@New England Patriots" data-f-mkt="1" data-f-st="strong" data-f-tt="strong" data-f-ml="heavy" data-f-mlp="-350" data-f-gap="3-7" data-f-day="sun" data-f-slot="early" data-f-sc="low" style="animation-delay:110ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="scoreline"><div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/NYJ.png" alt="" width="48" height="48" loading="lazy" /><span class="side__team">New York Jets</span></span>
@@ -4314,9 +4443,28 @@ a { color: inherit; text-decoration: none; }
                                 <span>Total 38.5</span><span class="tag tag--hint" title="Low-scoring watch: both defenses outrank the offense they face in points allowed against points scored. Raw season-to-date ranks, never measured against a total. Details under Matchup edges.">Low-scoring</span><span class="chev">&#x2B;</span>
                                 <span class="foot__break"></span>
                                 <span class="foot__win" title="Chance New England Patriots wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--hi">81%</span> to win
-                                    </span></div><div class="mkt mkt--none">
-                                    No market captured — this game cannot be evaluated against a price.
-                                </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
+                                    </span></div><div class="game__plays"><span class="game__plays-k">Play</span>
+                                    <div class="picks"><div class="pick" title="New England Patriots -7.0 &#x2014; the model is 5.9 past the line, 62% chance to cover, strong. The model&#x27;s spread picks measured 49.6% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">New England Patriots -7.0</span>
+                                                <span class="pick__p"><span class="prob prob--hi">62%</span> chance to cover</span>
+                                                <span class="pick__tier prob--hi">strong</span>
+                                                <span class="pick__edge"><span class="tag edge-badge edge-badge--against" title="Sized against the captured price: New England Patriots -7.0 at -112, 59.3% vs 52.8% break-even, &#x2B;6.5%. Against evidence: Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict.">edge &#x26A0;</span></span></div><div class="pick" title="Under 43.5 &#x2014; the model is 5.0 past the line, 64% chance of under, strong. The model&#x27;s totals picks measured 48.4% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Under 43.5</span>
+                                                <span class="pick__p"><span class="prob prob--hi">64%</span> chance of under</span>
+                                                <span class="pick__tier prob--hi">strong</span>
+                                                <span class="pick__edge"><span class="tag edge-badge edge-badge--against" title="Sized against the captured price: Under 43.5 at -110, 64.1% vs 52.4% break-even, &#x2B;11.7%. Against evidence: Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict.">edge &#x26A0;</span></span></div></div></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · pulled 14 Oct 21:01 MST</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">New York Jets</td>
+                                                <td>&#x2B;7.0  -106</td>
+                                                <td>&#x2B;272</td></tr>
+                                            <tr><td class="mkt__team">New England Patriots</td>
+                                                <td>-7.0  -112</td>
+                                                <td>-350</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 43.5</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
                                     <tbody><tr><td class="grid__team">New York Jets</td>
                                             <td>-4.7</td>
@@ -4429,7 +4577,7 @@ a { color: inherit; text-decoration: none; }
                                                                 <td class="">0.80<span class="tstats__rk"> #21</span></td></tr><tr data-core="1"><td class="tstats__k">Turnover margin/g</td>
                                                                 <td class="tstats__win">&#x2B;0.60<span class="tstats__rk"> #7</span></td>
                                                                 <td class="">&#x2212;1.00<span class="tstats__rk"> #27</span></td></tr><tr class="tstats__group" data-core="0"><td colspan="3">Pressure</td></tr><tr data-core="0"><td class="tstats__k">TFL allowed/g</td>
-                                                                <td class="">6.20<span class="tstats__rk"> #29</span></td>
+                                                                <td class="">6.20<span class="tstats__rk"> #30</span></td>
                                                                 <td class="tstats__win">4.00<span class="tstats__rk"> #8</span></td></tr><tr data-core="0"><td class="tstats__k">QB hits allowed/g</td>
                                                                 <td class="">6.80<span class="tstats__rk"> #23</span></td>
                                                                 <td class="tstats__win">5.60<span class="tstats__rk"> #11</span></td></tr><tr class="tstats__group" data-core="1"><td colspan="3">Discipline</td></tr><tr data-core="0"><td class="tstats__k">Penalties/g</td>
@@ -4442,7 +4590,7 @@ a { color: inherit; text-decoration: none; }
                                                 <tbody><tr class="tstats__group" data-core="1"><td colspan="3">Scoring</td></tr><tr data-core="1"><td class="tstats__k">Points allowed/g</td>
                                                                 <td class="">19.2<span class="tstats__rk"> #5</span></td>
                                                                 <td class="tstats__win">18.8<span class="tstats__rk"> #4</span></td></tr><tr class="tstats__group" data-core="1"><td colspan="3">Total</td></tr><tr data-core="0"><td class="tstats__k">Yards/g</td>
-                                                                <td class="tstats__win">292.8<span class="tstats__rk"> #4</span></td>
+                                                                <td class="tstats__win">293.0<span class="tstats__rk"> #4</span></td>
                                                                 <td class="">296.2<span class="tstats__rk"> #5</span></td></tr><tr data-core="1"><td class="tstats__k">Yards/play</td>
                                                                 <td class="tstats__win">4.62<span class="tstats__rk"> #2</span></td>
                                                                 <td class="">5.18<span class="tstats__rk"> #11</span></td></tr><tr data-core="0"><td class="tstats__k">Plays/g</td>
@@ -4450,11 +4598,11 @@ a { color: inherit; text-decoration: none; }
                                                                 <td class="">57.2<span class="tstats__rk"> #29</span></td></tr><tr data-core="0"><td class="tstats__k">First downs/g</td>
                                                                 <td class="">16.2<span class="tstats__rk"> #8</span></td>
                                                                 <td class="tstats__win">15.4<span class="tstats__rk"> #5</span></td></tr><tr class="tstats__group" data-core="1"><td colspan="3">Passing</td></tr><tr data-core="0"><td class="tstats__k">Pass yds/g</td>
-                                                                <td class="tstats__win">174.8<span class="tstats__rk"> #4</span></td>
+                                                                <td class="tstats__win">175.0<span class="tstats__rk"> #4</span></td>
                                                                 <td class="">205.4<span class="tstats__rk"> #10</span></td></tr><tr data-core="0"><td class="tstats__k">Comp %</td>
                                                                 <td class="tstats__win">62.5%<span class="tstats__rk"> #9</span></td>
                                                                 <td class="">66.0%<span class="tstats__rk"> #24</span></td></tr><tr data-core="1"><td class="tstats__k">Yds/att</td>
-                                                                <td class="tstats__win">5.46<span class="tstats__rk"> #3</span></td>
+                                                                <td class="tstats__win">5.47<span class="tstats__rk"> #3</span></td>
                                                                 <td class="">6.34<span class="tstats__rk"> #12</span></td></tr><tr data-core="0"><td class="tstats__k">Pass TD/g</td>
                                                                 <td class="">1.20<span class="tstats__rk"> #9</span></td>
                                                                 <td class="">1.20<span class="tstats__rk"> #9</span></td></tr><tr data-core="0"><td class="tstats__k">INT/g</td>
@@ -4494,9 +4642,9 @@ a { color: inherit; text-decoration: none; }
                                                                 <td class="">1.20<span class="tstats__rk"> #17</span></td></tr><tr data-core="0"><td class="tstats__k">Fumble recoveries/g</td>
                                                                 <td class="tstats__win">1.00<span class="tstats__rk"> #2</span></td>
                                                                 <td class="">0.60<span class="tstats__rk"> #14</span></td></tr><tr class="tstats__pad" data-core="1"><td colspan="3">&nbsp;</td></tr><tr class="tstats__group" data-core="0"><td colspan="3">Pressure</td></tr><tr data-core="0"><td class="tstats__k">TFL/g</td>
-                                                                <td class="tstats__win">5.60<span class="tstats__rk"> #8</span></td>
+                                                                <td class="tstats__win">5.40<span class="tstats__rk"> #9</span></td>
                                                                 <td class="">4.00<span class="tstats__rk"> #21</span></td></tr><tr data-core="0"><td class="tstats__k">QB hits/g</td>
-                                                                <td class="">5.40<span class="tstats__rk"> #19</span></td>
+                                                                <td class="">5.60<span class="tstats__rk"> #17</span></td>
                                                                 <td class="tstats__win">6.20<span class="tstats__rk"> #15</span></td></tr><tr class="tstats__group" data-core="1"><td colspan="3">Discipline</td></tr><tr class="tstats__pad" data-core="0"><td colspan="3">&nbsp;</td></tr><tr class="tstats__pad" data-core="1"><td colspan="3">&nbsp;</td></tr></tbody></table></div>
 
                                         <div class="dig__note">
@@ -4566,7 +4714,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " id="g-new-orleans-saints-new-york-giants" data-game="New Orleans Saints@New York Giants" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="animation-delay:132ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " id="g-new-orleans-saints-new-york-giants" data-game="New Orleans Saints@New York Giants" data-f-mkt="1" data-f-st="strong" data-f-tt="flip" data-f-ml="close" data-f-mlp="-108" data-f-gap="3-7" data-f-day="sun" data-f-slot="early" style="animation-delay:132ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="scoreline"><div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/NO.png" alt="" width="48" height="48" loading="lazy" /><span class="side__team">New Orleans Saints</span></span>
@@ -4582,9 +4730,28 @@ a { color: inherit; text-decoration: none; }
                                 <span>Total 45.4</span><span class="chev">&#x2B;</span>
                                 <span class="foot__break"></span>
                                 <span class="foot__win" title="Chance New York Giants wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--mid">61%</span> to win
-                                    </span></div><div class="mkt mkt--none">
-                                    No market captured — this game cannot be evaluated against a price.
-                                </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
+                                    <span class="tag edge-badge edge-badge--against" title="Sized against the captured price: New York Giants at -108, 60.6% vs 51.9% break-even, &#x2B;8.7%. Against evidence: Moneyline vs close measured 31.9% over 1,011 &#x2014; a losing verdict.">edge &#x26A0;</span></span></div><div class="game__plays"><span class="game__plays-k">Play</span>
+                                    <div class="picks"><div class="pick" title="New York Giants &#x2B;1.0 &#x2014; the model is 5.3 past the line, 62% chance to cover, strong. The model&#x27;s spread picks measured 49.6% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">New York Giants &#x2B;1.0</span>
+                                                <span class="pick__p"><span class="prob prob--hi">62%</span> chance to cover</span>
+                                                <span class="pick__tier prob--hi">strong</span>
+                                                <span class="pick__edge"><span class="tag edge-badge edge-badge--against" title="Sized against the captured price: New York Giants &#x2B;1.0 at -110, 60.9% vs 52.4% break-even, &#x2B;8.5%. Against evidence: Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict.">edge &#x26A0;</span></span></div><div class="pick" title="Under 46.0 &#x2014; the model is 0.6 past the line, 52% chance of under, coin flip. The model&#x27;s totals picks measured 48.4% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Under 46.0</span>
+                                                <span class="pick__p"><span class="prob prob--lo">52%</span> chance of under</span>
+                                                <span class="pick__tier prob--lo">coin flip</span>
+                                                <span class="pick__edge"></span></div></div></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · pulled 14 Oct 21:01 MST</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">New Orleans Saints</td>
+                                                <td>-1.0  -108</td>
+                                                <td>-112</td></tr>
+                                            <tr><td class="mkt__team">New York Giants</td>
+                                                <td>&#x2B;1.0  -110</td>
+                                                <td>-108</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 46.0</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
                                     <tbody><tr><td class="grid__team">New Orleans Saints</td>
                                             <td>-1.8</td>
@@ -4831,7 +4998,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " id="g-carolina-panthers-philadelphia-eagles" data-game="Carolina Panthers@Philadelphia Eagles" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="animation-delay:154ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " id="g-carolina-panthers-philadelphia-eagles" data-game="Carolina Panthers@Philadelphia Eagles" data-f-mkt="1" data-f-st="flip" data-f-tt="strong" data-f-ml="close" data-f-mlp="-105" data-f-gap="0-3" data-f-day="sun" data-f-slot="early" style="animation-delay:154ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="scoreline"><div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/CAR.png" alt="" width="48" height="48" loading="lazy" /><span class="side__team">Carolina Panthers</span></span>
@@ -4847,9 +5014,28 @@ a { color: inherit; text-decoration: none; }
                                 <span>Total 44.4</span><span class="chev">&#x2B;</span>
                                 <span class="foot__break"></span>
                                 <span class="foot__win" title="Chance Philadelphia Eagles wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--lo">52%</span> to win
-                                    </span></div><div class="mkt mkt--none">
-                                    No market captured — this game cannot be evaluated against a price.
-                                </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
+                                    </span></div><div class="game__plays"><span class="game__plays-k">Play</span>
+                                    <div class="picks"><div class="pick" title="Philadelphia Eagles &#x2B;1.0 &#x2014; the model is 1.8 past the line, 53% chance to cover, coin flip. The model&#x27;s spread picks measured 49.6% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Philadelphia Eagles &#x2B;1.0</span>
+                                                <span class="pick__p"><span class="prob prob--lo">53%</span> chance to cover</span>
+                                                <span class="pick__tier prob--lo">coin flip</span>
+                                                <span class="pick__edge"></span></div><div class="pick" title="Over 39.5 &#x2014; the model is 4.9 past the line, 64% chance of over, strong. The model&#x27;s totals picks measured 48.4% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Over 39.5</span>
+                                                <span class="pick__p"><span class="prob prob--hi">64%</span> chance of over</span>
+                                                <span class="pick__tier prob--hi">strong</span>
+                                                <span class="pick__edge"><span class="tag edge-badge edge-badge--against" title="Sized against the captured price: Over 39.5 at -110, 63.9% vs 52.4% break-even, &#x2B;11.5%. Against evidence: Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict.">edge &#x26A0;</span></span></div></div></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · pulled 14 Oct 21:01 MST</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Carolina Panthers</td>
+                                                <td>-1.0  -109</td>
+                                                <td>-115</td></tr>
+                                            <tr><td class="mkt__team">Philadelphia Eagles</td>
+                                                <td>&#x2B;1.0  -110</td>
+                                                <td>-105</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 39.5</td>
+                                                <td>over -110</td>
+                                                <td>under -108</td></tr></tbody></table></div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
                                     <tbody><tr><td class="grid__team">Carolina Panthers</td>
                                             <td>&#x2B;1.4</td>
@@ -5096,7 +5282,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " id="g-pittsburgh-steelers-tampa-bay-buccaneers" data-game="Pittsburgh Steelers@Tampa Bay Buccaneers" data-f-mkt="0" data-f-day="sun" data-f-slot="early" style="animation-delay:176ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 10:00</span>
+                                </div></div></article><article class="game " id="g-pittsburgh-steelers-tampa-bay-buccaneers" data-game="Pittsburgh Steelers@Tampa Bay Buccaneers" data-f-mkt="1" data-f-st="flip" data-f-tt="lean" data-f-ml="fav" data-f-mlp="-142" data-f-gap="0-3" data-f-day="sun" data-f-slot="early" style="animation-delay:176ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 10:00</span>
                                 <span></span></div>
 
                             <div class="scoreline"><div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/PIT.png" alt="" width="48" height="48" loading="lazy" /><span class="side__team">Pittsburgh Steelers</span></span>
@@ -5109,12 +5295,31 @@ a { color: inherit; text-decoration: none; }
 
                             <div class="game__foot"><span class="spread">Pittsburgh Steelers by 0.2</span>
                                 <span class="foot__sep">|</span>
-                                <span>Total 43.0</span><span class="chev">&#x2B;</span>
+                                <span>Total 43.0</span><span class="tag tag--key" title="Market &#x2B;2.5 teases to &#x2B;8.5 &#x2014; a qualifying leg">3 &amp; 7</span><span class="chev">&#x2B;</span>
                                 <span class="foot__break"></span>
                                 <span class="foot__win" title="Chance Pittsburgh Steelers wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--lo">51%</span> to win
-                                    </span></div><div class="mkt mkt--none">
-                                    No market captured — this game cannot be evaluated against a price.
-                                </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
+                                    </span></div><div class="game__plays"><span class="game__plays-k">Play</span>
+                                    <div class="picks"><div class="pick" title="Tampa Bay Buccaneers &#x2B;2.5 &#x2014; the model is 2.3 past the line, 54% chance to cover, coin flip. The model&#x27;s spread picks measured 49.6% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Tampa Bay Buccaneers &#x2B;2.5</span>
+                                                <span class="pick__p"><span class="prob prob--lo">54%</span> chance to cover</span>
+                                                <span class="pick__tier prob--lo">coin flip</span>
+                                                <span class="pick__edge"></span></div><div class="pick" title="Over 39.5 &#x2014; the model is 3.5 past the line, 60% chance of over, lean. The model&#x27;s totals picks measured 48.4% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Over 39.5</span>
+                                                <span class="pick__p"><span class="prob prob--mid">60%</span> chance of over</span>
+                                                <span class="pick__tier prob--mid">lean</span>
+                                                <span class="pick__edge"><span class="tag edge-badge edge-badge--against" title="Sized against the captured price: Over 39.5 at -108, 60.0% vs 51.9% break-even, &#x2B;8.1%. Against evidence: Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict.">edge &#x26A0;</span></span></div></div></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · pulled 14 Oct 21:01 MST</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Pittsburgh Steelers</td>
+                                                <td>-2.5  -112</td>
+                                                <td>-142</td></tr>
+                                            <tr><td class="mkt__team">Tampa Bay Buccaneers</td>
+                                                <td>&#x2B;2.5  -105</td>
+                                                <td>&#x2B;120</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 39.5</td>
+                                                <td>over -108</td>
+                                                <td>under -110</td></tr></tbody></table></div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
                                     <tbody><tr><td class="grid__team">Pittsburgh Steelers</td>
                                             <td>-0.7</td>
@@ -5363,7 +5568,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " id="g-arizona-cardinals-los-angeles-rams" data-game="Arizona Cardinals@Los Angeles Rams" data-f-mkt="0" data-f-day="sun" data-f-slot="afternoon" style="animation-delay:198ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 13:05</span>
+                                </div></div></article><article class="game " id="g-arizona-cardinals-los-angeles-rams" data-game="Arizona Cardinals@Los Angeles Rams" data-f-mkt="1" data-f-st="flip" data-f-tt="flip" data-f-ml="heavy" data-f-mlp="-825" data-f-gap="0-3" data-f-day="sun" data-f-slot="afternoon" style="animation-delay:198ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 13:05</span>
                                 <span></span></div>
 
                             <div class="scoreline"><div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/ARI.png" alt="" width="48" height="48" loading="lazy" /><span class="side__team">Arizona Cardinals</span></span>
@@ -5379,9 +5584,28 @@ a { color: inherit; text-decoration: none; }
                                 <span>Total 53.1</span><span class="chev">&#x2B;</span>
                                 <span class="foot__break"></span>
                                 <span class="foot__win" title="Chance Los Angeles Rams wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--hi">81%</span> to win
-                                    </span></div><div class="mkt mkt--none">
-                                    No market captured — this game cannot be evaluated against a price.
-                                </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
+                                    </span></div><div class="game__plays"><span class="game__plays-k">Play</span>
+                                    <div class="picks"><div class="pick" title="Los Angeles Rams -12.5 &#x2014; the model is 0.7 past the line, 51% chance to cover, coin flip. The model&#x27;s spread picks measured 49.6% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Los Angeles Rams -12.5</span>
+                                                <span class="pick__p"><span class="prob prob--lo">51%</span> chance to cover</span>
+                                                <span class="pick__tier prob--lo">coin flip</span>
+                                                <span class="pick__edge"></span></div><div class="pick" title="Over 51.5 &#x2014; the model is 1.6 past the line, 55% chance of over, coin flip. The model&#x27;s totals picks measured 48.4% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Over 51.5</span>
+                                                <span class="pick__p"><span class="prob prob--lo">55%</span> chance of over</span>
+                                                <span class="pick__tier prob--lo">coin flip</span>
+                                                <span class="pick__edge"></span></div></div></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · pulled 14 Oct 21:01 MST</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Arizona Cardinals</td>
+                                                <td>&#x2B;12.5  -110</td>
+                                                <td>&#x2B;550</td></tr>
+                                            <tr><td class="mkt__team">Los Angeles Rams</td>
+                                                <td>-12.5  -110</td>
+                                                <td>-825</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 51.5</td>
+                                                <td>over -110</td>
+                                                <td>under -108</td></tr></tbody></table></div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
                                     <tbody><tr><td class="grid__team">Arizona Cardinals</td>
                                             <td>-1.0</td>
@@ -5598,26 +5822,26 @@ a { color: inherit; text-decoration: none; }
                                                             <th title="Rushing + receiving touchdowns this season">TD</th>
                                                             <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
                                                     <tbody><tr><td class="tstats__k">Kyren Williams (RB)</td>
+                                                                <td>5</td>
+                                                                <td>5</td>
+                                                                <td>56%</td></tr><tr><td class="tstats__k">Davante Adams (WR)</td>
+                                                                <td>5</td>
                                                                 <td>4</td>
-                                                                <td>4</td>
-                                                                <td>59%</td></tr><tr><td class="tstats__k">Puka Nacua (WR)</td>
-                                                                <td>2</td>
-                                                                <td>1</td>
-                                                                <td>42%</td></tr><tr><td class="tstats__k">Davante Adams (WR)</td>
-                                                                <td>4</td>
-                                                                <td>2</td>
-                                                                <td>42%</td></tr><tr><td class="tstats__k">Tyler Higbee (TE)</td>
+                                                                <td>43%</td></tr><tr><td class="tstats__k">Puka Nacua (WR)</td>
                                                                 <td>3</td>
-                                                                <td>1</td>
-                                                                <td>25%</td></tr><tr><td class="tstats__k">Blake Corum (RB)</td>
+                                                                <td>2</td>
+                                                                <td>42%</td></tr><tr><td class="tstats__k">Colby Parkinson (TE)</td>
                                                                 <td>4</td>
                                                                 <td>0</td>
-                                                                <td>17%</td></tr></tbody></table></div>
+                                                                <td>25%</td></tr><tr><td class="tstats__k">Tyler Higbee (TE)</td>
+                                                                <td>4</td>
+                                                                <td>1</td>
+                                                                <td>22%</td></tr></tbody></table></div>
 
                                         <div class="dig__note">
                                             Not market-tested, no prices. Lineups: Arizona Cardinals from week
                                             5, Los Angeles Rams from week
-                                            4, players with a stat line only; an injury is not
+                                            5, players with a stat line only; an injury is not
                                             seen until a game is missed. GP is games with a line, so a player with one or two
                                             leans mostly on last season. Built from touchdown opportunity as well as
                                             touchdowns: carries and targets inside the 10 and the 20, each worth what that
@@ -5629,7 +5853,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " id="g-los-angeles-chargers-kansas-city-chiefs" data-game="Los Angeles Chargers@Kansas City Chiefs" data-f-mkt="0" data-f-day="sun" data-f-slot="afternoon" style="animation-delay:220ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 13:25</span>
+                                </div></div></article><article class="game " id="g-los-angeles-chargers-kansas-city-chiefs" data-game="Los Angeles Chargers@Kansas City Chiefs" data-f-mkt="1" data-f-st="flip" data-f-tt="flip" data-f-ml="heavy" data-f-mlp="-430" data-f-gap="3-7" data-f-day="sun" data-f-slot="afternoon" style="animation-delay:220ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 13:25</span>
                                 <span></span></div>
 
                             <div class="scoreline"><div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/LAC.png" alt="" width="48" height="48" loading="lazy" /><span class="side__team">Los Angeles Chargers</span></span>
@@ -5642,12 +5866,31 @@ a { color: inherit; text-decoration: none; }
 
                             <div class="game__foot"><span class="spread">Kansas City Chiefs by 11.4</span>
                                 <span class="foot__sep">|</span>
-                                <span>Total 41.0</span><span class="chev">&#x2B;</span>
+                                <span>Total 41.0</span><span class="tag tag--key" title="Market -8.0 teases to -2.0 &#x2014; a qualifying leg">3 &amp; 7</span><span class="chev">&#x2B;</span>
                                 <span class="foot__break"></span>
                                 <span class="foot__win" title="Chance Kansas City Chiefs wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--hi">78%</span> to win
-                                    </span></div><div class="mkt mkt--none">
-                                    No market captured — this game cannot be evaluated against a price.
-                                </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
+                                    </span></div><div class="game__plays"><span class="game__plays-k">Play</span>
+                                    <div class="picks"><div class="pick" title="Kansas City Chiefs -8.0 &#x2014; the model is 3.4 past the line, 54% chance to cover, coin flip. The model&#x27;s spread picks measured 49.6% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Kansas City Chiefs -8.0</span>
+                                                <span class="pick__p"><span class="prob prob--lo">54%</span> chance to cover</span>
+                                                <span class="pick__tier prob--lo">coin flip</span>
+                                                <span class="pick__edge"></span></div><div class="pick" title="Under 42.5 &#x2014; the model is 1.5 past the line, 54% chance of under, coin flip. The model&#x27;s totals picks measured 48.4% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Under 42.5</span>
+                                                <span class="pick__p"><span class="prob prob--lo">54%</span> chance of under</span>
+                                                <span class="pick__tier prob--lo">coin flip</span>
+                                                <span class="pick__edge"></span></div></div></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · pulled 14 Oct 21:01 MST</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Los Angeles Chargers</td>
+                                                <td>&#x2B;8.0  -110</td>
+                                                <td>&#x2B;330</td></tr>
+                                            <tr><td class="mkt__team">Kansas City Chiefs</td>
+                                                <td>-8.0  -107</td>
+                                                <td>-430</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 42.5</td>
+                                                <td>over -109</td>
+                                                <td>under -110</td></tr></tbody></table></div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
                                     <tbody><tr><td class="grid__team">Los Angeles Chargers</td>
                                             <td>-4.6</td>
@@ -5895,7 +6138,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " id="g-buffalo-bills-las-vegas-raiders" data-game="Buffalo Bills@Las Vegas Raiders" data-f-mkt="0" data-f-day="sun" data-f-slot="afternoon" data-f-sc="shootout" style="animation-delay:242ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 13:25</span>
+                                </div></div></article><article class="game " id="g-buffalo-bills-las-vegas-raiders" data-game="Buffalo Bills@Las Vegas Raiders" data-f-mkt="1" data-f-st="flip" data-f-tt="strong" data-f-ml="fav" data-f-mlp="-235" data-f-gap="0-3" data-f-day="sun" data-f-slot="afternoon" data-f-sc="shootout" style="animation-delay:242ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 13:25</span>
                                 <span></span></div>
 
                             <div class="scoreline"><div class="side side--fav"><span class="side__id"><img class="mark-logo" src="logos/nfl/BUF.png" alt="" width="48" height="48" loading="lazy" /><span class="side__team">Buffalo Bills</span></span>
@@ -5911,9 +6154,28 @@ a { color: inherit; text-decoration: none; }
                                 <span>Total 59.0</span><span class="tag tag--hint" title="Shootout watch: both offenses outrank the defense they face in points scored against points allowed. Raw season-to-date ranks, never measured against a total. Details under Matchup edges.">Shootout</span><span class="chev">&#x2B;</span>
                                 <span class="foot__break"></span>
                                 <span class="foot__win" title="Chance Buffalo Bills wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--mid">66%</span> to win
-                                    </span></div><div class="mkt mkt--none">
-                                    No market captured — this game cannot be evaluated against a price.
-                                </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
+                                    </span></div><div class="game__plays"><span class="game__plays-k">Play</span>
+                                    <div class="picks"><div class="pick" title="Buffalo Bills -4.5 &#x2014; the model is 1.6 past the line, 52% chance to cover, coin flip. The model&#x27;s spread picks measured 49.6% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Buffalo Bills -4.5</span>
+                                                <span class="pick__p"><span class="prob prob--lo">52%</span> chance to cover</span>
+                                                <span class="pick__tier prob--lo">coin flip</span>
+                                                <span class="pick__edge"></span></div><div class="pick" title="Over 53.5 &#x2014; the model is 5.5 past the line, 65% chance of over, strong. The model&#x27;s totals picks measured 48.4% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Over 53.5</span>
+                                                <span class="pick__p"><span class="prob prob--hi">65%</span> chance of over</span>
+                                                <span class="pick__tier prob--hi">strong</span>
+                                                <span class="pick__edge"><span class="tag edge-badge edge-badge--against" title="Sized against the captured price: Over 53.5 at -110, 65.4% vs 52.4% break-even, &#x2B;13.1%. Against evidence: Total vs close measured 48.4% over 1,535 &#x2014; a losing verdict.">edge &#x26A0;</span></span></div></div></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · pulled 14 Oct 21:01 MST</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Buffalo Bills</td>
+                                                <td>-4.5  -110</td>
+                                                <td>-235</td></tr>
+                                            <tr><td class="mkt__team">Las Vegas Raiders</td>
+                                                <td>&#x2B;4.5  -110</td>
+                                                <td>&#x2B;195</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 53.5</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
                                     <tbody><tr><td class="grid__team">Buffalo Bills</td>
                                             <td>&#x2B;7.4</td>
@@ -6031,7 +6293,7 @@ a { color: inherit; text-decoration: none; }
                                                                 <td class="tstats__win">3.40<span class="tstats__rk"> #4</span></td>
                                                                 <td class="">5.80<span class="tstats__rk"> #26</span></td></tr><tr data-core="0"><td class="tstats__k">QB hits allowed/g</td>
                                                                 <td class="tstats__win">4.80<span class="tstats__rk"> #5</span></td>
-                                                                <td class="">7.20<span class="tstats__rk"> #26</span></td></tr><tr class="tstats__group" data-core="1"><td colspan="3">Discipline</td></tr><tr data-core="0"><td class="tstats__k">Penalties/g</td>
+                                                                <td class="">7.20<span class="tstats__rk"> #25</span></td></tr><tr class="tstats__group" data-core="1"><td colspan="3">Discipline</td></tr><tr data-core="0"><td class="tstats__k">Penalties/g</td>
                                                                 <td class="">8.6<span class="tstats__rk"> #26</span></td>
                                                                 <td class="tstats__win">6.2<span class="tstats__rk"> #5</span></td></tr><tr data-core="1"><td class="tstats__k">Penalty yds/g</td>
                                                                 <td class="">72.4<span class="tstats__rk"> #25</span></td>
@@ -6115,21 +6377,21 @@ a { color: inherit; text-decoration: none; }
                                                             <th title="Rushing + receiving touchdowns this season">TD</th>
                                                             <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
                                                     <tbody><tr><td class="tstats__k">James Cook (RB)</td>
-                                                                <td>4</td>
-                                                                <td>3</td>
-                                                                <td>56%</td></tr><tr><td class="tstats__k">Josh Allen (QB)</td>
-                                                                <td>4</td>
-                                                                <td>7</td>
-                                                                <td>54%</td></tr><tr><td class="tstats__k">DJ Moore (WR)</td>
-                                                                <td>4</td>
-                                                                <td>1</td>
-                                                                <td>25%</td></tr><tr><td class="tstats__k">Khalil Shakir (WR)</td>
-                                                                <td>4</td>
+                                                                <td>5</td>
+                                                                <td>5</td>
+                                                                <td>55%</td></tr><tr><td class="tstats__k">Josh Allen (QB)</td>
+                                                                <td>5</td>
+                                                                <td>8</td>
+                                                                <td>51%</td></tr><tr><td class="tstats__k">Keon Coleman (WR)</td>
+                                                                <td>5</td>
+                                                                <td>2</td>
+                                                                <td>22%</td></tr><tr><td class="tstats__k">Khalil Shakir (WR)</td>
+                                                                <td>5</td>
                                                                 <td>0</td>
-                                                                <td>24%</td></tr><tr><td class="tstats__k">Keon Coleman (WR)</td>
-                                                                <td>4</td>
+                                                                <td>21%</td></tr><tr><td class="tstats__k">Dalton Kincaid (TE)</td>
+                                                                <td>5</td>
                                                                 <td>1</td>
-                                                                <td>22%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>Las Vegas Raiders</th>
+                                                                <td>18%</td></tr></tbody></table><table class="grid tstats__grid pwatch"><thead><tr><th>Las Vegas Raiders</th>
                                                             <th title="Games with a stat line this season">GP</th>
                                                             <th title="Rushing + receiving touchdowns this season">TD</th>
                                                             <th title="Chance of at least one rushing or receiving touchdown">Anytime TD</th></tr></thead>
@@ -6152,7 +6414,7 @@ a { color: inherit; text-decoration: none; }
 
                                         <div class="dig__note">
                                             Not market-tested, no prices. Lineups: Buffalo Bills from week
-                                            4, Las Vegas Raiders from week
+                                            5, Las Vegas Raiders from week
                                             5, players with a stat line only; an injury is not
                                             seen until a game is missed. GP is games with a line, so a player with one or two
                                             leans mostly on last season. Built from touchdown opportunity as well as
@@ -6165,7 +6427,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " id="g-dallas-cowboys-green-bay-packers" data-game="Dallas Cowboys@Green Bay Packers" data-f-mkt="0" data-f-day="sun" data-f-slot="night" style="animation-delay:264ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 17:20</span>
+                                </div></div></article><article class="game " id="g-dallas-cowboys-green-bay-packers" data-game="Dallas Cowboys@Green Bay Packers" data-f-mkt="1" data-f-st="lean" data-f-tt="flip" data-f-ml="fav" data-f-mlp="-124" data-f-gap="0-3" data-f-day="sun" data-f-slot="night" style="animation-delay:264ms"><div class="game__hit" data-toggle><div class="game__when"><span>Sun 18 Oct &#xB7; 17:20</span>
                                 <span></span></div>
 
                             <div class="scoreline"><div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/DAL.png" alt="" width="48" height="48" loading="lazy" /><span class="side__team">Dallas Cowboys</span></span>
@@ -6178,12 +6440,31 @@ a { color: inherit; text-decoration: none; }
 
                             <div class="game__foot"><span class="spread">Green Bay Packers by 3.5</span>
                                 <span class="foot__sep">|</span>
-                                <span>Total 54.4</span><span class="chev">&#x2B;</span>
+                                <span>Total 54.4</span><span class="tag tag--key" title="Market &#x2B;1.5 teases to &#x2B;7.5 &#x2014; a qualifying leg">3 &amp; 7</span><span class="chev">&#x2B;</span>
                                 <span class="foot__break"></span>
                                 <span class="foot__win" title="Chance Green Bay Packers wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--lo">59%</span> to win
-                                    </span></div><div class="mkt mkt--none">
-                                    No market captured — this game cannot be evaluated against a price.
-                                </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
+                                    </span></div><div class="game__plays"><span class="game__plays-k">Play</span>
+                                    <div class="picks"><div class="pick" title="Green Bay Packers -1.5 &#x2014; the model is 2.0 past the line, 57% chance to cover, lean. The model&#x27;s spread picks measured 49.6% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Green Bay Packers -1.5</span>
+                                                <span class="pick__p"><span class="prob prob--mid">57%</span> chance to cover</span>
+                                                <span class="pick__tier prob--mid">lean</span>
+                                                <span class="pick__edge"></span></div><div class="pick" title="Over 53.0 &#x2014; the model is 1.4 past the line, 54% chance of over, coin flip. The model&#x27;s totals picks measured 48.4% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Over 53.0</span>
+                                                <span class="pick__p"><span class="prob prob--lo">54%</span> chance of over</span>
+                                                <span class="pick__tier prob--lo">coin flip</span>
+                                                <span class="pick__edge"></span></div></div></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · pulled 14 Oct 21:01 MST</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Dallas Cowboys</td>
+                                                <td>&#x2B;1.5  -110</td>
+                                                <td>&#x2B;102</td></tr>
+                                            <tr><td class="mkt__team">Green Bay Packers</td>
+                                                <td>-1.5  -110</td>
+                                                <td>-124</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 53.0</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
                                     <tbody><tr><td class="grid__team">Dallas Cowboys</td>
                                             <td>&#x2B;3.6</td>
@@ -6431,7 +6712,7 @@ a { color: inherit; text-decoration: none; }
                                             are comparable between a team that has played contenders and
                                             one that has not.
                                                                             No injuries, weather or market prices are included.
-                                </div></div></article><article class="game " id="g-washington-commanders-san-francisco-49ers" data-game="Washington Commanders@San Francisco 49ers" data-f-mkt="0" data-f-day="mon" data-f-slot="night" style="animation-delay:286ms"><div class="game__hit" data-toggle><div class="game__when"><span>Mon 19 Oct &#xB7; 17:15</span>
+                                </div></div></article><article class="game " id="g-washington-commanders-san-francisco-49ers" data-game="Washington Commanders@San Francisco 49ers" data-f-mkt="1" data-f-st="strong" data-f-tt="flip" data-f-ml="heavy" data-f-mlp="-400" data-f-gap="7-10" data-f-day="mon" data-f-slot="night" style="animation-delay:286ms"><div class="game__hit" data-toggle><div class="game__when"><span>Mon 19 Oct &#xB7; 17:15</span>
                                 <span></span></div>
 
                             <div class="scoreline"><div class="side "><span class="side__id"><img class="mark-logo" src="logos/nfl/WAS.png" alt="" width="48" height="48" loading="lazy" /><span class="side__team">Washington Commanders</span></span>
@@ -6444,12 +6725,31 @@ a { color: inherit; text-decoration: none; }
 
                             <div class="game__foot"><span class="spread">San Francisco 49ers by 15.6</span>
                                 <span class="foot__sep">|</span>
-                                <span>Total 51.7</span><span class="chev">&#x2B;</span>
+                                <span>Total 51.7</span><span class="tag tag--key" title="Market -7.5 teases to -1.5 &#x2014; a qualifying leg">3 &amp; 7</span><span class="chev">&#x2B;</span>
                                 <span class="foot__break"></span>
                                 <span class="foot__win" title="Chance San Francisco 49ers wins the game outright. Not the chance of covering a spread &#x2014; the plays below answer that."><span class="prob prob--hi">85%</span> to win
-                                    </span></div><div class="mkt mkt--none">
-                                    No market captured — this game cannot be evaluated against a price.
-                                </div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
+                                    <span class="tag edge-badge edge-badge--against" title="Sized against the captured price: San Francisco 49ers at -400, 83.9% vs 80.0% break-even, &#x2B;3.9%. Against evidence: Moneyline vs close measured 31.9% over 1,011 &#x2014; a losing verdict.">edge &#x26A0;</span></span></div><div class="game__plays"><span class="game__plays-k">Play</span>
+                                    <div class="picks"><div class="pick" title="San Francisco 49ers -7.5 &#x2014; the model is 8.1 past the line, 66% chance to cover, strong. The model&#x27;s spread picks measured 49.6% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">San Francisco 49ers -7.5</span>
+                                                <span class="pick__p"><span class="prob prob--hi">66%</span> chance to cover</span>
+                                                <span class="pick__tier prob--hi">strong</span>
+                                                <span class="pick__edge"><span class="tag edge-badge edge-badge--against" title="Sized against the captured price: San Francisco 49ers -7.5 at -110, 65.9% vs 52.4% break-even, &#x2B;13.5%. Against evidence: Spread vs close measured 49.6% over 1,535 &#x2014; a losing verdict.">edge &#x26A0;</span></span></div><div class="pick" title="Over 50.5 &#x2014; the model is 1.2 past the line, 54% chance of over, coin flip. The model&#x27;s totals picks measured 48.4% against the close over 1,535 games, so read this as conviction, never as edge."><span class="pick__sel">Over 50.5</span>
+                                                <span class="pick__p"><span class="prob prob--lo">54%</span> chance of over</span>
+                                                <span class="pick__tier prob--lo">coin flip</span>
+                                                <span class="pick__edge"></span></div></div></div><div class="mkt"><div class="mkt__cap"><span>Market</span>
+                                        <span class="mkt__src">consensus · pulled 14 Oct 21:01 MST</span></div>
+
+                                    <table class="mkt__grid"><thead><tr><th></th>
+                                                <th>Spread</th>
+                                                <th>Money</th></tr></thead>
+                                        <tbody><tr><td class="mkt__team">Washington Commanders</td>
+                                                <td>&#x2B;7.5  -110</td>
+                                                <td>&#x2B;310</td></tr>
+                                            <tr><td class="mkt__team">San Francisco 49ers</td>
+                                                <td>-7.5  -110</td>
+                                                <td>-400</td></tr>
+                                            <tr class="mkt__tot"><td class="mkt__team">Total 50.5</td>
+                                                <td>over -110</td>
+                                                <td>under -110</td></tr></tbody></table></div></div><div class="dig"><div class="dig__label">Ratings — points against an average team</div>
                                 <table class="grid"><thead><tr><th></th><th>Att</th><th>Def</th><th>Net</th><th>SoS</th><th>Gm</th></tr></thead>
                                     <tbody><tr><td class="grid__team">Washington Commanders</td>
                                             <td>-1.2</td>
@@ -6723,21 +7023,60 @@ a { color: inherit; text-decoration: none; }
                             <span class="row__value ">66%</span></div><div class="row row--act " data-focus="New Orleans Saints@New York Giants"><span class="row__label"><b>New York Giants</b>
                                 <span style="opacity:.72">vs New Orleans Saints</span><span class="band">
                                         band ran 61% on 313· claims high</span></span>
-                            <span class="row__value ">61%</span></div></section><section class="panel-block"><div class="panel__head  " data-filter="Spread confidence" data-keys=""><span class="panel__title">Spread confidence</span>
-                        <span class="panel__meta">cover prob · captured line</span></div><div class="row"><span class="row__label" style="opacity:.72">
-                                    Nothing clears 55% cover probability — every spread pick this
-                                    week is a coin flip, and the board says so rather than
-                                    promoting its least-uncertain one.
-                                </span></div><div class="row"><span class="row__label" style="opacity:.65;font-size:12px">1 coin flip below 55% not
+                            <span class="row__value ">61%</span></div></section><section class="panel-block"><div class="panel__head panel__head--act " data-filter="Spread confidence" data-keys="Washington Commanders@San Francisco 49ers|Houston Texans@Jacksonville Jaguars|New York Jets@New England Patriots|New Orleans Saints@New York Giants|Tennessee Titans@Indianapolis Colts|Baltimore Ravens@Cleveland Browns|Dallas Cowboys@Green Bay Packers"><span class="panel__title">Spread confidence</span>
+                        <span class="panel__meta">cover prob · captured line</span></div><div class="row row--act " data-focus="Washington Commanders@San Francisco 49ers"><span class="row__label"><b>San Francisco 49ers -7.5</b>
+                                    <span class="tag tag--key">strong</span>
+                                    <span class="band">Washington Commanders at San Francisco 49ers</span></span>
+                                <span class="row__value">66%</span></div><div class="row row--act " data-focus="Houston Texans@Jacksonville Jaguars"><span class="row__label"><b>Jacksonville Jaguars -2.5</b>
+                                    <span class="tag tag--key">strong</span>
+                                    <span class="band">Houston Texans at Jacksonville Jaguars</span></span>
+                                <span class="row__value">65%</span></div><div class="row row--act " data-focus="New York Jets@New England Patriots"><span class="row__label"><b>New England Patriots -7.0</b>
+                                    <span class="tag tag--key">strong</span>
+                                    <span class="band">New York Jets at New England Patriots</span></span>
+                                <span class="row__value">62%</span></div><div class="row row--act " data-focus="New Orleans Saints@New York Giants"><span class="row__label"><b>New York Giants &#x2B;1.0</b>
+                                    <span class="tag tag--key">strong</span>
+                                    <span class="band">New Orleans Saints at New York Giants</span></span>
+                                <span class="row__value">62%</span></div><div class="row row--act " data-focus="Tennessee Titans@Indianapolis Colts"><span class="row__label"><b>Indianapolis Colts -7.0</b>
+                                    <span class="tag">lean</span>
+                                    <span class="band">Tennessee Titans at Indianapolis Colts</span></span>
+                                <span class="row__value">59%</span></div><div class="row row--act " data-focus="Baltimore Ravens@Cleveland Browns"><span class="row__label"><b>Cleveland Browns &#x2B;5.0</b>
+                                    <span class="tag">lean</span>
+                                    <span class="band">Baltimore Ravens at Cleveland Browns</span></span>
+                                <span class="row__value">57%</span></div><div class="row row--act " data-focus="Dallas Cowboys@Green Bay Packers"><span class="row__label"><b>Green Bay Packers -1.5</b>
+                                    <span class="tag">lean</span>
+                                    <span class="band">Dallas Cowboys at Green Bay Packers</span></span>
+                                <span class="row__value">57%</span></div><div class="row"><span class="row__label" style="opacity:.65;font-size:12px">7 coin flips below 55% not
                                 shown. Tiers are the model's conviction, not edge:
 
                                         spread picks measured <b>49.6%</b> against
                                         the close over 1,535 games. High
                                         confidence has never meant beating this price.
-                                    </span></div></section><section class="panel-block"><div class="panel__head  " data-filter="Total confidence" data-keys=""><span class="panel__title">Total confidence</span>
-                        <span class="panel__meta">over/under prob · captured line</span></div><div class="row"><span class="row__label" style="opacity:.72">
-                                    No total clears 55% — all coin flips this week.
-                                </span></div><div class="row"><span class="row__label" style="opacity:.65;font-size:12px">1 coin flip below 55% not
+                                    </span></div></section><section class="panel-block"><div class="panel__head panel__head--act " data-filter="Total confidence" data-keys="Buffalo Bills@Las Vegas Raiders|New York Jets@New England Patriots|Carolina Panthers@Philadelphia Eagles|Houston Texans@Jacksonville Jaguars|Pittsburgh Steelers@Tampa Bay Buccaneers|Chicago Bears@Atlanta Falcons|Seattle Seahawks@Denver Broncos|Baltimore Ravens@Cleveland Browns"><span class="panel__title">Total confidence</span>
+                        <span class="panel__meta">over/under prob · captured line</span></div><div class="row row--act " data-focus="Buffalo Bills@Las Vegas Raiders"><span class="row__label"><b>Over 53.5</b>
+                                    <span class="tag tag--key">strong</span>
+                                    <span class="band">Buffalo Bills at Las Vegas Raiders</span></span>
+                                <span class="row__value">65%</span></div><div class="row row--act " data-focus="New York Jets@New England Patriots"><span class="row__label"><b>Under 43.5</b>
+                                    <span class="tag tag--key">strong</span>
+                                    <span class="band">New York Jets at New England Patriots</span></span>
+                                <span class="row__value">64%</span></div><div class="row row--act " data-focus="Carolina Panthers@Philadelphia Eagles"><span class="row__label"><b>Over 39.5</b>
+                                    <span class="tag tag--key">strong</span>
+                                    <span class="band">Carolina Panthers at Philadelphia Eagles</span></span>
+                                <span class="row__value">64%</span></div><div class="row row--act " data-focus="Houston Texans@Jacksonville Jaguars"><span class="row__label"><b>Under 42.5</b>
+                                    <span class="tag tag--key">strong</span>
+                                    <span class="band">Houston Texans at Jacksonville Jaguars</span></span>
+                                <span class="row__value">61%</span></div><div class="row row--act " data-focus="Pittsburgh Steelers@Tampa Bay Buccaneers"><span class="row__label"><b>Over 39.5</b>
+                                    <span class="tag">lean</span>
+                                    <span class="band">Pittsburgh Steelers at Tampa Bay Buccaneers</span></span>
+                                <span class="row__value">60%</span></div><div class="row row--act " data-focus="Chicago Bears@Atlanta Falcons"><span class="row__label"><b>Under 51.0</b>
+                                    <span class="tag">lean</span>
+                                    <span class="band">Chicago Bears at Atlanta Falcons</span></span>
+                                <span class="row__value">59%</span></div><div class="row row--act " data-focus="Seattle Seahawks@Denver Broncos"><span class="row__label"><b>Over 40.5</b>
+                                    <span class="tag">lean</span>
+                                    <span class="band">Seattle Seahawks at Denver Broncos</span></span>
+                                <span class="row__value">59%</span></div><div class="row row--act " data-focus="Baltimore Ravens@Cleveland Browns"><span class="row__label"><b>Over 42.5</b>
+                                    <span class="tag">lean</span>
+                                    <span class="band">Baltimore Ravens at Cleveland Browns</span></span>
+                                <span class="row__value">57%</span></div><div class="row"><span class="row__label" style="opacity:.65;font-size:12px">6 coin flips below 55% not
                                 shown.
 
                                         ⚠ The totals opinion measured <b>48.4%</b>
@@ -6755,14 +7094,20 @@ a { color: inherit; text-decoration: none; }
                         <span class="row__value">10.7</span></div><div class="row row--act " data-focus="Tennessee Titans@Indianapolis Colts"><span class="row__label"><b>Indianapolis Colts</b> <span style="opacity:.72">vs Tennessee Titans</span></span>
                         <span class="row__value">9.4</span></div><div class="row row--act " data-focus="Los Angeles Chargers@Kansas City Chiefs"><span class="row__label"><b>Kansas City Chiefs</b> <span style="opacity:.72">vs Los Angeles Chargers</span></span>
                         <span class="row__value">9.3</span></div><div class="row row--act " data-focus="Buffalo Bills@Las Vegas Raiders"><span class="row__label"><b>Buffalo Bills</b> <span style="opacity:.72">vs Las Vegas Raiders</span></span>
-                        <span class="row__value">8.2</span></div></section><section class="panel-block"><div class="panel__head panel__head--act " data-filter="Teaser watch" data-keys="Seattle Seahawks@Denver Broncos|Houston Texans@Jacksonville Jaguars|Chicago Bears@Atlanta Falcons"><span class="panel__title">Teaser watch</span>
-                    <span class="panel__meta">crosses 3 &amp; 7</span></div><div class="row row--act " data-focus="Seattle Seahawks@Denver Broncos"><span class="row__label"><b>Denver Broncos</b>
-                                <span style="opacity:.72">&#x2B;2.0 → &#x2B;8.0</span></span>
-                            <span class="row__value ">75.1%</span></div><div class="row row--act " data-focus="Houston Texans@Jacksonville Jaguars"><span class="row__label"><b>Jacksonville Jaguars</b>
-                                <span style="opacity:.72">-7.6 → -1.6</span><span class="band band--none">model line — no price captured</span></span>
-                            <span class="row__value row__value--mute">72.8%</span></div><div class="row row--act " data-focus="Chicago Bears@Atlanta Falcons"><span class="row__label"><b>Atlanta Falcons</b>
-                                <span style="opacity:.72">&#x2B;1.5 → &#x2B;7.5</span><span class="band band--none">model line — no price captured</span></span>
-                            <span class="row__value row__value--mute">75.1%</span></div><div class="row"><span class="row__label" style="opacity:.65;font-size:12px">
+                        <span class="row__value">8.2</span></div></section><section class="panel-block"><div class="panel__head panel__head--act " data-filter="Teaser watch" data-keys="Washington Commanders@San Francisco 49ers|Los Angeles Chargers@Kansas City Chiefs|Houston Texans@Jacksonville Jaguars|Dallas Cowboys@Green Bay Packers|Seattle Seahawks@Denver Broncos|Pittsburgh Steelers@Tampa Bay Buccaneers"><span class="panel__title">Teaser watch</span>
+                    <span class="panel__meta">crosses 3 &amp; 7</span></div><div class="row row--act " data-focus="Washington Commanders@San Francisco 49ers"><span class="row__label"><b>San Francisco 49ers</b>
+                                <span style="opacity:.72">-7.5 → -1.5</span></span>
+                            <span class="row__value ">72.8%</span></div><div class="row row--act " data-focus="Los Angeles Chargers@Kansas City Chiefs"><span class="row__label"><b>Kansas City Chiefs</b>
+                                <span style="opacity:.72">-8.0 → -2.0</span></span>
+                            <span class="row__value ">72.8%</span></div><div class="row row--act " data-focus="Houston Texans@Jacksonville Jaguars"><span class="row__label"><b>Houston Texans</b>
+                                <span style="opacity:.72">&#x2B;2.5 → &#x2B;8.5</span></span>
+                            <span class="row__value ">75.1%</span></div><div class="row row--act " data-focus="Dallas Cowboys@Green Bay Packers"><span class="row__label"><b>Dallas Cowboys</b>
+                                <span style="opacity:.72">&#x2B;1.5 → &#x2B;7.5</span></span>
+                            <span class="row__value ">75.1%</span></div><div class="row row--act " data-focus="Seattle Seahawks@Denver Broncos"><span class="row__label"><b>Denver Broncos</b>
+                                <span style="opacity:.72">&#x2B;2.5 → &#x2B;8.5</span></span>
+                            <span class="row__value ">75.1%</span></div><div class="row row--act " data-focus="Pittsburgh Steelers@Tampa Bay Buccaneers"><span class="row__label"><b>Tampa Bay Buccaneers</b>
+                                <span style="opacity:.72">&#x2B;2.5 → &#x2B;8.5</span></span>
+                            <span class="row__value ">75.1%</span></div><div class="row"><span class="row__label" style="opacity:.65;font-size:12px">
                             Win rates are the measured per-leg rates over 1999–2025, not this game's.
                             A market-priced leg is actionable; a model line only says a qualifying
                             price may appear. At −134 the two-team six-pointer loses — bet at −115
