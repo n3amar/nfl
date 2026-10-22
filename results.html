@@ -1107,6 +1107,13 @@ a { color: inherit; text-decoration: none; }
 .pwatch__opp { color: var(--chalk-dim); }
 .pwatch__opp--up { color: #4ade80; }
 .pwatch__opp--down { color: #f87171; }
+/* Goals tab "Last 5" (2026-10-21): the glyph carries the result, the fill repeats it, so it
+   stays readable for red-green colour blindness. Same green / red as the opponent factor. */
+.form5 { display: inline-flex; gap: 3px; vertical-align: middle; }
+.form5__sq { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 3px; font-size: 11px; font-weight: 700; line-height: 1; color: #14171b; }
+.form5__sq--yes { background: #4ade80; }
+.form5__sq--no { background: #f87171; }
+.form5__sq--dnp { background: transparent; border: 1px solid var(--chalk-mute); color: var(--chalk-dim); }
 /* Matchup fit (2026-10-14): the wash marks the row, the cell that qualified carries the
    signal color, and the tag says it in words so it does not rest on colour alone. */
 .pwatch__fit > td { background: var(--signal-wash); }
