@@ -1296,30 +1296,44 @@ a { color: inherit; text-decoration: none; }
 a.chip { text-decoration: none; }
 a.chip--on:hover { color: var(--ink); }
 
+/* Every local table (2026-10-22 redesign, the user's request: "very hard to read"). Four
+   faults fixed together: grey cells at 12px and darker-grey headers (~3:1) were too faint;
+   no column separation, so right-aligned figures ran into the next column; row rules
+   (#191d22 on #0a0b0d) were invisible, so the eye slid between rows; and the name column
+   took width: 100%, parking every figure at the far edge. Now: column lines, banded
+   rows, chalk cells, readable headers, and a table only as wide as its content. */
 .ladder {
-    width: 100%;
+    width: auto;
+    max-width: 100%;
     border-collapse: collapse;
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: 12.5px;
     font-variant-numeric: tabular-nums;
+    border: 1px solid var(--rule);
 }
 
 .ladder thead th {
     position: sticky;
     top: 0;
-    background: var(--ink);
+    background: var(--panel);
     z-index: 2;
-    font-weight: 500;
-    font-size: 10.5px;
-    letter-spacing: 0.14em;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--chalk-mute);
-    padding: 9px 0 8px 12px;
-    border-bottom: 1px solid var(--rule);
+    color: var(--chalk-dim);
+    padding: 9px 12px 8px;
+    border-bottom: 1px solid var(--chalk-mute);
     white-space: nowrap;
 }
 
-.ladder__num { text-align: right; }
+/* The column lines. */
+.ladder th + th,
+.ladder td + td { border-left: 1px solid var(--rule); }
+
+/* A figure never breaks across lines ("Under 58%" wrapped once the table stopped stretching). */
+.ladder__num { text-align: right; white-space: nowrap; }
+.ladder th.ladder__team { text-align: left; }
 .ladder th.ladder__num { cursor: pointer; user-select: none; transition: color .15s ease; }
 .ladder th.ladder__num:hover { color: var(--chalk); }
 .ladder th.ladder__num--on { color: var(--signal); }
@@ -1327,25 +1341,31 @@ a.chip--on:hover { color: var(--ink); }
 .ladder th.ladder__plain { text-align: right; }
 
 .ladder tbody td {
-    padding: 7px 0 7px 12px;
-    border-bottom: 1px solid var(--rule-soft);
-    color: var(--chalk-dim);
+    padding: 7px 12px;
+    border-bottom: 1px solid var(--rule);
 }
 
-.ladder tbody tr:hover td { background: var(--panel); }
+/* The base cell colour at zero specificity, so every colour class on a cell wins over it.
+   Before this, `.ladder tbody td` outranked `.ladder__net`, `.pwatch__fitcell` and the
+   band result colours, and none of them ever showed. */
+:where(.ladder tbody td) { color: var(--chalk); }
+
+/* Banded rows, so a wide row can be followed across. The hover is lighter than the band
+   so it still shows on a banded row. */
+.ladder tbody tr:nth-child(even) > td { background: var(--rule-soft); }
+.ladder tbody tr:hover > td { background: var(--rule); }
 
 .ladder__rank {
     width: 34px;
     text-align: right;
-    color: var(--chalk-mute);
-    padding-left: 0 !important;
+    color: var(--chalk-dim);
 }
 
 .ladder__team {
     font-family: var(--sans);
     font-size: 13.5px;
     color: var(--chalk);
-    width: 100%;
+    white-space: nowrap;
 }
 
 .ladder__conf {
@@ -1353,12 +1373,13 @@ a.chip--on:hover { color: var(--ink); }
     font-size: 10px;
     letter-spacing: 0.09em;
     text-transform: uppercase;
-    color: var(--chalk-mute);
+    color: var(--chalk-dim);
     margin-left: 8px;
 }
 
-.ladder__net { color: var(--signal); font-weight: 500; }
-.ladder__dim { color: var(--chalk-mute); }
+.ladder__net { color: var(--signal); font-weight: 600; }
+/* Secondary figures: quieter than a cell, still readable (#9c968a, ~7:1 on the ink). */
+.ladder__dim { color: var(--chalk-dim); }
 
 /* Matchup fit: eight or nine columns where the other tabs have four, so a wider gutter,
    no wrapping in a figure ("#6 vs #27" must not break), and a text column whose header
@@ -2434,6 +2455,11 @@ a.chip--on:hover { color: var(--ink); }
 .band__res--miss { color: var(--warn, #c8552b); }
 .band__res--push { color: var(--chalk-mute); }
 
+/* Shots tab "Last 5" (2026-10-22): a raw count, so no result colour. Filled in chalk with
+   ink text (~16:1) — the first outlined version, grey border on the panel, was too faint
+   to read (the user, 2026-10-22). */
+.form5__sq--count { width: auto; min-width: 18px; height: 18px; padding: 0 3px; background: var(--chalk); color: var(--ink); font-size: 12px; font-variant-numeric: tabular-nums; }
+
 /* /Components/Layout/MainLayout.razor.rz.scp.css */
 #blazor-error-ui[b-yok0k17bsi] {
     color-scheme: light only;
@@ -2973,26 +2999,26 @@ a.chip--on:hover { color: var(--ink); }
                 said. Walk-forward, so each week was projected from the weeks before it and
                 nothing here has seen the result it is being judged on.
             </p></header><div class="stats stats--wide" b-dkv3jdcz3w><div class="stat" b-dkv3jdcz3w><div class="stat__k" b-dkv3jdcz3w>Games graded</div>
-                    <div class="stat__v" b-dkv3jdcz3w>93</div></div>
+                    <div class="stat__v" b-dkv3jdcz3w>94</div></div>
                 <div class="stat" b-dkv3jdcz3w><div class="stat__k" b-dkv3jdcz3w>Margin error</div>
-                    <div class="stat__v stat__v--signal" b-dkv3jdcz3w>10.15</div>
-                    <div class="stat__sub" b-dkv3jdcz3w><span class="cool" b-dkv3jdcz3w>market 9.31</span></div></div>
+                    <div class="stat__v stat__v--signal" b-dkv3jdcz3w>10.11</div>
+                    <div class="stat__sub" b-dkv3jdcz3w><span class="cool" b-dkv3jdcz3w>market 9.24</span></div></div>
                 <div class="stat" b-dkv3jdcz3w><div class="stat__k" b-dkv3jdcz3w>Straight up</div>
-                    <div class="stat__v stat__v--signal" b-dkv3jdcz3w>55-37-1</div>
-                    <div class="stat__sub" b-dkv3jdcz3w>59.8%<span class="cool" b-dkv3jdcz3w> · market 58-34-1</span></div></div>
+                    <div class="stat__v stat__v--signal" b-dkv3jdcz3w>56-37-1</div>
+                    <div class="stat__sub" b-dkv3jdcz3w>60.2%<span class="cool" b-dkv3jdcz3w> · market 59-34-1</span></div></div>
                 <div class="stat" b-dkv3jdcz3w><div class="stat__k" b-dkv3jdcz3w>Against the spread</div>
-                    <div class="stat__v" b-dkv3jdcz3w>41-46-6</div>
-                    <div class="stat__sub" b-dkv3jdcz3w>47.1%<span b-dkv3jdcz3w> · break-even 52.4%</span></div></div></div><div class="warn" b-dkv3jdcz3w><strong b-dkv3jdcz3w>Read the ATS column as variance, not as edge.</strong><span b-dkv3jdcz3w>
+                    <div class="stat__v" b-dkv3jdcz3w>41-47-6</div>
+                    <div class="stat__sub" b-dkv3jdcz3w>46.6%<span b-dkv3jdcz3w> · break-even 52.4%</span></div></div></div><div class="warn" b-dkv3jdcz3w><strong b-dkv3jdcz3w>Read the ATS column as variance, not as edge.</strong><span b-dkv3jdcz3w>
                             The same measurement over 1,535 games
                             recorded 49.6% — Model error 10.44 against the market&#x27;s 9.87. Betting every game returns -5.2% at -110.</span><span b-dkv3jdcz3w>
-                        A season is 93 games. It takes several hundred
+                        A season is 94 games. It takes several hundred
                         before a spread record separates from a coin flip at all.
                     </span></div><div class="tiers" b-dkv3jdcz3w><div class="tiers__k" b-dkv3jdcz3w>Spread record by the model's own conviction</div>
                     <div class="tiers__grid" b-dkv3jdcz3w><div class="tier" b-dkv3jdcz3w><div class="tier__k" b-dkv3jdcz3w>Strong</div>
                                 <div class="tier__v" b-dkv3jdcz3w>15-12-3</div>
                                 <div class="tier__sub" b-dkv3jdcz3w>55.6%</div></div><div class="tier" b-dkv3jdcz3w><div class="tier__k" b-dkv3jdcz3w>Lean</div>
-                                <div class="tier__v" b-dkv3jdcz3w>10-15-1</div>
-                                <div class="tier__sub" b-dkv3jdcz3w>40.0%</div></div><div class="tier" b-dkv3jdcz3w><div class="tier__k" b-dkv3jdcz3w>Coinflip</div>
+                                <div class="tier__v" b-dkv3jdcz3w>10-16-1</div>
+                                <div class="tier__sub" b-dkv3jdcz3w>38.5%</div></div><div class="tier" b-dkv3jdcz3w><div class="tier__k" b-dkv3jdcz3w>Coinflip</div>
                                 <div class="tier__v" b-dkv3jdcz3w>16-19-2</div>
                                 <div class="tier__sub" b-dkv3jdcz3w>45.7%</div></div></div>
                     <p class="tiers__note" b-dkv3jdcz3w>
@@ -3007,11 +3033,11 @@ a.chip--on:hover { color: var(--ink); }
                 The same treatment for the total: how far off the model and the market ran,
                 and — where a line was captured — whether the model's Over/Under call beat it.
             </p><div class="stats stats--wide" b-dkv3jdcz3w><div class="stat" b-dkv3jdcz3w><div class="stat__k" b-dkv3jdcz3w>Total error</div>
-                    <div class="stat__v stat__v--signal" b-dkv3jdcz3w>11.90</div>
-                    <div class="stat__sub" b-dkv3jdcz3w><span class="cool" b-dkv3jdcz3w>market 10.60</span></div></div>
+                    <div class="stat__v stat__v--signal" b-dkv3jdcz3w>11.87</div>
+                    <div class="stat__sub" b-dkv3jdcz3w><span class="cool" b-dkv3jdcz3w>market 10.52</span></div></div>
                 <div class="stat" b-dkv3jdcz3w><div class="stat__k" b-dkv3jdcz3w>Over/Under</div>
-                    <div class="stat__v" b-dkv3jdcz3w>38-55</div>
-                    <div class="stat__sub" b-dkv3jdcz3w>40.9%<span b-dkv3jdcz3w> · break-even 52.4%</span></div></div></div><div class="warn" b-dkv3jdcz3w><strong b-dkv3jdcz3w>This is the weakest column on the page — read it as such.</strong><span b-dkv3jdcz3w>
+                    <div class="stat__v" b-dkv3jdcz3w>38-56</div>
+                    <div class="stat__sub" b-dkv3jdcz3w>40.4%<span b-dkv3jdcz3w> · break-even 52.4%</span></div></div></div><div class="warn" b-dkv3jdcz3w><strong b-dkv3jdcz3w>This is the weakest column on the page — read it as such.</strong><span b-dkv3jdcz3w>
                             The same measurement over 1,535 games
                             recorded 48.4% — Model error 10.95 against the market&#x27;s 10.38. Betting every game returns -7.5% at -110.</span></div><div class="grid grid--totals" b-dkv3jdcz3w><div class="grid__head" b-dkv3jdcz3w><span b-dkv3jdcz3w>Wk</span>
                     <span class="num" b-dkv3jdcz3w>Games</span>
@@ -3043,12 +3069,17 @@ a.chip--on:hover { color: var(--ink); }
                         <span class="num hot" b-dkv3jdcz3w>9.55</span>
                         <span class="num cool" b-dkv3jdcz3w>10.17</span>
                         <span class="num hot" b-dkv3jdcz3w>&#x2B;0.62</span>
-                        <span class="num" b-dkv3jdcz3w>10-5</span></button><button class="grid__row grid__row--on" b-dkv3jdcz3w><span class="grid__wk" b-dkv3jdcz3w>6</span>
+                        <span class="num" b-dkv3jdcz3w>10-5</span></button><button class="grid__row " b-dkv3jdcz3w><span class="grid__wk" b-dkv3jdcz3w>6</span>
                         <span class="num" b-dkv3jdcz3w>14</span>
                         <span class="num hot" b-dkv3jdcz3w>11.65</span>
                         <span class="num cool" b-dkv3jdcz3w>10.43</span>
                         <span class="num " b-dkv3jdcz3w>-1.22</span>
-                        <span class="num" b-dkv3jdcz3w>4-10</span></button></div><h2 class="section" b-dkv3jdcz3w>Week by week</h2>
+                        <span class="num" b-dkv3jdcz3w>4-10</span></button><button class="grid__row grid__row--on" b-dkv3jdcz3w><span class="grid__wk" b-dkv3jdcz3w>7</span>
+                        <span class="num" b-dkv3jdcz3w>1</span>
+                        <span class="num hot" b-dkv3jdcz3w>8.90</span>
+                        <span class="num cool" b-dkv3jdcz3w>3.50</span>
+                        <span class="num " b-dkv3jdcz3w>-5.40</span>
+                        <span class="num" b-dkv3jdcz3w>0-1</span></button></div><h2 class="section" b-dkv3jdcz3w>Week by week</h2>
             <p class="section__note" b-dkv3jdcz3w>
                 Margin, the totals table above, and every per-game detail all open from
                 whichever row you click below. Each game carries three verdicts:
@@ -3093,290 +3124,36 @@ a.chip--on:hover { color: var(--ink); }
                         <span class="num cool" b-dkv3jdcz3w>10.40</span>
                         <span class="num " b-dkv3jdcz3w>-0.25</span>
                         <span class="num" b-dkv3jdcz3w>9-5-1</span>
-                        <span class="num" b-dkv3jdcz3w>7-7-1</span></button><button class="grid__row grid__row--on" b-dkv3jdcz3w><span class="grid__wk" b-dkv3jdcz3w>6</span>
+                        <span class="num" b-dkv3jdcz3w>7-7-1</span></button><button class="grid__row " b-dkv3jdcz3w><span class="grid__wk" b-dkv3jdcz3w>6</span>
                         <span class="num" b-dkv3jdcz3w>14</span>
                         <span class="num hot" b-dkv3jdcz3w>8.60</span>
                         <span class="num cool" b-dkv3jdcz3w>6.64</span>
                         <span class="num " b-dkv3jdcz3w>-1.95</span>
                         <span class="num" b-dkv3jdcz3w>7-7</span>
-                        <span class="num" b-dkv3jdcz3w>5-9</span></button><div class="detail" b-dkv3jdcz3w><div class="row" b-dkv3jdcz3w><div class="row__head" b-dkv3jdcz3w><span class="row__match" b-dkv3jdcz3w>Seattle Seahawks @ Denver Broncos</span>
+                        <span class="num" b-dkv3jdcz3w>5-9</span></button><button class="grid__row grid__row--on" b-dkv3jdcz3w><span class="grid__wk" b-dkv3jdcz3w>7</span>
+                        <span class="num" b-dkv3jdcz3w>1</span>
+                        <span class="num hot" b-dkv3jdcz3w>5.97</span>
+                        <span class="num cool" b-dkv3jdcz3w>3.00</span>
+                        <span class="num " b-dkv3jdcz3w>-2.97</span>
+                        <span class="num" b-dkv3jdcz3w>1-0</span>
+                        <span class="num" b-dkv3jdcz3w>0-1</span></button><div class="detail" b-dkv3jdcz3w><div class="row" b-dkv3jdcz3w><div class="row__head" b-dkv3jdcz3w><span class="row__match" b-dkv3jdcz3w>New England Patriots @ Chicago Bears</span>
                                         <span class="row__final" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>final</span>
-                                            <span class="row__score" b-dkv3jdcz3w>14–17</span></span></div>
+                                            <span class="row__score" b-dkv3jdcz3w>24–30</span></span></div>
 
                                     <div class="row__band row__band--nums" b-dkv3jdcz3w><span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>model</span>
-                                            <span class="row__v hot" b-dkv3jdcz3w>Seattle Seahawks 2.0</span></span>
+                                            <span class="row__v hot" b-dkv3jdcz3w>Chicago Bears 0.0</span></span>
 
                                         <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>market</span>
-                                            <span class="row__v cool" b-dkv3jdcz3w>Seattle Seahawks 2.5</span></span>
+                                            <span class="row__v cool" b-dkv3jdcz3w>Chicago Bears 3.0</span></span>
 
                                         <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>total</span>
-                                            <span class="row__v" b-dkv3jdcz3w><span class="hot" b-dkv3jdcz3w>43.5</span><span class="cool" b-dkv3jdcz3w> / 40.5</span><span b-dkv3jdcz3w> → 31</span></span></span></div>
-
-                                    <div class="row__band row__band--marks" b-dkv3jdcz3w><span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>winner</span>
-                                            <span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span></span>
-
-                                        <span class="row__cell row__cell--mark row__cell--spread" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>vs spread</span>
-                                            <span class="row__marked" b-dkv3jdcz3w><span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span><span class="row__pick" b-dkv3jdcz3w>Denver Broncos &#x2B;2.5 &#xB7; Coinflip</span></span></span>
-
-                                        <span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>O/U</span>
-                                            <span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span></span></div></div><div class="row" b-dkv3jdcz3w><div class="row__head" b-dkv3jdcz3w><span class="row__match" b-dkv3jdcz3w>Houston Texans @ Jacksonville Jaguars</span>
-                                        <span class="row__final" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>final</span>
-                                            <span class="row__score" b-dkv3jdcz3w>34–31</span></span></div>
-
-                                    <div class="row__band row__band--nums" b-dkv3jdcz3w><span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>model</span>
-                                            <span class="row__v hot" b-dkv3jdcz3w>Jacksonville Jaguars 7.6</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>market</span>
-                                            <span class="row__v cool" b-dkv3jdcz3w>Jacksonville Jaguars 2.5</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>total</span>
-                                            <span class="row__v" b-dkv3jdcz3w><span class="hot" b-dkv3jdcz3w>38.6</span><span class="cool" b-dkv3jdcz3w> / 42.5</span><span b-dkv3jdcz3w> → 65</span></span></span></div>
-
-                                    <div class="row__band row__band--marks" b-dkv3jdcz3w><span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>winner</span>
-                                            <span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span></span>
-
-                                        <span class="row__cell row__cell--mark row__cell--spread" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>vs spread</span>
-                                            <span class="row__marked" b-dkv3jdcz3w><span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span><span class="row__pick" b-dkv3jdcz3w>Jacksonville Jaguars -2.5 &#xB7; Strong</span></span></span>
-
-                                        <span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>O/U</span>
-                                            <span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span></span></div></div><div class="row" b-dkv3jdcz3w><div class="row__head" b-dkv3jdcz3w><span class="row__match" b-dkv3jdcz3w>Chicago Bears @ Atlanta Falcons</span>
-                                        <span class="row__final" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>final</span>
-                                            <span class="row__score" b-dkv3jdcz3w>31–23</span></span></div>
-
-                                    <div class="row__band row__band--nums" b-dkv3jdcz3w><span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>model</span>
-                                            <span class="row__v hot" b-dkv3jdcz3w>Chicago Bears 1.5</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>market</span>
-                                            <span class="row__v cool" b-dkv3jdcz3w>Chicago Bears 1.5</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>total</span>
-                                            <span class="row__v" b-dkv3jdcz3w><span class="hot" b-dkv3jdcz3w>47.8</span><span class="cool" b-dkv3jdcz3w> / 51.5</span><span b-dkv3jdcz3w> → 54</span></span></span></div>
+                                            <span class="row__v" b-dkv3jdcz3w><span class="hot" b-dkv3jdcz3w>45.1</span><span class="cool" b-dkv3jdcz3w> / 50.5</span><span b-dkv3jdcz3w> → 54</span></span></span></div>
 
                                     <div class="row__band row__band--marks" b-dkv3jdcz3w><span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>winner</span>
                                             <span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span></span>
 
                                         <span class="row__cell row__cell--mark row__cell--spread" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>vs spread</span>
-                                            <span class="row__marked" b-dkv3jdcz3w><span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span><span class="row__pick" b-dkv3jdcz3w>Chicago Bears -1.5 &#xB7; Coinflip</span></span></span>
-
-                                        <span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>O/U</span>
-                                            <span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span></span></div></div><div class="row" b-dkv3jdcz3w><div class="row__head" b-dkv3jdcz3w><span class="row__match" b-dkv3jdcz3w>Baltimore Ravens @ Cleveland Browns</span>
-                                        <span class="row__final" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>final</span>
-                                            <span class="row__score" b-dkv3jdcz3w>10–13</span></span></div>
-
-                                    <div class="row__band row__band--nums" b-dkv3jdcz3w><span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>model</span>
-                                            <span class="row__v hot" b-dkv3jdcz3w>Baltimore Ravens 3.0</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>market</span>
-                                            <span class="row__v cool" b-dkv3jdcz3w>Baltimore Ravens 3.0</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>total</span>
-                                            <span class="row__v" b-dkv3jdcz3w><span class="hot" b-dkv3jdcz3w>45.0</span><span class="cool" b-dkv3jdcz3w> / 39.5</span><span b-dkv3jdcz3w> → 23</span></span></span></div>
-
-                                    <div class="row__band row__band--marks" b-dkv3jdcz3w><span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>winner</span>
-                                            <span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span></span>
-
-                                        <span class="row__cell row__cell--mark row__cell--spread" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>vs spread</span>
-                                            <span class="row__marked" b-dkv3jdcz3w><span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span><span class="row__pick" b-dkv3jdcz3w>Cleveland Browns &#x2B;3.0 &#xB7; Coinflip</span></span></span>
-
-                                        <span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>O/U</span>
-                                            <span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span></span></div></div><div class="row" b-dkv3jdcz3w><div class="row__head" b-dkv3jdcz3w><span class="row__match" b-dkv3jdcz3w>Tennessee Titans @ Indianapolis Colts</span>
-                                        <span class="row__final" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>final</span>
-                                            <span class="row__score" b-dkv3jdcz3w>26–20</span></span></div>
-
-                                    <div class="row__band row__band--nums" b-dkv3jdcz3w><span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>model</span>
-                                            <span class="row__v hot" b-dkv3jdcz3w>Indianapolis Colts 11.6</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>market</span>
-                                            <span class="row__v cool" b-dkv3jdcz3w>Indianapolis Colts 6.5</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>total</span>
-                                            <span class="row__v" b-dkv3jdcz3w><span class="hot" b-dkv3jdcz3w>46.2</span><span class="cool" b-dkv3jdcz3w> / 43.5</span><span b-dkv3jdcz3w> → 46</span></span></span></div>
-
-                                    <div class="row__band row__band--marks" b-dkv3jdcz3w><span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>winner</span>
-                                            <span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span></span>
-
-                                        <span class="row__cell row__cell--mark row__cell--spread" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>vs spread</span>
-                                            <span class="row__marked" b-dkv3jdcz3w><span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span><span class="row__pick" b-dkv3jdcz3w>Indianapolis Colts -6.5 &#xB7; Strong</span></span></span>
-
-                                        <span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>O/U</span>
-                                            <span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span></span></div></div><div class="row" b-dkv3jdcz3w><div class="row__head" b-dkv3jdcz3w><span class="row__match" b-dkv3jdcz3w>New York Jets @ New England Patriots</span>
-                                        <span class="row__final" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>final</span>
-                                            <span class="row__score" b-dkv3jdcz3w>19–26</span></span></div>
-
-                                    <div class="row__band row__band--nums" b-dkv3jdcz3w><span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>model</span>
-                                            <span class="row__v hot" b-dkv3jdcz3w>New England Patriots 12.9</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>market</span>
-                                            <span class="row__v cool" b-dkv3jdcz3w>New England Patriots 7.5</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>total</span>
-                                            <span class="row__v" b-dkv3jdcz3w><span class="hot" b-dkv3jdcz3w>38.5</span><span class="cool" b-dkv3jdcz3w> / 43.5</span><span b-dkv3jdcz3w> → 45</span></span></span></div>
-
-                                    <div class="row__band row__band--marks" b-dkv3jdcz3w><span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>winner</span>
-                                            <span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span></span>
-
-                                        <span class="row__cell row__cell--mark row__cell--spread" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>vs spread</span>
-                                            <span class="row__marked" b-dkv3jdcz3w><span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span><span class="row__pick" b-dkv3jdcz3w>New England Patriots -7.5 &#xB7; Lean</span></span></span>
-
-                                        <span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>O/U</span>
-                                            <span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span></span></div></div><div class="row" b-dkv3jdcz3w><div class="row__head" b-dkv3jdcz3w><span class="row__match" b-dkv3jdcz3w>New Orleans Saints @ New York Giants</span>
-                                        <span class="row__final" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>final</span>
-                                            <span class="row__score" b-dkv3jdcz3w>34–27</span></span></div>
-
-                                    <div class="row__band row__band--nums" b-dkv3jdcz3w><span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>model</span>
-                                            <span class="row__v hot" b-dkv3jdcz3w>New York Giants 4.3</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>market</span>
-                                            <span class="row__v cool" b-dkv3jdcz3w>New Orleans Saints 1.5</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>total</span>
-                                            <span class="row__v" b-dkv3jdcz3w><span class="hot" b-dkv3jdcz3w>45.4</span><span class="cool" b-dkv3jdcz3w> / 46.5</span><span b-dkv3jdcz3w> → 61</span></span></span></div>
-
-                                    <div class="row__band row__band--marks" b-dkv3jdcz3w><span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>winner</span>
-                                            <span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span></span>
-
-                                        <span class="row__cell row__cell--mark row__cell--spread" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>vs spread</span>
-                                            <span class="row__marked" b-dkv3jdcz3w><span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span><span class="row__pick" b-dkv3jdcz3w>New York Giants &#x2B;1.5 &#xB7; Strong</span></span></span>
-
-                                        <span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>O/U</span>
-                                            <span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span></span></div></div><div class="row" b-dkv3jdcz3w><div class="row__head" b-dkv3jdcz3w><span class="row__match" b-dkv3jdcz3w>Carolina Panthers @ Philadelphia Eagles</span>
-                                        <span class="row__final" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>final</span>
-                                            <span class="row__score" b-dkv3jdcz3w>25–14</span></span></div>
-
-                                    <div class="row__band row__band--nums" b-dkv3jdcz3w><span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>model</span>
-                                            <span class="row__v hot" b-dkv3jdcz3w>Philadelphia Eagles 0.8</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>market</span>
-                                            <span class="row__v cool" b-dkv3jdcz3w>Carolina Panthers 3.0</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>total</span>
-                                            <span class="row__v" b-dkv3jdcz3w><span class="hot" b-dkv3jdcz3w>44.4</span><span class="cool" b-dkv3jdcz3w> / 39.5</span><span b-dkv3jdcz3w> → 39</span></span></span></div>
-
-                                    <div class="row__band row__band--marks" b-dkv3jdcz3w><span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>winner</span>
-                                            <span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span></span>
-
-                                        <span class="row__cell row__cell--mark row__cell--spread" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>vs spread</span>
-                                            <span class="row__marked" b-dkv3jdcz3w><span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span><span class="row__pick" b-dkv3jdcz3w>Philadelphia Eagles &#x2B;3.0 &#xB7; Strong</span></span></span>
-
-                                        <span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>O/U</span>
-                                            <span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span></span></div></div><div class="row" b-dkv3jdcz3w><div class="row__head" b-dkv3jdcz3w><span class="row__match" b-dkv3jdcz3w>Pittsburgh Steelers @ Tampa Bay Buccaneers</span>
-                                        <span class="row__final" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>final</span>
-                                            <span class="row__score" b-dkv3jdcz3w>26–19</span></span></div>
-
-                                    <div class="row__band row__band--nums" b-dkv3jdcz3w><span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>model</span>
-                                            <span class="row__v hot" b-dkv3jdcz3w>Pittsburgh Steelers 0.2</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>market</span>
-                                            <span class="row__v cool" b-dkv3jdcz3w>Pittsburgh Steelers 2.5</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>total</span>
-                                            <span class="row__v" b-dkv3jdcz3w><span class="hot" b-dkv3jdcz3w>43.0</span><span class="cool" b-dkv3jdcz3w> / 38.5</span><span b-dkv3jdcz3w> → 45</span></span></span></div>
-
-                                    <div class="row__band row__band--marks" b-dkv3jdcz3w><span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>winner</span>
-                                            <span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span></span>
-
-                                        <span class="row__cell row__cell--mark row__cell--spread" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>vs spread</span>
-                                            <span class="row__marked" b-dkv3jdcz3w><span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span><span class="row__pick" b-dkv3jdcz3w>Tampa Bay Buccaneers &#x2B;2.5 &#xB7; Coinflip</span></span></span>
-
-                                        <span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>O/U</span>
-                                            <span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span></span></div></div><div class="row" b-dkv3jdcz3w><div class="row__head" b-dkv3jdcz3w><span class="row__match" b-dkv3jdcz3w>Arizona Cardinals @ Los Angeles Rams</span>
-                                        <span class="row__final" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>final</span>
-                                            <span class="row__score" b-dkv3jdcz3w>18–16</span></span></div>
-
-                                    <div class="row__band row__band--nums" b-dkv3jdcz3w><span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>model</span>
-                                            <span class="row__v hot" b-dkv3jdcz3w>Los Angeles Rams 13.2</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>market</span>
-                                            <span class="row__v cool" b-dkv3jdcz3w>Los Angeles Rams 12.5</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>total</span>
-                                            <span class="row__v" b-dkv3jdcz3w><span class="hot" b-dkv3jdcz3w>53.1</span><span class="cool" b-dkv3jdcz3w> / 51.5</span><span b-dkv3jdcz3w> → 34</span></span></span></div>
-
-                                    <div class="row__band row__band--marks" b-dkv3jdcz3w><span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>winner</span>
-                                            <span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span></span>
-
-                                        <span class="row__cell row__cell--mark row__cell--spread" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>vs spread</span>
-                                            <span class="row__marked" b-dkv3jdcz3w><span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span><span class="row__pick" b-dkv3jdcz3w>Los Angeles Rams -12.5 &#xB7; Coinflip</span></span></span>
-
-                                        <span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>O/U</span>
-                                            <span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span></span></div></div><div class="row" b-dkv3jdcz3w><div class="row__head" b-dkv3jdcz3w><span class="row__match" b-dkv3jdcz3w>Los Angeles Chargers @ Kansas City Chiefs</span>
-                                        <span class="row__final" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>final</span>
-                                            <span class="row__score" b-dkv3jdcz3w>6–22</span></span></div>
-
-                                    <div class="row__band row__band--nums" b-dkv3jdcz3w><span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>model</span>
-                                            <span class="row__v hot" b-dkv3jdcz3w>Kansas City Chiefs 11.4</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>market</span>
-                                            <span class="row__v cool" b-dkv3jdcz3w>Kansas City Chiefs 7.5</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>total</span>
-                                            <span class="row__v" b-dkv3jdcz3w><span class="hot" b-dkv3jdcz3w>41.0</span><span class="cool" b-dkv3jdcz3w> / 41.5</span><span b-dkv3jdcz3w> → 28</span></span></span></div>
-
-                                    <div class="row__band row__band--marks" b-dkv3jdcz3w><span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>winner</span>
-                                            <span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span></span>
-
-                                        <span class="row__cell row__cell--mark row__cell--spread" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>vs spread</span>
-                                            <span class="row__marked" b-dkv3jdcz3w><span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span><span class="row__pick" b-dkv3jdcz3w>Kansas City Chiefs -7.5 &#xB7; Lean</span></span></span>
-
-                                        <span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>O/U</span>
-                                            <span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span></span></div></div><div class="row" b-dkv3jdcz3w><div class="row__head" b-dkv3jdcz3w><span class="row__match" b-dkv3jdcz3w>Buffalo Bills @ Las Vegas Raiders</span>
-                                        <span class="row__final" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>final</span>
-                                            <span class="row__score" b-dkv3jdcz3w>33–30</span></span></div>
-
-                                    <div class="row__band row__band--nums" b-dkv3jdcz3w><span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>model</span>
-                                            <span class="row__v hot" b-dkv3jdcz3w>Buffalo Bills 6.1</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>market</span>
-                                            <span class="row__v cool" b-dkv3jdcz3w>Buffalo Bills 5.5</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>total</span>
-                                            <span class="row__v" b-dkv3jdcz3w><span class="hot" b-dkv3jdcz3w>59.0</span><span class="cool" b-dkv3jdcz3w> / 53.5</span><span b-dkv3jdcz3w> → 63</span></span></span></div>
-
-                                    <div class="row__band row__band--marks" b-dkv3jdcz3w><span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>winner</span>
-                                            <span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span></span>
-
-                                        <span class="row__cell row__cell--mark row__cell--spread" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>vs spread</span>
-                                            <span class="row__marked" b-dkv3jdcz3w><span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span><span class="row__pick" b-dkv3jdcz3w>Buffalo Bills -5.5 &#xB7; Coinflip</span></span></span>
-
-                                        <span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>O/U</span>
-                                            <span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span></span></div></div><div class="row" b-dkv3jdcz3w><div class="row__head" b-dkv3jdcz3w><span class="row__match" b-dkv3jdcz3w>Dallas Cowboys @ Green Bay Packers</span>
-                                        <span class="row__final" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>final</span>
-                                            <span class="row__score" b-dkv3jdcz3w>13–23</span></span></div>
-
-                                    <div class="row__band row__band--nums" b-dkv3jdcz3w><span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>model</span>
-                                            <span class="row__v hot" b-dkv3jdcz3w>Green Bay Packers 3.5</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>market</span>
-                                            <span class="row__v cool" b-dkv3jdcz3w>Dallas Cowboys 1.5</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>total</span>
-                                            <span class="row__v" b-dkv3jdcz3w><span class="hot" b-dkv3jdcz3w>54.4</span><span class="cool" b-dkv3jdcz3w> / 53.5</span><span b-dkv3jdcz3w> → 36</span></span></span></div>
-
-                                    <div class="row__band row__band--marks" b-dkv3jdcz3w><span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>winner</span>
-                                            <span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span></span>
-
-                                        <span class="row__cell row__cell--mark row__cell--spread" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>vs spread</span>
-                                            <span class="row__marked" b-dkv3jdcz3w><span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span><span class="row__pick" b-dkv3jdcz3w>Green Bay Packers &#x2B;1.5 &#xB7; Strong</span></span></span>
-
-                                        <span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>O/U</span>
-                                            <span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span></span></div></div><div class="row" b-dkv3jdcz3w><div class="row__head" b-dkv3jdcz3w><span class="row__match" b-dkv3jdcz3w>Washington Commanders @ San Francisco 49ers</span>
-                                        <span class="row__final" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>final</span>
-                                            <span class="row__score" b-dkv3jdcz3w>17–23</span></span></div>
-
-                                    <div class="row__band row__band--nums" b-dkv3jdcz3w><span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>model</span>
-                                            <span class="row__v hot" b-dkv3jdcz3w>San Francisco 49ers 15.6</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>market</span>
-                                            <span class="row__v cool" b-dkv3jdcz3w>San Francisco 49ers 7.5</span></span>
-
-                                        <span class="row__cell" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>total</span>
-                                            <span class="row__v" b-dkv3jdcz3w><span class="hot" b-dkv3jdcz3w>51.7</span><span class="cool" b-dkv3jdcz3w> / 51.5</span><span b-dkv3jdcz3w> → 40</span></span></span></div>
-
-                                    <div class="row__band row__band--marks" b-dkv3jdcz3w><span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>winner</span>
-                                            <span class="row__v mark2 mark2--win" b-dkv3jdcz3w>&#x2713; hit</span></span>
-
-                                        <span class="row__cell row__cell--mark row__cell--spread" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>vs spread</span>
-                                            <span class="row__marked" b-dkv3jdcz3w><span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span><span class="row__pick" b-dkv3jdcz3w>San Francisco 49ers -7.5 &#xB7; Strong</span></span></span>
+                                            <span class="row__marked" b-dkv3jdcz3w><span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span><span class="row__pick" b-dkv3jdcz3w>New England Patriots &#x2B;3.0 &#xB7; Lean</span></span></span>
 
                                         <span class="row__cell row__cell--mark" b-dkv3jdcz3w><span class="row__k" b-dkv3jdcz3w>O/U</span>
                                             <span class="row__v mark2 mark2--loss" b-dkv3jdcz3w>&#x2717; miss</span></span></div></div></div></div><div class="caveats" b-dkv3jdcz3w><h2 class="read__head" b-dkv3jdcz3w>How to read these</h2>
@@ -3392,9 +3169,9 @@ a.chip--on:hover { color: var(--ink); }
                     </li>
                     <li b-dkv3jdcz3w><strong b-dkv3jdcz3w>Model and market errors are measured on the same games.</strong>
                         Where a game carried no price, it counts toward the model's error but
-                        not the comparison — 93 of
-                        93 games are directly comparable on margin,
-                        93 on the total.
+                        not the comparison — 94 of
+                        94 games are directly comparable on margin,
+                        94 on the total.
                     </li>
                     <li b-dkv3jdcz3w><strong b-dkv3jdcz3w>Early weeks are rated on priors.</strong> Weeks 1–3 are included
                         because the board really did show those projections, but the ratings
@@ -3403,7 +3180,7 @@ a.chip--on:hover { color: var(--ink); }
                         backtests exclude them; this page does not.
                     </li>
                     <li b-dkv3jdcz3w>
-                        Market numbers: nflverse closing lines, 93 of 93 fixtures joined. Ratings: 79 games played, primed with 2025 ratings carried at 85%.
+                        Market numbers: nflverse closing lines, 94 of 94 fixtures joined. Ratings: 93 games played, primed with 2025 ratings carried at 85%.
                     </li></ul></div></main></div>
 </body>
 </html>
